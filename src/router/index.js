@@ -1,3 +1,4 @@
+import CarrinhoView from '@/views/CarrinhoView.vue'
 import ComprarView from '@/views/ComprarView.vue'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'

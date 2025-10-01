@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-    <body>
+    <main>
         <div class="container">
 
             <div class="filter">
@@ -57,12 +57,13 @@
                 <button type="submit" class="button-register">CADASTRAR</button>
             </form>
         </div>
-    </body>
+        <a href="http://localhost:5173/Login"><button>ir pra login</button></a>
+    </main>
 </template>
 
 <style scoped>
 
-    body{
+    main{
         width: 1400px;
         margin: 0 auto;
         font-family: 'Open Sans';
@@ -71,6 +72,7 @@
     .container{
         display: flex;
         align-items: flex-start;
+        
     }
     .MS-Reference{
        font-family: "MS Reference Sans Serif", sans-serif;

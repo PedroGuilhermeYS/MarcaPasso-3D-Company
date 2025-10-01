@@ -18,6 +18,7 @@
                 <button class="button-registed">ENTRAR</button>
             </div>
         </div>
+        <a href="http://localhost:5173/Produto"><button>ir pra Produto</button></a>
     </main>
 </template>
 

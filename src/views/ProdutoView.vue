@@ -1,7 +1,12 @@
 <script setup>
+import TopMenu from '@/componentes/TopMenu.vue';
+import UserAction from '@/componentes/UserAction.vue';
+import Footer from '@/componentes/Footer.vue';
 </script>
 
 <template>
+    <TopMenu></TopMenu>
+    <UserAction></UserAction>
     <main>
         <h3>Home / Decorações / Suporte de Vinho Dragão Chinês</h3>
         <div class="container1">
@@ -52,8 +57,9 @@
             </div>
 
         </div>
-        <a href="http://localhost:5173/Carrinho"><button>ir pra Produto</button></a>
     </main>
+    <Footer></Footer>
+    <a href="http://localhost:5173/Carrinho"><button>ir pra Carrinho</button></a>
 </template>
 
 <style scoped>

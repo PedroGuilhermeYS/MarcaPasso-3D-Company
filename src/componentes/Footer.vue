@@ -5,7 +5,9 @@
   <footer class="footer">
     <div class="footer-top">
       <div class="footer-columnn logo">
-        <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\marcapasso-logo.svg" alt="logo" width="300"/>
+        <a href="http://localhost:5173/">
+          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\marcapasso-logo.svg" alt="logo" width="300"/>
+        </a>
       </div>
 
       <div class="footer-column">
@@ -60,76 +62,70 @@
 </template>
 
 <style scoped>
-.footer {
-    background-color: rgb(255, 255, 255);
-    font-family: "Open Sans", sans-serif;
-    color: #000;
-    border-top: 1px solid #ccc;
-    font-size: 14px;
-    width: 1400px;
-    margin: 0 auto;
-}
-
-.footer-top {
-    display: flex;
-    padding: 2rem;
-    justify-content: center;
-}
-
-.footer-column {
-    align-items: center;
-    margin: 1rem;
-}
-
-.footer-column h4 {
-    margin-bottom: 0.5rem;
-    font-size: 16px;
-}
-
-.footer-column ul {
-    list-style: none;
-    padding: 0;
-    margin: 5;
-}
-
-.footer-column ul li {
-    margin-bottom: 0.3rem;
-    cursor: pointer;
-}
-
-.footer-columnn img{
-    margin: 2rem;
-}
-
-.atendimento p {
-    margin: 0.5rem 0;
-}
-
-.pagamentos img {
-    height: 24px;
-    margin: 5px;
-}
-
-.selo {
-    height: 32px;
-    margin-top: 10px;
-}
-
-.footer-bottom {
-    border-top: 1px solid #999;
-    padding: 1rem;
-    text-align: center;
-}
-.material-symbols-outlined {
-    font-variation-settings: 
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-    font-size: 20px;
+    .footer {
+        background-color: rgb(255, 255, 255);
+        font-family: "Open Sans", sans-serif;
+        color: #000;
+        border-top: 1px solid #ccc;
+        font-size: 14px;
+        width: 1400px;
+        margin: 0 auto;
+    }
+    .footer-top {
+        display: flex;
+        padding: 2rem;
+        justify-content: center;
+    }
+    .footer-column {
+        align-items: center;
+        margin: 1rem;
+    }
+    .footer-column h4 {
+        margin-bottom: 0.5rem;
+        font-size: 16px;
+    }
+    .footer-column ul {
+        list-style: none;
+        padding: 0;
+        margin: 5;
+    }
+    .footer-column ul li {
+        margin-bottom: 0.3rem;
+        cursor: pointer;
+    }
+    .footer-columnn img{
+        margin: 2rem;
+    }
+    .atendimento p {
+        margin: 0.5rem 0;
+    }
+    .pagamentos img {
+        height: 24px;
+        margin: 5px;
+    }
+    .selo {
+        height: 32px;
+        margin-top: 10px;
+    }
+    .footer-bottom {
+        border-top: 1px solid #999;
+        padding: 1rem;
+        text-align: center;
+    }
+    .material-symbols-outlined {
+        font-variation-settings: 
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+        font-size: 20px;
     } 
-h4{
-  margin: 0;
-}
+    h4{
+        margin: 0;
+    }
+    a{
+        text-decoration: none;
+        color: inherit;
+      }
 
 </style>

@@ -15,7 +15,9 @@
         
         <div class="login">
           <span class="material-symbols-outlined">person</span>
-          <h4>Minha Conta</h4>
+          <a href="http://localhost:5173/Login">
+            <h4>Minha Conta</h4>
+          </a>
         </div>
 
         <div class="pedidos">
@@ -55,7 +57,6 @@
         display: flex;
         justify-content: space-between;
     }
-
     p{
         color: white;
         font-family: "Open Sans";
@@ -72,16 +73,13 @@
     .space{
         margin-left: 20px;
     }
-
     .Essa-barra-que-é-gostar-de-você{
         border: 1px solid #ffffff;
         margin: 10px;
     }
-
     .right-buttons h4{
         margin: 5px;
     }
-
     .login, .pedidos, .favorito, .carrinho{
         border: 2px solid #0185FA;
         background-color: white;
@@ -90,7 +88,6 @@
         display: flex;
         align-items: center;
     }
-
     .material-symbols-outlined {
         font-variation-settings: 
         'FILL' 0,
@@ -99,5 +96,9 @@
         'opsz' 24;
         font-size: 20px;
         color: #0185FA;
-    }   
+    }
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
 </style>

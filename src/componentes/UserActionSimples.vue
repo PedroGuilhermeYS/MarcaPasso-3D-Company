@@ -6,7 +6,9 @@
     <div class="container">
 
       <div class="left-buttons">
-        <p class="space">Contatos</p>
+        <a href="http://localhost:5173/Contatos">
+          <p class="space">Contatos</p>
+        </a>
         <div class="Essa-barra-que-é-gostar-de-você"></div>
         <p>Quem somos</p>
       </div>

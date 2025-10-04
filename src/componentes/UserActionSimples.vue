@@ -16,7 +16,6 @@
 </template>
 
 <style scoped>
-
     main {
         width: 1400px;
         margin: 0 auto;
@@ -32,7 +31,6 @@
         display: flex;
         justify-content: center;
     }
-
     p{
         color: white;
         font-family: "Open Sans";
@@ -42,7 +40,6 @@
     .space{
         margin-left: 20px;
     }
-
     .Essa-barra-que-é-gostar-de-você{
         border: 1px solid #ffffff;
         margin: 10px;

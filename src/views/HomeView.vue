@@ -1,7 +1,13 @@
-<script setup></script>
+<script setup>
+import TopMenu from '@/componentes/TopMenu.vue';
+import UserAction from '@/componentes/UserAction.vue';
+import Footer from '@/componentes/Footer.vue';
+</script>
 
 <template>
-    <main>
+    <TopMenu></TopMenu>
+    <UserAction></UserAction>
+    <main> 
         <div class="container">
 
             <div class="filter">
@@ -57,8 +63,9 @@
                 <button type="submit" class="button-register">CADASTRAR</button>
             </form>
         </div>
-        <a href="http://localhost:5173/Login"><button>ir pra login</button></a>
     </main>
+    <Footer></Footer>
+    <a href="http://localhost:5173/Login"><button>ir pra login</button></a>
 </template>
 
 <style scoped>
@@ -137,6 +144,7 @@
         margin-top: 30px;
         background-color: #DDDDDD;
         text-align: center;
+        margin-bottom: 3rem;
     }
     .information p{
         margin: 0px;

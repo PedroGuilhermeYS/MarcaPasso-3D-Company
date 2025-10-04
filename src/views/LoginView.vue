@@ -1,7 +1,10 @@
 <script setup>
+import UserActionSimples from '@/componentes/UserActionSimples.vue';
+import Footer from '@/componentes/Footer.vue';
 </script>
 
 <template>
+    <UserActionSimples></UserActionSimples>
     <main>
         <div class="container">
             <div class="yes-registered">
@@ -18,8 +21,9 @@
                 <button class="button-registed">ENTRAR</button>
             </div>
         </div>
-        <a href="http://localhost:5173/Produto"><button>ir pra Produto</button></a>
     </main>
+    <Footer></Footer>
+    <a href="http://localhost:5173/Produto"><button>ir pra Produto</button></a>
 </template>
 
 <style scoped>

@@ -1,0 +1,74 @@
+{
+  "produtos": [
+    {
+      "id": 1,
+      "imagem": "/imagem-produtos/abajurcogumelo.jpg",
+      "nome": "Abajur Cogumelo",
+      "preco": 79.90,
+      "categoria": "Decoração",
+      "personalizavel": false,
+      "descricao": "Abajur em formato de cogumelo com luz suave e design divertido. Ideal para o quarto ou sala geek.",
+      "fotos": ["/imagem-produtos/abajurcogumelo.jpg"]
+    },
+    {
+      "id": 2,
+      "imagem": "/imagem-produtos/capivaraGamer.jpg",
+      "nome": "Capivara Gamer",
+      "preco": 149.90,
+      "categoria": "Colecionáveis",
+      "personalizavel": false,
+      "descricao": "Estátua da Capivara Gamer com headset e controle, perfeita para decorar seu setup.",
+      "fotos": ["/imagem-produtos/capivaraGamer.jpg"]
+    },
+    {
+      "id": 3,
+      "imagem": "/imagem-produtos/chaveiroCSGO.png",
+      "nome": "Chaveiro CS:GO",
+      "preco": 29.90,
+      "categoria": "Acessórios",
+      "personalizavel": true,
+      "descricao": "Chaveiro metálico inspirado em CS:GO. Perfeito para fãs do jogo e colecionadores.",
+      "fotos": ["/imagem-produtos/chaveiroCSGO.png"]
+    },
+    {
+      "id": 4,
+      "imagem": "/imagem-produtos/colarespinha.jpg",
+      "nome": "Colar Espinha de Peixe",
+      "preco": 39.90,
+      "categoria": "Moda",
+      "personalizavel": false,
+      "descricao": "Colar estiloso com pingente em formato de espinha de peixe. Ideal para um visual alternativo.",
+      "fotos": ["/imagem-produtos/colarespinha.jpg"]
+    },
+    {
+      "id": 5,
+      "imagem": "/imagem-produtos/dragão suporte.jpg",
+      "nome": "Suporte de Dragão",
+      "preco": 119.90,
+      "categoria": "Decoração",
+      "personalizavel": false,
+      "descricao": "Suporte decorativo em formato de dragão, feito em resina detalhada. Ideal para apoiar livros ou controles.",
+      "fotos": ["/imagem-produtos/dragão suporte.jpg"]
+    },
+    {
+      "id": 6,
+      "imagem": "/imagem-produtos/silksong.jpg",
+      "nome": "Pôster Silksong",
+      "preco": 49.90,
+      "categoria": "Decoração",
+      "personalizavel": false,
+      "descricao": "Pôster artístico do jogo Hollow Knight: Silksong, impresso em papel premium.",
+      "fotos": ["/imagem-produtos/silksong.jpg"]
+    },
+    {
+      "id": 7,
+      "imagem": "/imagem-produtos/suportecristalxbox.jpeg",
+      "nome": "Suporte de Cristal Xbox",
+      "preco": 159.90,
+      "categoria": "Acessórios",
+      "personalizavel": false,
+      "descricao": "Suporte iluminado em formato de cristal com logo Xbox. Um toque elegante para o setup gamer.",
+      "fotos": ["/imagem-produtos/suportecristalxbox.jpeg"]
+    }
+  ]
+}

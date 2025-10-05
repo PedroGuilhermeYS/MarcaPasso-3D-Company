@@ -99,9 +99,9 @@
                     <div v-for="p in produtosSelecionado" :key="p.id" class="produto">
                         <img :src="p.imagem" :alt="p.nome">
                         <h3>{{ p.nome }}</h3>
-                        <p class="preco">{{ p.preco.toFixed(2) }}</p>
+                        <p class="preco">R$ {{ p.preco.toFixed(2) }}</p>
                         <p class="avaliacao">★★★★★</p>
-                        <button>Comprar</button>
+                        <button @click="$router.push({ name: 'Produto', params: { id: p.id } })">Comprar</button>
                     </div>
                 </div>
             </div>

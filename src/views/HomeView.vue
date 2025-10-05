@@ -1,7 +1,52 @@
 <script setup>
-import TopMenu from '@/componentes/TopMenu.vue';
-import UserAction from '@/componentes/UserAction.vue';
-import Footer from '@/componentes/Footer.vue';
+    import TopMenu from '@/componentes/TopMenu.vue';
+    import UserAction from '@/componentes/UserAction.vue';
+    import Footer from '@/componentes/Footer.vue';
+
+    import { ref, onMounted, computed } from 'vue'
+
+    const produtos = ref([])
+
+    const categoriaSelecionada = ref('')
+    const precoSelecionado = ref('')
+    const personalizavelSelecionado = ref('')
+    const relevancia = ref('')
+
+    onMounted(async () => {
+        const resposta = await fetch('http://localhost:3000/produtos')
+        const data = await resposta.json()
+        produtos.value = data
+    })
+
+    const produtosSelecionado = computed(() => {
+        return produtos.value.filter(p => {
+            let passa = true
+
+            if (categoriaSelecionada.value && p.categoria !== categoriaSelecionada.value) {
+                passa = false
+            }
+
+            if (precoSelecionado.value) {
+                const preco = p.preco;
+                if (precoSelecionado.value === '1' && preco > 50) passa = false
+                if (precoSelecionado.value === '2' && (preco < 50 || preco > 100)) passa = false
+                if (precoSelecionado.value === '3' && preco < 100) passa = false
+            }
+
+            if (personalizavelSelecionado.value && String(p.personalizavel) !== personalizavelSelecionado.value) {
+                passa = false
+            }
+
+            return passa
+        })
+    })
+
+    const limparFiltros = () => {
+        categoriaSelecionada.value = ''
+        precoSelecionado.value = ''
+        personalizavelSelecionado.value = ''
+    }
+
 </script>
 
 <template>
@@ -13,44 +58,52 @@ import Footer from '@/componentes/Footer.vue';
             <div class="filter">
                 <h3 style="margin-left: 10px;" class="MS-Reference"># Filtre sua busca</h3>
                 <label for="categorias">
-                    <select name="categorias" id="categoria" class="select-filter">
-                        <option value="" selected disabled>Categorias</option>
-                        <option value="1">Opção 1</option>
-                        <option value="2">Opção 2</option>
-                        <option value="3">Opção 3</option>
+                    <select v-model="categoriaSelecionada" class="select-filter">
+                        <option value="">Categorias</option>
+                        <option value="Decoração">Decoração</option>
+                        <option value="Roupas">Roupas</option>
+                        <option value="Acessórios">Acessórios</option>
                     </select>
                 </label>
                 <label for="categorias">
-                    <select name="preço" id="preço" class="select-filter">
-                        <option value="" selected disabled>Preço</option>
-                        <option value="1">Opção 1</option>
-                        <option value="2">Opção 2</option>
-                        <option value="3">Opção 3</option>
+                    <select v-model="precoSelecionado" class="select-filter">
+                        <option value="">Preço</option>
+                        <option value="1">Até R$ 50</option>
+                        <option value="2">De R$ 50 a R$ 100</option>
+                        <option value="3">Acima de R$ 100</option>
                     </select>
                 </label>
                 <label for="categorias">
-                    <select name="personalizavel" id="personalizavel" class="select-filter">
-                        <option value="" selected disabled>Personalizavel</option>
-                        <option value="1">Opção 1</option>
-                        <option value="2">Opção 2</option>
-                        <option value="3">Opção 3</option>
+                    <select v-model="personalizavelSelecionado" class="select-filter">
+                        <option value="">Personalizavel</option>
+                        <option value="true">Personalizável</option>
+                        <option value="false">Não personalizável</option>
                     </select>
                 </label>
-                <button class="button-filter">Filtrar</button>
+                <button class="button-filter" @click="limparFiltros">Limpar filtros</button>
             </div>
             
             <div class="all-products">
                 <h2 class="MS-Reference">Todos os produtos</h2>
                 <label for="categorias">
                     <h3 class="MS-Reference">Ordenar por:
-                        <select name="relevancia" id="relevancia" class="relevance-filter">
-                            <option value="" selected disabled>Relevância</option>
-                            <option value="1">Opção 1</option>
-                            <option value="2">Opção 2</option>
-                            <option value="3">Opção 3</option>
+                        <select v-model="relevancia" id="relevancia" class="relevance-filter">
+                            <option value="">Relevância</option>
+                            <option value="1">Nome (A-Z)</option>
+                            <option value="2">Maior Preço</option>
+                            <option value="3">Menor Preço</option>
                         </select>
                     </h3>
                 </label>
+                <div class="lista-produtos">
+                    <div v-for="p in produtosSelecionado" :key="p.id" class="produto">
+                        <img :src="p.imagem" :alt="p.nome">
+                        <h3>{{ p.nome }}</h3>
+                        <p class="preco">{{ p.preco.toFixed(2) }}</p>
+                        <p class="avaliacao">★★★★★</p>
+                        <button>Comprar</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -172,6 +225,61 @@ import Footer from '@/componentes/Footer.vue';
         color: white;
         background-color: #0185FA;
         margin-left: 10px;
+    }
+    .lista-produtos {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);;
+        margin-top: 20px;
+        gap: 20px;
+        padding: 20px;
+        justify-items: center;
+    }
+    .produto {
+        width: 220px;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .produto:hover {
+        transform: scale(1.03);
+    }
+    .produto img {
+        width: 80%;
+        height: 160px;
+        object-fit: cover;
+    }
+
+    .produto h3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: 16px;
+        margin: 10px 0 5px;
+        height: 2.6em;
+    }
+
+    .preco {
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .avaliacao {
+        color: gold;
+        margin: 0px 0;
+    }
+
+    button {
+        background-color: #0099ff;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #007acc;
     }
     
 </style>

@@ -1,35 +1,47 @@
 <script setup>
-import TopMenu from '@/componentes/TopMenu.vue';
-import UserAction from '@/componentes/UserAction.vue';
-import Footer from '@/componentes/Footer.vue';
+    import TopMenu from '@/componentes/TopMenu.vue';
+    import UserAction from '@/componentes/UserAction.vue';
+    import Footer from '@/componentes/Footer.vue';
+
+    import { ref, onMounted } from 'vue'
+    import { useRoute } from 'vue-router'
+
+    const route = useRoute()
+    const Produto = ref(null)
+
+    onMounted(async () => {
+        const resposta = await fetch(`http://localhost:3000/produtos/${route.params.id}`)
+        Produto.value = await resposta.json()
+    })
 </script>
 
 <template>
     <TopMenu></TopMenu>
     <UserAction></UserAction>
-    <main>
-        <h3>Home / Decorações / Suporte de Vinho Dragão Chinês</h3>
+    <main v-if="Produto">
+        <h3>Home / {{ Produto.categoria }} / {{ Produto.nome }}</h3>
         <div class="container1">
 
             <div class="photos">
                 <div class="atual">
-                    <img src="" alt="teste" width="600" height="700">
+                    <img :src="Produto.imagem" :alt="Produto.nome" width="600" height="700">
                 </div>
-                <div class="outrasimg">
-                    <img src="" alt="teste" width="90" height="110">
+                <div v-if="Produto.fotos && Produto.fotos.length" class="outrasimg">
+                    <div v-for="(foto, index) in Produto.fotos" :key="index">
+                        <img :src="foto" :alt="`Foto ${index + 1} de ${Produto.nome}`" width="90" height="110" />
+                    </div>
                 </div>
             </div>
 
             <div class="market">
                 <div class="text">
                     <div class="justify">
-                        <h2 class="name">Suporte de vinho Dragão Chinês</h2>
+                        <h2 class="name">{{ Produto.nome }}</h2>
 
-                        <!-- script para estrelas de icone -->
                         <h6 class="sla">*****</h6>
                         <h6 class="sla2">Seja o primeiro a opinar</h6>
 
-                        <h2 class="price">R$ 24,99</h2>
+                        <h2 class="price">R$ {{ Produto.preco.toFixed(2) }}</h2>
                         <h5 class="juros">ou 2x Sem juros</h5>
                         <div class="sub-container">
                             <!-- script para botão de quantidade-->
@@ -52,8 +64,7 @@ import Footer from '@/componentes/Footer.vue';
         </div>
         <div class="container2">
             <div class="describe">
-                <h2>descrição
-                </h2>
+                <h2>{{ Produto.descricao }}</h2>
             </div>
 
         </div>
@@ -88,6 +99,9 @@ import Footer from '@/componentes/Footer.vue';
     .atual{
         margin-top: 3rem;
         margin-bottom: 2rem;
+    }
+    .outrasimg{
+        display: inline-flex;
     }
     img{
         margin-right: 10px;

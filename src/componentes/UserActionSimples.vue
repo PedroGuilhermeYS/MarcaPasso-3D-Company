@@ -46,4 +46,8 @@
         border: 1px solid #ffffff;
         margin: 10px;
     }  
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
 </style>

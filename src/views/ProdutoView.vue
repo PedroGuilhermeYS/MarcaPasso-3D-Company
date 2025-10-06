@@ -44,7 +44,7 @@
                     <div class="justify">
                         <h2 class="name">{{ Produto.nome }}</h2>
 
-                        <h6 class="sla">*****</h6>
+                        <p class="avaliacao">★★★★★</p>
                         <h6 class="sla2">Seja o primeiro a opinar</h6>
 
                         <h2 class="price">R$ {{ Produto.preco.toFixed(2) }}</h2>
@@ -64,7 +64,7 @@
             <div class="descricao">
                 <h2>Descrição geral</h2>
             </div>
-            <div class="avaliacao">
+            <div class="avaliacoes">
                 <h2>Avaliações</h2>
             </div>
         </div>
@@ -174,5 +174,9 @@
     .describe{
         margin-left: 2rem;
         margin-right: 2rem;
+    }
+    .avaliacao {
+        color: gold;
+        margin-bottom: 0;
     }
 </style>

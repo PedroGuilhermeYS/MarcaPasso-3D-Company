@@ -130,6 +130,7 @@
         font-weight: 300;
     }
     .container{
+        margin-left: 20px;
         display: flex;
         align-items: flex-start;
         
@@ -139,7 +140,6 @@
        font-weight: 200;
     }
     .all-products{
-        width: 78%;
         margin: 0 auto;
         border-radius: 20px;
         border: 2px solid #0185FA;

@@ -35,7 +35,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in carrinho.itens" :key="item.id">
-                                <td><img v-if="item.imagem" :src="item.imagem" :alt="item.nome" width="100px"> <img v-else src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\produto_sem_foto.jpg" alt="Imagem padrão" width="100px"></td>
+                                <td><img v-if="item.imagem" :src="item.imagem" :alt="item.nome" width="100px"></td>
                                 <td class="valor">{{ item.nome }}</td>
                                 <td>
                                     <div class="quantidade">
@@ -173,7 +173,7 @@
         color: #fff;
         border: none;
         border-radius: 8px;
-        padding: 0rem;
+        padding: 2.5px;
         cursor: pointer;
     }
     .remove:hover {
@@ -216,7 +216,7 @@
         align-items: flex-end;
     }
     .valor {
-        font-weight: 00;
+        font-weight:500;
     }
     small {
         font-size: 12px;

@@ -5,14 +5,20 @@
 
     import { ref, onMounted } from 'vue'
     import { useRoute } from 'vue-router'
+    import { useCarrinhoStore } from '@/stores/carrinho'
 
     const route = useRoute()
     const Produto = ref(null)
+    const carrinho = useCarrinhoStore()
 
     onMounted(async () => {
         const resposta = await fetch(`http://localhost:3000/produtos/${route.params.id}`)
         Produto.value = await resposta.json()
     })
+
+    const adicionarAoCarrinho = () => {
+        carrinho.adicionarItem(Produto.value)
+    }
 </script>
 
 <template>
@@ -46,7 +52,7 @@
                         <div class="sub-container">
                             <!-- script para botão de quantidade-->
                             <button class="quantid">1</button>
-                            <button class="cart"># Adicionar ao carrinho</button>
+                            <button class="cart" @click="adicionarAoCarrinho"># Adicionar ao carrinho</button>
                         </div>
                     </div>
                     <h6 class="aviso">Aqui sua compra é 100% segura, compre com tranquilidade.</h6>
@@ -70,7 +76,7 @@
         </div>
     </main>
     <Footer></Footer>
-    <a href="http://localhost:5173/Carrinho"><button>ir pra Carrinho</button></a>
+    <router-link to="/Carrinho"><button>ir pra Carrinho</button></router-link>
 </template>
 
 <style scoped>

@@ -1,6 +1,19 @@
 <script setup>
 import UserActionSimples from '@/componentes/UserActionSimples.vue';
 import Footer from '@/componentes/Footer.vue';
+    import { ref } from 'vue'
+    import ModalLoginView from '@/views/ModalLoginView.vue'
+
+    const mostrarModal = ref(false)
+
+    const abrirModal = () => {
+        mostrarModal.value = true
+    }
+
+    const fecharModal = () => {
+        mostrarModal.value = false
+    }
+
 </script>
 
 <template>
@@ -10,7 +23,8 @@ import Footer from '@/componentes/Footer.vue';
             <div class="yes-registered">
                 <h2>Já sou cadastrado</h2>
                 <p>Para se autenticar, informe seu e-mail ou CPF/CNPJ</p>
-                <button class="button-login">ENTRAR</button>
+                <button class="button-login" @click="abrirModal">ENTRAR</button>
+                <ModalLoginView :mostrarModal="mostrarModal" @fecharModal="fecharModal"/>
             </div>
 
             <div class="Essa-barra-que-é-gostar-de-você"></div>

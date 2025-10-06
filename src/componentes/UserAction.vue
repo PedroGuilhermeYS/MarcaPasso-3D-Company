@@ -1,4 +1,8 @@
 <script setup>
+  import { useCarrinhoStore } from '@/stores/carrinho';
+  
+  const carrinho = useCarrinhoStore()
+  
 </script>
 
 <template>
@@ -33,8 +37,8 @@
         </div>
 
         <div class="carrinho">
-          <span class="material-symbols-outlined">shopping_cart</span>
-          <h4>R$ 0,00</h4>
+          <router-link to="/Carrinho"><span class="material-symbols-outlined">shopping_cart</span></router-link>
+          <router-link to="/Carrinho"><h4>R$ {{ carrinho.total.toFixed(2) }}</h4></router-link>
         </div>
 
       </div>

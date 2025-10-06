@@ -1,33 +1,30 @@
 <script setup>
-import TopMenu from '@/componentes/TopMenu.vue';
-import UserAction from '@/componentes/UserAction.vue';
-import Footer from '@/componentes/Footer.vue';
+    import TopMenu from '@/componentes/TopMenu.vue';
+    import UserAction from '@/componentes/UserAction.vue';
+    import Footer from '@/componentes/Footer.vue';
+
+    import { useCarrinhoStore } from '@/stores/carrinho';
+
+    const carrinho = useCarrinhoStore()
+
 </script>
 
 <template>
     <TopMenu></TopMenu>
     <UserAction></UserAction>
-    <main>
-        
+    <main>       
         <div class="container1">
-
             <div class="products">
-
                 <div class="topo">
-
                     <h2># Carrinho</h2>
                     <h4>Clique em continuar para efetuar o seu pedido</h4>
-                
                 </div>
 
                 <hr>
 
                 <div class="itens-products">
-
                     <table>
-
                         <thead>
-
                             <tr>
                             <th>Produto</th>
                             <th></th>
@@ -35,107 +32,73 @@ import Footer from '@/componentes/Footer.vue';
                             <th>Preço</th>
                             <th>Excluir</th>
                             </tr>
-
                         </thead>
-
                         <tbody>
-
-                            <tr>
-                                <td><img src="" alt="produto" width="100px"></td>
-                                <td>Suporte de Vinho Dragão Chinês</td>
+                            <tr v-for="item in carrinho.itens" :key="item.id">
+                                <td><img v-if="item.imagem" :src="item.imagem" :alt="item.nome" width="100px"> <img v-else src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\produto_sem_foto.jpg" alt="Imagem padrão" width="100px"></td>
+                                <td class="valor">{{ item.nome }}</td>
                                 <td>
                                     <div class="quantidade">
-                                        <button>-</button>
-                                        <h4>1</h4>
-                                        <button>+</button>
+                                        <button @click="carrinho.alterarQuantidade(item.id, item.quantidade - 1)">-</button>
+                                        <h4>{{ item.quantidade }}</h4>
+                                        <button @click="carrinho.alterarQuantidade(item.id, item.quantidade + 1)">+</button>
                                     </div>
                                 </td>
-                                <td>R$</td>
-                                <td><button>Excluir</button></td>
+                                <td class="valor">R$ {{ (item.preco * item.quantidade).toFixed(2) }}</td>
+                                <td><button @click="carrinho.removerItem(item.id)" class="remove">Excluir</button></td>
                             </tr>
-
                         </tbody>
-                        
-
-                    </table>
-                    
-                    
+                    </table>                  
                 </div>  
-
                 <div class="complements">
-    
                         <div class="frete">
-
                             <label for="cep">Calcule o frete:</label>
                             <input class="cep" type="text" id="cep" placeholder="Digite seu CEP">
                             <button>Calcular</button>
-                            <span class="help">? Não sei meu CEP</span>
-
+                            <a href="https://buscacepinter.correios.com.br/app/endereco/index.php"><span class="help">? Não sei meu CEP</span></a>
                         </div>
-
                         <div class="cupom">
-
                             <label for="desconto">Cupom de desconto:</label>
                             <input class="desconto" type="text" id="desconto" placeholder="Digite o cupom">
                             <button>Usar cupom</button>
-
                         </div>
-
                 </div>
-
             </div>
-
             <div class="market">
-
                 <h2># RESUMO</h2>
-
                     <div class="style-camp">
-
                         <span>Valor dos Produtos:</span>
-                        <span>R$ XXX,XX</span>
-
+                        <span>R$ {{ carrinho.total.toFixed(2) }}</span>
                     </div>
 
                 <hr>
 
                 <div class="style-camp">
-
                     <span>Frete:</span>
                     <span>R$ XXX,XX</span>
-
                 </div>
 
                 <hr>
             
                 <div class="style-camp destaque-prazo">
-
                     <span>Total a prazo:</span>
                     <div class="preco">
-
-                        <span class="valor">R$ XXX,XX</span>
-                        <small>(Em até 2x de R$ XXX,XX sem juros)</small>
+                        <span class="valor">R$ {{ ((carrinho.total * 0.2) + carrinho.total).toFixed(2) }}</span>
+                        <small>(Em até 2x de R$ {{ (carrinho.total / 2).toFixed(2) }} sem juros)</small>
                     </div>
-
                 </div>
-
                 <div class="style-camp destaque-vista">
-
                     <span>Valor à vista no <b>Pix:</b></span>
                     <div class="preco">
-
-                        <span class="valor">R$ XXX,XX</span>
-                        <small>(Economize: R$ XXX,XX)</small>
-
+                        <span class="valor">R$ {{ carrinho.total.toFixed(2) }}</span>
                     </div>
                 </div>
 
                 <hr>
 
                 <button class="button-comprar">CONTINUAR</button>
-                <button class="button-voltar">VOLTAR</button>
-
+                <router-link to="/"><button class="button-voltar" >VOLTAR</button></router-link>
             </div>
-            
         </div>
     </main>
     <Footer></Footer>
@@ -204,6 +167,18 @@ import Footer from '@/componentes/Footer.vue';
         border-radius: 20px;
         width: 3rem;
     }
+    .remove{
+        width: 50%;
+        background: #0185FA;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0rem;
+        cursor: pointer;
+    }
+    .remove:hover {
+        transform: scale(1.03);
+    }
     .complements{
         font-family: inherit;
         text-align: left;
@@ -241,7 +216,7 @@ import Footer from '@/componentes/Footer.vue';
         align-items: flex-end;
     }
     .valor {
-        font-weight: bold;
+        font-weight: 00;
     }
     small {
         font-size: 12px;
@@ -298,6 +273,13 @@ import Footer from '@/componentes/Footer.vue';
         font-weight: bold;
         margin-top: 0.5rem;
         cursor: pointer;
+    }
+    .button-comprar:hover, .button-voltar:hover {
+        transform: scale(1.03);
+    }
+    a {
+        text-decoration: none;
+        color: inherit;
     }
 
 </style>

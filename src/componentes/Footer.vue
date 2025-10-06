@@ -6,7 +6,7 @@
     <div class="footer-top">
       <div class="footer-columnn logo">
         <a href="http://localhost:5173/">
-          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\marcapasso-logo.svg" alt="logo" width="300"/>
+          <router-link to="/"><img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\marcapasso-logo.svg" alt="logo" width="300"/></router-link>
         </a>
       </div>
 

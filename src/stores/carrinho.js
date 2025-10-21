@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed} from 'vue'
 
 export const useCarrinhoStore = defineStore('carrinho', () => {
     const itens = ref([])
@@ -16,20 +16,22 @@ export const useCarrinhoStore = defineStore('carrinho', () => {
         }
     }
 
-    function adicionarItem(produto) {
+    function adicionarItem(produto, quantidades) {
+        const quantidade = Number(quantidades) || 1
         const existente = itens.value.find(i => i.id === produto.id)
-        if(existente) {
-            existente.quantidade++
+
+        if (existente) {
+            existente.quantidade += quantidade
         } else {
             itens.value.push({
             id: produto.id,
             nome: produto.nome,
             preco: produto.preco,
             imagem: produto.imagem,
-            quantidade: 1
+            quantidade
             })
         }
-    }
+        }
     function removerItem(id) {
         itens.value = itens.value.filter(i => i.id !== id)
         }

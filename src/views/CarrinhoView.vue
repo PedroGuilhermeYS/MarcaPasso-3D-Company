@@ -77,14 +77,14 @@
                     <span>Frete:</span>
                     <span>R$ XXX,XX</span>
                 </div>
-
+        
                 <hr>
             
                 <div class="style-camp destaque-prazo">
                     <span>Total a prazo:</span>
                     <div class="preco">
-                        <span class="valor">R$ {{ ((carrinho.total * 0.2) + carrinho.total).toFixed(2) }}</span>
-                        <small>(Em até 2x de R$ {{ (carrinho.total / 2).toFixed(2) }} sem juros)</small>
+                        <span class="valor">R$ {{ ((carrinho.total * 0.05) + carrinho.total).toFixed(2) }}</span>
+                        <small>(Em até 2x de R$ {{ ((carrinho.total * 0.05 + carrinho.total) / 2).toFixed(2) }} sem juros)</small>
                     </div>
                 </div>
                 <div class="style-camp destaque-vista">

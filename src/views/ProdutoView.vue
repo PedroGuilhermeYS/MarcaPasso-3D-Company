@@ -9,6 +9,7 @@
 
     const route = useRoute()
     const Produto = ref(null)
+    const itens = ref(1)
     const carrinho = useCarrinhoStore()
 
     onMounted(async () => {
@@ -16,8 +17,10 @@
         Produto.value = await resposta.json()
     })
 
-    const adicionarAoCarrinho = () => {
-        carrinho.adicionarItem(Produto.value)
+    function limitarQuantidade() {
+        const str = quantidade.value.toString()
+        if (str.length > 2)
+            quantidade.value = parseInt(str.slice(0, 2))
     }
 </script>
 
@@ -50,9 +53,9 @@
                         <h2 class="price">R$ {{ Produto.preco.toFixed(2) }}</h2>
                         <h5 class="juros">ou 2x Sem juros</h5>
                         <div class="sub-container">
-                            <!-- script para botão de quantidade-->
-                            <button class="quantid">1</button>
-                            <button class="cart" @click="adicionarAoCarrinho"># Adicionar ao carrinho</button>
+                            
+                            <input class="quantid" v-model.number="itens" type="number"max="99" maxlength="2" @input="limitarQuantidade"/>
+                            <button class="cart" @click="carrinho.adicionarItem(Produto, itens)"># Adicionar ao carrinho</button>
                         </div>
                     </div>
                     <h6 class="aviso">Aqui sua compra é 100% segura, compre com tranquilidade.</h6>
@@ -152,10 +155,19 @@
         background-color: #0185FA;
     }
     .quantid{
-        width: 4rem;
-        padding: 10px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        width:1rem;
+        padding: 11px;
+        border: none;
+        background-color: #DDDDDD;
         border-radius: 6px;
-        margin-right: 10px;
+        margin-right: 1rem;
+    }
+    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
     .container2{
         width: 99.7%;

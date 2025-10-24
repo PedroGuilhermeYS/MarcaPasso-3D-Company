@@ -70,5 +70,76 @@
       "descricao": "Suporte iluminado em formato de cristal com logo Xbox. Um toque elegante para o setup gamer.",
       "fotos": ["/imagem-produtos/suportecristalxbox.jpeg", "/imagem-produtos/suportecristalxbox.jpeg", "/imagem-produtos/suportecristalxbox.jpeg", "/imagem-produtos/suportecristalxbox.jpeg"]
     }
+  ],
+  "fretes": [
+    {
+      "id": 1,
+      "cidade": "Joaquim Nabuco",
+      "cep_destino": "55535000",
+      "valor_frete": 25.00,
+      "prazo_entrega_dias": 5
+    },
+    {
+      "id": 2,
+      "cidade": "Recife",
+      "cep_destino": "51160220",
+      "valor_frete": 15.00,
+      "prazo_entrega_dias": 7
+    },
+    {
+      "id": 3,
+      "cidade": "Tamandaré",
+      "cep_destino": "55578000",
+      "valor_frete": 30.00,
+      "prazo_entrega_dias": 6
+    },
+    {
+      "id": 4,
+      "cidade": "Ribeirão",
+      "cep_destino": "55520330",
+      "valor_frete": 25.00,
+      "prazo_entrega_dias": 5
+    },
+    {
+      "id": 5,
+      "cidade": "Palmares",
+      "cep_destino": "55540000",
+      "valor_frete": 15.00,
+      "prazo_entrega_dias": 7
+    },
+    {
+      "id": 6,
+      "cidade": "Água Preta",
+      "cep_destino": "55550000",
+      "valor_frete": 30.00,
+      "prazo_entrega_dias": 6
+    }
+  ],
+  "cupons": [
+    {
+      "id": 1,
+      "cupom_nome": "PRIMEIRACOMPRA",
+      "desconto": 20
+    },
+    {
+      "id": 2,
+      "cupom_nome": "FRETEGRATIS10",
+      "desconto": 10
+    },
+    {
+      "id": 3,
+      "cupom+nome": "CLIENTEVIP",
+      "desconto": 25
+    },
+    {
+      "id": 4,
+      "cupom_nome": "DESCONTO15",
+      "desconto": 15
+    },
+    {
+      "id": 5,
+      "cupom_nome": "BLACKWEEK",
+      "desconto": 30
+    }
   ]
 }

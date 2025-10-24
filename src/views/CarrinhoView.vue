@@ -3,9 +3,61 @@
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
 
+    import { ref, onMounted } from 'vue'
     import { useCarrinhoStore } from '@/stores/carrinho';
 
     const carrinho = useCarrinhoStore()
+    const fretes = ref([])
+    const cepatual = ref('')
+    const ValorFrete = ref("0.00")
+    const ValorComFrete = ref(0)
+    const DiaEntrega = ref('')
+    const cidade = ref('')
+
+    onMounted(async () => {
+        const resposta = await fetch('http://localhost:3000/fretes')
+        const data = await resposta.json()
+        fretes.value = data
+    })
+
+    function calculardata(cepatual) {
+        const frete = fretes.value.find(f => f.cep_destino === cepatual)
+
+        if (frete){
+            DiaEntrega.value = `${frete.prazo_entrega_dias} dias`
+            ValorFrete.value = frete.valor_frete.toFixed(2)
+            ValorComFrete.value = carrinho.total + frete.valor_frete
+            cidade.value = ` em ${frete.cidade}`
+        } else {
+            DiaEntrega.value = 'Cidade fora de rotas'
+            ValorFrete.value = `0.00`
+            ValorComFrete.value = carrinho.total
+            cidade.value = ""
+        }
+    }
+
+    const cupons = ref([])
+    const cupomatual = ref('')
+    const descontostring = ref()
+    const valordesconto = ref(0)
+
+    onMounted(async () => {
+        const resposta = await fetch('http://localhost:3000/cupons')
+        const data = await resposta.json()
+        cupons.value = data
+    })
+
+    function calcularcupom(cupomatual) {
+        const cupom = cupons.value.find(c => c.cupom_nome === cupomatual.trim().toUpperCase())
+
+        if(cupom) {
+            valordesconto.value = cupom.desconto
+            descontostring.value = `Desconto de R$ ${cupom.desconto.toFixed(2)} com o cupom`
+        } else {
+        valordesconto.value = 0
+        descontostring.value = 'Cupom inválido ou não encontrado'
+    }
+    }
 
 </script>
 
@@ -53,15 +105,17 @@
                 <div class="complements">
                         <div class="frete">
                             <label for="cep">Calcule o frete:</label>
-                            <input class="cep" type="text" id="cep" placeholder="Digite seu CEP">
-                            <button>Calcular</button>
+                            <input v-model="cepatual" class="cep" type="text" id="cep" placeholder="Digite seu CEP">
+                            <button @click="calculardata(cepatual)">Calcular</button>
                             <a href="https://buscacepinter.correios.com.br/app/endereco/index.php"><span class="help">? Não sei meu CEP</span></a>
                         </div>
+                        <label>Tempo estimado para entrega{{ cidade }}: {{ DiaEntrega }}</label>
                         <div class="cupom">
                             <label for="desconto">Cupom de desconto:</label>
-                            <input class="desconto" type="text" id="desconto" placeholder="Digite o cupom">
-                            <button>Usar cupom</button>
+                            <input v-model="cupomatual" class="desconto" type="text" id="desconto" placeholder="Digite o cupom">
+                            <button @click="calcularcupom(cupomatual)">Usar cupom</button>
                         </div>
+                        <label v-if="descontostring">{{ descontostring }}</label>
                 </div>
             </div>
             <div class="market">
@@ -75,7 +129,7 @@
 
                 <div class="style-camp">
                     <span>Frete:</span>
-                    <span>R$ XXX,XX</span>
+                    <span v-if="ValorFrete">R$ {{ ValorFrete }}</span>
                 </div>
         
                 <hr>
@@ -83,14 +137,14 @@
                 <div class="style-camp destaque-prazo">
                     <span>Total a prazo:</span>
                     <div class="preco">
-                        <span class="valor">R$ {{ ((carrinho.total * 0.05) + carrinho.total).toFixed(2) }}</span>
-                        <small>(Em até 2x de R$ {{ ((carrinho.total * 0.05 + carrinho.total) / 2).toFixed(2) }} sem juros)</small>
+                        <span class="valor">R$ {{ ((ValorComFrete * 0.05) + ValorComFrete - valordesconto).toFixed(2) }}</span>
+                        <small>(Em até 2x de R$ {{ ((ValorComFrete * 0.05 + ValorComFrete - valordesconto) / 2).toFixed(2) }} sem juros)</small>
                     </div>
                 </div>
                 <div class="style-camp destaque-vista">
                     <span>Valor à vista no <b>Pix:</b></span>
                     <div class="preco">
-                        <span class="valor">R$ {{ carrinho.total.toFixed(2) }}</span>
+                        <span class="valor">R$ {{ (ValorComFrete - valordesconto).toFixed(2) }}</span>
                     </div>
                 </div>
 
@@ -190,6 +244,15 @@
         font-weight: 700;
         margin-bottom: 2rem;
     }
+    .frete{
+        margin-bottom: 1rem;
+    }
+    .cupom{
+        margin-bottom: 1rem;
+    }
+    .cupom{
+        margin-top: 1rem;
+    }
     .cep, .help{ 
         margin-left: 2rem 
     }
@@ -276,6 +339,9 @@
     }
     .button-comprar:hover, .button-voltar:hover {
         transform: scale(1.03);
+    }
+    button{
+        margin: 0 !important;
     }
     a {
         text-decoration: none;

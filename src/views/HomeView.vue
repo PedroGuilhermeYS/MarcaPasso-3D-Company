@@ -2,6 +2,7 @@
     import TopMenu from '@/componentes/TopMenu.vue';
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
+    import { usePesquisaStore } from '@/stores/pesquisa'
 
     import { ref, onMounted, computed } from 'vue'
 
@@ -10,7 +11,8 @@
     const categoriaSelecionada = ref('')
     const precoSelecionado = ref('')
     const personalizavelSelecionado = ref('')
-    const relevancia = ref('')
+    const ordenacaoSelecionada = ref('')
+    const pesquisa = usePesquisaStore()
 
     onMounted(async () => {
         const resposta = await fetch('http://localhost:3000/produtos')
@@ -19,13 +21,15 @@
     })
 
     const produtosSelecionado = computed(() => {
-        return produtos.value.filter(p => {
+        let filtrados = produtos.value.filter(p => {
             let passa = true
 
-            if (categoriaSelecionada.value && p.categoria !== categoriaSelecionada.value) {
+            if (pesquisa.termo && !p.nome.toLowerCase().includes(pesquisa.termo.toLowerCase())) {
                 passa = false
             }
-
+            if (categoriaSelecionada.value && p.categoria !== categoriaSelecionada.value)
+                passa = false
+            
             if (precoSelecionado.value) {
                 const preco = p.preco;
                 if (precoSelecionado.value === '1' && preco > 50) passa = false
@@ -38,7 +42,16 @@
             }
 
             return passa
-        })
+        })  
+            if (ordenacaoSelecionada.value === 'az') {
+                filtrados.sort((a, b) => a.nome.localeCompare(b.nome))
+            } else if (ordenacaoSelecionada.value === 'maior') {
+                filtrados.sort((a, b) => b.preco - a.preco)
+            } else if (ordenacaoSelecionada.value === 'menor') {
+                filtrados.sort((a, b) => a.preco - b.preco)
+            }
+
+            return filtrados
     })
 
     const limparFiltros = () => {
@@ -87,11 +100,11 @@
                 <h2 class="MS-Reference">Todos os produtos</h2>
                 <label for="categorias">
                     <h3 class="MS-Reference">Ordenar por:
-                        <select v-model="relevancia" id="relevancia" class="relevance-filter">
+                        <select v-model="ordenacaoSelecionada" id="relevancia" class="relevance-filter">
                             <option value="">Relevância</option>
-                            <option value="1">Nome (A-Z)</option>
-                            <option value="2">Maior Preço</option>
-                            <option value="3">Menor Preço</option>
+                            <option value="az">Nome (A-Z)</option>
+                            <option value="menor">Maior Preço</option>
+                            <option value="maior">Menor Preço</option>
                         </select>
                     </h3>
                 </label>

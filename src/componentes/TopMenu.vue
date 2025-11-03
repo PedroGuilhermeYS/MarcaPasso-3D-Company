@@ -1,18 +1,23 @@
 <script setup>
+import { usePesquisaStore } from '@/stores/pesquisa'
+const pesquisa = usePesquisaStore()
 </script>
 
 <template>
   <main>
     <div class="container">
-      <a href="http://localhost:5173/">
-        <router-link to="/"><img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\marcapasso-logo.svg" alt="logo" width="150"></router-link>
-      </a>
+      <router-link to="/">
+        <img src="@/img/marcapasso-logo.svg" alt="logo">
+      </router-link>
 
       <div class="search-container">
-        <input type="text" class="search" placeholder="Compre na MarcaPasso 3D">
-        <span class="icon">
-          🔍
-        </span>
+        <input 
+          type="text" 
+          class="search" 
+          placeholder="Compre na MarcaPasso 3D"
+          v-model="pesquisa.termo"
+        >
+        <span class="icon">🔍</span>
       </div>
     </div>
   </main>

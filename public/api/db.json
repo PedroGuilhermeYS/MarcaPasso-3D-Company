@@ -128,7 +128,7 @@
     },
     {
       "id": 3,
-      "cupom+nome": "CLIENTEVIP",
+      "cupom_nome": "CLIENTEVIP",
       "desconto": 25
     },
     {
@@ -140,6 +140,11 @@
       "id": 5,
       "cupom_nome": "BLACKWEEK",
       "desconto": 30
+    },
+    {
+      "id": 6,
+      "cupom_nome": "BATTLEFIELD6",
+      "desconto": 100
     }
   ]
 }

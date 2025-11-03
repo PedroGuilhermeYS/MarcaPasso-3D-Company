@@ -32,8 +32,8 @@
         </div>
 
         <div class="favorito">
-          <span class="material-symbols-outlined">favorite</span>
-          <h4>""Em criação""</h4>
+          <router-link to="/Favoritos"><span class="material-symbols-outlined">favorite</span></router-link>
+          <router-link to="/Favoritos"><h4>Favoritos</h4></router-link>
         </div>
 
         <div class="carrinho">
@@ -97,9 +97,10 @@
     .material-symbols-outlined {
         font-variation-settings: 
         'FILL' 0,
-        'wght' 400,
+        'wght' 300,
         'GRAD' 0,
         'opsz' 24;
+        margin-top: 5px;
         font-size: 20px;
         color: #0185FA;
     }

@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import ProdutoView from '@/views/ProdutoView.vue'
 import ContatosView from '@/views/ContatosView.vue'
+import FavoritosView from '@/views/FavoritosView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       name: 'Produto', 
       component: ProdutoView, 
       props: true 
+    },
+    {
+      path: "/Favoritos",
+      name: "/Favoritos",
+      component: FavoritosView
     }
   ],
 })

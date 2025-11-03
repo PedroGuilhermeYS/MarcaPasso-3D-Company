@@ -10,7 +10,7 @@
     const fretes = ref([])
     const cepatual = ref('')
     const ValorFrete = ref("0.00")
-    const ValorComFrete = ref(0)
+    const ValorComFrete = ref(carrinho.total)
     const DiaEntrega = ref('')
     const cidade = ref('')
 
@@ -87,7 +87,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in carrinho.itens" :key="item.id">
-                                <td><img v-if="item.imagem" :src="item.imagem" :alt="item.nome" width="100px"></td>
+                                <td><img v-if="item.imagem" :src="item.imagem" :alt="item.nome" width="100px" @click="$router.push({ name: 'Produto', params: { id: item.id } })"></td>
                                 <td class="valor">{{ item.nome }}</td>
                                 <td>
                                     <div class="quantidade">

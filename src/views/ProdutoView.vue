@@ -6,11 +6,16 @@
     import { ref, onMounted } from 'vue'
     import { useRoute } from 'vue-router'
     import { useCarrinhoStore } from '@/stores/carrinho'
+    import { useFavoritadosStore } from '@/stores/favoritados';
 
     const route = useRoute()
     const Produto = ref(null)
     const itens = ref(1)
     const carrinho = useCarrinhoStore()
+    const favoritados = useFavoritadosStore()
+    const currentUrl = window.location.href
+
+    console.log('Favoritos store:', favoritados)
 
     onMounted(async () => {
         const resposta = await fetch(`http://localhost:3000/produtos/${route.params.id}`)
@@ -22,14 +27,52 @@
         if (str.length > 2)
             quantidade.value = parseInt(str.slice(0, 2))
     }
+
+    async function compartilharProduto() {
+        const link = `http://localhost:5173/produto/${route.params.id}`
+        const titulo = Produto.value.nome
+
+        if (navigator.share) {
+            await navigator.share({
+            title: titulo,
+            text: `Confira este produto: ${titulo}`,
+            url: link,
+            })
+        } else {
+            await navigator.clipboard.writeText(link)
+            alert('Link copiado para a área de transferência!')
+        }
+    }
 </script>
 
 <template>
     <TopMenu></TopMenu>
     <UserAction></UserAction>
     <main v-if="Produto">
-        <h3>Home / {{ Produto.categoria }} / {{ Produto.nome }}</h3>
         <div class="container1">
+            <div class="left">
+                <h3>Home / {{ Produto.categoria }} / {{ Produto.nome }}</h3>
+            </div>
+
+            <div class="right">
+
+                <div class="link">
+                    <button class="material-symbols-outlined" @click="compartilharProduto">link</button>
+                </div>
+
+                <div class="whatsapp">
+                    <a :href="`https://api.whatsapp.com/send?text=${encodeURIComponent('Confira este produto: ' + Produto.nome + ' - ' + currentUrl)}`"
+                    target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
+                </div>
+
+                <div class="favorito">
+                    <button class="material-symbols-outlined" :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : '#0185FA' }"
+                    @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">favorite</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="container2">
 
             <div class="photos">
                 <div class="atual">
@@ -71,7 +114,7 @@
                 <h2>Avaliações</h2>
             </div>
         </div>
-        <div class="container2">
+        <div class="container3">
             <div class="describe">
                 <h2>{{ Produto.descricao }}</h2>
             </div>
@@ -89,7 +132,7 @@
         font-family: 'Open Sans';
         font-weight: 300;
     }
-    .container1{
+    .container2{
         width: 100%;
         display: flex;
         gap: 2.9rem;
@@ -169,7 +212,7 @@
         -webkit-appearance: none;
         margin: 0;
     }
-    .container2{
+    .container3{
         width: 99.7%;
         display: flex;
         justify-content: left;
@@ -190,5 +233,43 @@
     .avaliacao {
         color: gold;
         margin-bottom: 0;
+    }
+    .container1, .left, .right{
+        display: flex;
+        justify-content: space-between;
+    }
+    .right {
+        margin-right: 9%;
+    }
+    .container1{
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .link, .favorito, .whatsapp{
+        padding: 1px 10px;
+        display: flex;
+        align-items: center;  
+    }
+    .material-symbols-outlined {
+        font-variation-settings: 
+        'FILL' 0,
+        'wght' 300,
+        'GRAD' 0,
+        'opsz' 24;
+        font-size: 25px;
+        color: #0185FA;
+    }
+    .bi-whatsapp{
+        color: green;
+        font-size: 20px;
+    }
+    button{
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+    .cart:hover {
+        background-color: #007acc;
+        transform: scale(1.03);
     }
 </style>

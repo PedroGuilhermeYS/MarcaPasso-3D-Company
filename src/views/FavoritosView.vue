@@ -1,0 +1,137 @@
+<script setup>
+    import TopMenu from '@/componentes/TopMenu.vue';
+    import UserAction from '@/componentes/UserAction.vue';
+    import Footer from '@/componentes/Footer.vue';
+
+    import { useFavoritadosStore } from '@/stores/favoritados';
+
+    const favoritados = useFavoritadosStore()
+
+</script>
+
+<template>
+
+    <TopMenu></TopMenu>
+    <UserAction></UserAction>
+
+    <main>
+        <div class="container">
+            <div class="all-products">
+                <h2 class="MS-Reference">Todos os produtos</h2>
+                <label for="categorias">
+                    <h3 class="MS-Reference">Ordenar por:
+                        <select v-model="relevancia" id="relevancia" class="relevance-filter">
+                            <option value="">Relevância</option>
+                            <option value="1">Nome (A-Z)</option>
+                            <option value="2">Maior Preço</option>
+                            <option value="3">Menor Preço</option>
+                        </select>
+                    </h3>
+                </label>
+                <div class="lista-produtos">
+                    <div v-for="item in favoritados.itens" :key="item.id" class="produto">
+                        <img :src="item.imagem" :alt="item.nome">
+                        <h3>{{ item.nome }}</h3>
+                        <p class="preco">R$ {{ item.preco.toFixed(2) }}</p>
+                        <p class="avaliacao">★★★★★</p>
+                        <button @click="$router.push({ name: 'Produto', params: { id: item.id } })">Comprar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <Footer></Footer>
+</template>
+
+<style scoped>
+
+    main{
+        width: 1400px;
+        margin: 0 auto;
+        font-family: 'Open Sans';
+        font-weight: 300;
+    }
+    .container{
+        margin-left: 20px;
+        display: flex;
+        align-items: flex-start;
+        
+    }
+    .MS-Reference{
+       font-family: "MS Reference Sans Serif", sans-serif;
+       font-weight: 200;
+    }
+    .all-products{
+        width: 90%;
+        margin: 0 auto;
+        border-radius: 20px;
+        border: 2px solid #0185FA;
+    }
+    .all-products h3{
+        margin-top: 5px;
+        margin-left: 40px;
+        font-size: .8rem;
+    }
+    .all-products h2{
+        margin-top: 10px;
+        margin-left: 50px;
+        margin-bottom: 0px;
+    }
+    .relevance-filter{
+        padding: 5px;
+        border-radius: 20px;
+        width: 140px;
+        font-size: .8rem;
+        background-color: #D2D2D2;
+        border: none;
+    }
+    .produto {
+        width: 220px;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .produto:hover {
+        transform: scale(1.03);
+    }
+    .produto img {
+        width: 80%;
+        height: 160px;
+        object-fit: cover;
+    }
+    .produto h3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: 16px;
+        margin: 10px 0 5px;
+        height: 2.6em;
+    }
+    .lista-produtos {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);;
+        margin-top: 20px;
+        gap: 20px;
+        padding: 20px;
+        justify-items: center;
+    }
+    .preco {
+        margin: 0;
+        font-weight: bold;
+    }
+    .avaliacao {
+        color: gold;
+        margin: 0px 0;
+    }
+    button {
+        background-color: #0099ff;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+</style>

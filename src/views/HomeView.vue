@@ -3,25 +3,25 @@
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
     import { usePesquisaStore } from '@/stores/pesquisa'
+    import { useProdutosStore } from '@/stores/Produtos';
+    import { formatarPreco } from '@/utils/functionsFull.js'
 
     import { ref, onMounted, computed } from 'vue'
 
-    const produtos = ref([])
+    const pesquisa = usePesquisaStore()
+    const produtosStore = useProdutosStore()
 
     const categoriaSelecionada = ref('')
     const precoSelecionado = ref('')
     const personalizavelSelecionado = ref('')
     const ordenacaoSelecionada = ref('')
-    const pesquisa = usePesquisaStore()
 
     onMounted(async () => {
-        const resposta = await fetch('http://localhost:3000/produtos')
-        const data = await resposta.json()
-        produtos.value = data
+        await produtosStore.carregarProdutos()
     })
 
     const produtosSelecionado = computed(() => {
-        let filtrados = produtos.value.filter(p => {
+        let filtrados = produtosStore.produtos.filter(p => {
             let passa = true
 
             if (pesquisa.termo && !p.nome.toLowerCase().includes(pesquisa.termo.toLowerCase())) {
@@ -69,7 +69,7 @@
         <div class="container">
 
             <div class="filter">
-                <h3 style="margin-left: 10px;" class="MS-Reference"># Filtre sua busca</h3>
+                <h3 style="margin-left: 10px; align-items: center;" class="MS-Reference"><span class="material-symbols-outlined">filter_alt</span> Filtre sua busca</h3>
                 <label for="categorias">
                     <select v-model="categoriaSelecionada" class="select-filter">
                         <option value="">Categorias</option>
@@ -100,11 +100,11 @@
                 <h2 class="MS-Reference">Todos os produtos</h2>
                 <label for="categorias">
                     <h3 class="MS-Reference">Ordenar por:
-                        <select v-model="ordenacaoSelecionada" id="relevancia" class="relevance-filter">
+                        <select v-model="ordenacaoSelecionada" id="relevancia" class="relevance-filter"> <!--Modifica para v-for Categorias-->
                             <option value="">Relevância</option>
                             <option value="az">Nome (A-Z)</option>
-                            <option value="menor">Maior Preço</option>
-                            <option value="maior">Menor Preço</option>
+                            <option value="menor">Menor Preço</option>
+                            <option value="maior">Maior Preço</option>
                         </select>
                     </h3>
                 </label>
@@ -112,9 +112,11 @@
                     <div v-for="p in produtosSelecionado" :key="p.id" class="produto">
                         <img :src="p.imagem" :alt="p.nome">
                         <h3>{{ p.nome }}</h3>
-                        <p class="preco">R$ {{ p.preco.toFixed(2) }}</p>
-                        <p class="avaliacao">★★★★★</p>
+                        <p class="preco">{{ formatarPreco(p.preco) }}</p>
+                        <p class="avaliacao">★★★★★</p>                        
+                        
                         <button @click="$router.push({ name: 'Produto', params: { id: p.id } })">Comprar</button>
+
                     </div>
                 </div>
             </div>
@@ -148,11 +150,20 @@
         align-items: flex-start;
         
     }
+    .material-symbols-outlined {
+        font-variation-settings: 
+        'FILL' 0,
+        'wght' 300,
+        'GRAD' 0,
+        'opsz' 24;
+        font-size: 25px;  
+    }
     .MS-Reference{
        font-family: "MS Reference Sans Serif", sans-serif;
        font-weight: 200;
     }
     .all-products{
+        width: 77%;
         margin: 0 auto;
         border-radius: 20px;
         border: 2px solid #0185FA;

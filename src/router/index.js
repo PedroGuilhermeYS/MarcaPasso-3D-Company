@@ -5,6 +5,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ProdutoView from '@/views/ProdutoView.vue'
 import ContatosView from '@/views/ContatosView.vue'
 import FavoritosView from '@/views/FavoritosView.vue'
+import AdminProdutosView from '@/views/AdminProdutosView.vue'
+import PainelUserView from '@/views/PainelUserView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +40,16 @@ const router = createRouter({
       path: "/Favoritos",
       name: "/Favoritos",
       component: FavoritosView
+    },
+    {
+      path: "/admin",
+      name: "AdminProdutos",
+      component: AdminProdutosView
+    },
+    {
+      path: "/Painel",
+      name: "PainelUser",
+      component: PainelUserView
     }
   ],
 })

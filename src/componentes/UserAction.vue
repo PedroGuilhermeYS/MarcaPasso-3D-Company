@@ -1,8 +1,13 @@
 <script setup>
-  import { useCarrinhoStore } from '@/stores/carrinho';
-  
-  const carrinho = useCarrinhoStore()
-  
+import { computed } from 'vue'
+import { useCarrinhoStore } from '@/stores/carrinho'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { formatarPreco } from '@/utils/functionsFull.js'
+
+const carrinho = useCarrinhoStore()
+const auth = useAuthStore()
+
+const usuarioLogado = computed(() => auth.usuario)
 </script>
 
 <template>
@@ -10,20 +15,22 @@
     <div class="container">
 
       <div class="left-buttons">
-        <a href="http://localhost:5173/Contatos">
-          <p class="space">Contatos</p>
-        </a>
+        <router-link to="/Contatos"><p class="space">Contatos</p></router-link>
         <div class="Essa-barra-que-é-gostar-de-você"></div>
         <p>Quem somos</p>
       </div>
 
       <div class="right-buttons">
-        
         <div class="login">
           <span class="material-symbols-outlined">person</span>
-          <a href="http://localhost:5173/Login">
-            <h4>Minha Conta</h4>
-          </a>
+
+          <router-link to="/Login">
+          <h4 v-if="!usuarioLogado">Entrar/Cadastrar</h4>
+          </router-link>
+
+          <router-link to="/Painel">
+            <h4 v-if="usuarioLogado">Olá, {{ usuarioLogado.displayName || usuarioLogado.email }}</h4>
+          </router-link>
         </div>
 
         <div class="pedidos">
@@ -31,21 +38,25 @@
           <h4>""Em criação""</h4>
         </div>
 
-        <div class="favorito">
-          <router-link to="/Favoritos"><span class="material-symbols-outlined">favorite</span></router-link>
-          <router-link to="/Favoritos"><h4>Favoritos</h4></router-link>
-        </div>
+        <router-link :to="usuarioLogado ? '/Favoritos' : '/Login'">
+          <div class="favorito">
+          <span class="material-symbols-outlined">favorite</span>
+          <h4>Favoritos</h4>
+          </div>
+        </router-link>
 
-        <div class="carrinho">
-          <router-link to="/Carrinho"><span class="material-symbols-outlined">shopping_cart</span></router-link>
-          <router-link to="/Carrinho"><h4>R$ {{ carrinho.total.toFixed(2) }}</h4></router-link>
-        </div>
-
+        <router-link to="/Carrinho">
+          <div class="carrinho">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          <h4>{{ formatarPreco(carrinho.total) }}</h4>
+          </div>
+        </router-link>
       </div>
 
     </div>
   </main>
 </template>
+
 
 <style scoped>
 

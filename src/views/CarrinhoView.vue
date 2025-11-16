@@ -2,15 +2,14 @@
     import TopMenu from '@/componentes/TopMenu.vue';
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
-
     import { ref, onMounted } from 'vue'
     import { useCarrinhoStore } from '@/stores/carrinho';
+    import { formatarPreco } from '@/utils/functionsFull.js'
 
     const carrinho = useCarrinhoStore()
     const fretes = ref([])
     const cepatual = ref('')
-    const ValorFrete = ref("0.00")
-    const ValorComFrete = ref(carrinho.total)
+    const ValorFrete = ref(null)
     const DiaEntrega = ref('')
     const cidade = ref('')
 
@@ -25,20 +24,18 @@
 
         if (frete){
             DiaEntrega.value = `${frete.prazo_entrega_dias} dias`
-            ValorFrete.value = frete.valor_frete.toFixed(2)
-            ValorComFrete.value = carrinho.total + frete.valor_frete
+            ValorFrete.value = frete.valor_frete
             cidade.value = ` em ${frete.cidade}`
         } else {
             DiaEntrega.value = 'Cidade fora de rotas'
-            ValorFrete.value = `0.00`
-            ValorComFrete.value = carrinho.total
+            ValorFrete.value = null
             cidade.value = ""
         }
     }
 
     const cupons = ref([])
     const cupomatual = ref('')
-    const descontostring = ref()
+    const descontostring = ref('')
     const valordesconto = ref(0)
 
     onMounted(async () => {
@@ -50,14 +47,15 @@
     function calcularcupom(cupomatual) {
         const cupom = cupons.value.find(c => c.cupom_nome === cupomatual.trim().toUpperCase())
 
-        if(cupom) {
-            valordesconto.value = cupom.desconto
-            descontostring.value = `Desconto de R$ ${cupom.desconto.toFixed(2)} com o cupom`
+        if (cupom) {
+            valordesconto.value = cupom.desconto / 100
+            descontostring.value = `Desconto de ${cupom.desconto}% aplicado com sucesso!`
         } else {
-        valordesconto.value = 0
-        descontostring.value = 'Cupom inválido ou não encontrado'
+            valordesconto.value = 0
+            descontostring.value = 'Cupom inválido ou não encontrado'
+        }
     }
-    }
+    console.log(ValorFrete)
 
 </script>
 
@@ -96,7 +94,7 @@
                                         <button @click="carrinho.alterarQuantidade(item.id, item.quantidade + 1)">+</button>
                                     </div>
                                 </td>
-                                <td class="valor">R$ {{ (item.preco * item.quantidade).toFixed(2) }}</td>
+                                <td class="valor">R$ {{ formatarPreco(item.preco * item.quantidade) }}</td>
                                 <td><button @click="carrinho.removerItem(item.id)" class="remove">Excluir</button></td>
                             </tr>
                         </tbody>
@@ -122,14 +120,15 @@
                 <h2># RESUMO</h2>
                     <div class="style-camp">
                         <span>Valor dos Produtos:</span>
-                        <span>R$ {{ carrinho.total.toFixed(2) }}</span>
+                        <span>{{ formatarPreco(carrinho.total) }}</span>
                     </div>
 
                 <hr>
 
                 <div class="style-camp">
                     <span>Frete:</span>
-                    <span v-if="ValorFrete">R$ {{ ValorFrete }}</span>
+                    <span v-if="ValorFrete === null">R$ 0,00</span>
+                    <span v-if="ValorFrete">{{ formatarPreco(ValorFrete) }}</span>
                 </div>
         
                 <hr>
@@ -137,14 +136,16 @@
                 <div class="style-camp destaque-prazo">
                     <span>Total a prazo:</span>
                     <div class="preco">
-                        <span class="valor">R$ {{ ((ValorComFrete * 0.05) + ValorComFrete - valordesconto).toFixed(2) }}</span>
-                        <small>(Em até 2x de R$ {{ ((ValorComFrete * 0.05 + ValorComFrete - valordesconto) / 2).toFixed(2) }} sem juros)</small>
+                        <span v-if="ValorFrete === null" class="valor">{{ formatarPreco(((carrinho.total * 0.05) + carrinho.total) * (1 - valordesconto)) }}</span>
+                        <span v-if="ValorFrete" class="valor">{{ formatarPreco((((carrinho.total * 0.05) + carrinho.total + ValorFrete)) * (1 - valordesconto)) }}</span>
+                        <small>(Em até 2x de R$ {{ formatarPreco((((carrinho.total * 0.05) + carrinho.total + (ValorFrete || 0)) * (1 - valordesconto)) / 2) }} sem juros)</small>
                     </div>
                 </div>
                 <div class="style-camp destaque-vista">
                     <span>Valor à vista no <b>Pix:</b></span>
                     <div class="preco">
-                        <span class="valor">R$ {{ (ValorComFrete - valordesconto).toFixed(2) }}</span>
+                        <span v-if="ValorFrete === null" class="valor">{{ formatarPreco(carrinho.total * (1 - valordesconto)) }}</span>
+                        <span v-if="ValorFrete" class="valor">{{ formatarPreco((carrinho.total + ValorFrete) * (1 - valordesconto)) }}</span>
                     </div>
                 </div>
 

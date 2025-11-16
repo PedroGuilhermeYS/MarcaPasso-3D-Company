@@ -1,57 +1,79 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+    import { defineProps, defineEmits, ref } from 'vue'
+    import { useAuthStore } from '@/stores/useAuthStore'
+    import { useRouter } from 'vue-router'
 
-const props = defineProps({
-    mostrarModal: {
-        type: Boolean,
-        default: false
+    const props = defineProps({
+        mostrarModalLogin: {
+            type: Boolean,
+            default: false
+        }
+    })
+
+    const emit = defineEmits(['fecharModalLogin'])
+
+    const router = useRouter()
+    const auth = useAuthStore()
+
+    const email = ref('')
+    const senha = ref('')
+    const loading = ref(false)
+    const erro = ref('')
+
+    function fecharModalLogin() {
+        emit('fecharModalLogin')
     }
-})
 
-const emit = defineEmits(['fecharModal'])
-
-const fecharModal = () => {
-    emit('fecharModal')
-}
+    async function logar() {
+        erro.value = ''
+        loading.value = true
+        try {
+            await auth.login(email.value, senha.value)
+            fecharModalLogin()
+            router.push('/')
+        } catch (e) {
+            erro.value = e?.message ?? 'Erro ao efetuar login.'
+        } finally {
+            loading.value = false
+        }
+    }
 </script>
 
 <template>
-    <div v-if="mostrarModal" class="modal-overlay" @click.self="fecharModal">
-        <div class="modal">
-            <h2>Autenticação</h2>
+  <div v-if="mostrarModalLogin" class="modal-overlay" @click.self="fecharModalLogin">
+    <div class="modal">
+      <h2>Autenticação</h2>
 
-            <div class="campo">
-                <input type="text" placeholder="E-mail ou CPF/CNPJ" />
-            </div>
+      <div class="campo">
+        <input v-model="email" type="email" placeholder="E-mail" />
+      </div>
 
-            <div class="campo">
-                <input type="password" placeholder="Digite sua senha" />
-            </div>
+      <div class="campo">
+        <input v-model="senha" type="password" placeholder="Senha" />
+      </div>
 
-            <a href="#" class="link">Esqueci minha senha</a>
+      <p v-if="erro" style="color: #c00; margin-bottom: 8px;">{{ erro }}</p>
 
-            <button class="continuar">Continuar</button>
+      <button class="continuar" :disabled="loading" @click="logar">
+        {{ loading ? 'Entrando...' : 'Continuar' }}
+      </button>
 
-            <div class="linha-ou">
-                <span>---------- ou utilize uma das opções abaixo ----------</span>
-            </div>
+      <div class="linha-ou">
+        <span>---------- ou utilize uma das opções abaixo ----------</span>
+      </div>
 
-            <div class="social-login">
-                <button class="google">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" /> Login com o Google
-                </button>
-                <button class="facebook">
-                    <img src="https://www.svgrepo.com/show/452196/facebook-1.svg" width="18" /> Login com o Facebook
-                </button>
-            </div>
+      <div class="social-login">
+        <button class="google"> <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" /> Login com o Google</button>
+        <button class="facebook"><img src="https://www.svgrepo.com/show/452196/facebook-1.svg" width="18" /> Login com o Facebook</button>
+      </div>
 
-            <p class="termos">
-                Ao continuar você concorda com nossos <a href="#">termos de uso</a>.
-            </p>
+      <p class="termos">
+        Ao continuar você concorda com nossos <a href="#">termos de uso</a>.
+      </p>
 
-            <button class="fechar" @click="fecharModal">×</button>
-        </div>
+      <button class="fechar" @click="fecharModalLogin">×</button>
     </div>
+  </div>
 </template>
 
 <style scoped>

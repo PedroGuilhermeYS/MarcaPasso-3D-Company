@@ -6,7 +6,7 @@
     <div class="footer-top">
       <div class="footer-columnn logo">
         <a href="http://localhost:5173/">
-          <router-link to="/"><img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\marcapasso-logo.svg" alt="logo" width="300"/></router-link>
+          <router-link to="/"><img src="@\img\marcapasso-logo.svg" alt="logo" width="300"/></router-link>
         </a>
       </div>
 
@@ -39,16 +39,16 @@
       <div class="footer-column">
         <h4>Formas de Pagamento</h4>
         <div class="pagamentos">
-          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\pix.png" alt="Pix" />
-          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\c5.png" alt="Elo" />
-          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\c4.png" alt="Bradesco" /><br>
-          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\c1.png" alt="Visa" />
-          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\c3.png" alt="American Express" />
-          <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\c2.png" alt="Mastercard" />
+          <img src="@\img\pix.png" alt="Pix" />
+          <img src="@\img\c5.png" alt="Elo" />
+          <img src="@\img\c4.png" alt="Bradesco" /><br>
+          <img src="@\img\c1.png" alt="Visa" />
+          <img src="@\img\c3.png" alt="American Express" />
+          <img src="@\img\c2.png" alt="Mastercard" />
         </div>
 
         <h4>Selos de Segurança</h4>
-        <img src="C:\Users\MarcaPasso\Desktop\MarcaPasso-3D-Company\src\img\selos.png" alt="Google Safe" class="selo" />
+        <img src="@\img\selos.png" alt="Google Safe" class="selo" />
       </div>
     </div>
 

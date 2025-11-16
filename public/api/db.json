@@ -42,13 +42,13 @@
     },
     {
       "id": 5,
-      "imagem": "/imagem-produtos/dragão suporte.jpg",
+      "imagem": "/imagem-produtos/dragaosuporte.jpg",
       "nome": "Suporte de Dragão",
       "preco": 119.90,
       "categoria": "Decoração",
       "personalizavel": false,
       "descricao": "Suporte decorativo em formato de dragão, feito em resina detalhada. Ideal para apoiar livros ou controles.",
-      "fotos": ["/imagem-produtos/dragão suporte.jpg"]
+      "fotos": ["/imagem-produtos/dragaosuporte.jpg"]
     },
     {
       "id": 6,
@@ -76,42 +76,42 @@
       "id": 1,
       "cidade": "Joaquim Nabuco",
       "cep_destino": "55535000",
-      "valor_frete": 25.00,
+      "valor_frete": 25,
       "prazo_entrega_dias": 5
     },
     {
       "id": 2,
       "cidade": "Recife",
       "cep_destino": "51160220",
-      "valor_frete": 15.00,
+      "valor_frete": 15,
       "prazo_entrega_dias": 7
     },
     {
       "id": 3,
       "cidade": "Tamandaré",
       "cep_destino": "55578000",
-      "valor_frete": 30.00,
+      "valor_frete": 30,
       "prazo_entrega_dias": 6
     },
     {
       "id": 4,
       "cidade": "Ribeirão",
       "cep_destino": "55520330",
-      "valor_frete": 25.00,
+      "valor_frete": 25,
       "prazo_entrega_dias": 5
     },
     {
       "id": 5,
       "cidade": "Palmares",
       "cep_destino": "55540000",
-      "valor_frete": 15.00,
+      "valor_frete": 15,
       "prazo_entrega_dias": 7
     },
     {
       "id": 6,
       "cidade": "Água Preta",
       "cep_destino": "55550000",
-      "valor_frete": 30.00,
+      "valor_frete": 30,
       "prazo_entrega_dias": 6
     }
   ],

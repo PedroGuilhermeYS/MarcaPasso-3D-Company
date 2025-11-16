@@ -3,11 +3,16 @@
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
 
-    import { ref, onMounted } from 'vue'
+    import { ref, onMounted, computed } from 'vue'
     import { useRoute } from 'vue-router'
     import { useCarrinhoStore } from '@/stores/carrinho'
     import { useFavoritadosStore } from '@/stores/favoritados';
+    import { useProdutosStore } from '@/stores/Produtos';
+    import { useAuthStore } from '@/stores/useAuthStore'
+    import { formatarPreco } from '@/utils/functionsFull.js'
 
+    const auth = useAuthStore()
+    const usuarioLogado = computed(() => auth.usuario)
     const route = useRoute()
     const Produto = ref(null)
     const itens = ref(1)
@@ -18,8 +23,17 @@
     console.log('Favoritos store:', favoritados)
 
     onMounted(async () => {
-        const resposta = await fetch(`http://localhost:3000/produtos/${route.params.id}`)
-        Produto.value = await resposta.json()
+        const produtosStore = useProdutosStore()
+
+        if (!produtosStore.produtos.length) {
+            await produtosStore.carregarProdutos()
+        }
+
+        Produto.value = produtosStore.produtos.find(p => String(p.id) === String(route.params.id))
+
+        if (!Produto.value) {
+            console.warn('Produto não encontrado para o ID:', route.params.id)
+        }
     })
 
     function limitarQuantidade() {
@@ -65,11 +79,17 @@
                     target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
                 </div>
 
-                <div class="favorito">
-                    <button class="material-symbols-outlined" :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : '#0185FA' }"
-                    @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">favorite</button>
-                </div>
-
+                <router-link v-if="usuarioLogado">
+                    <div class="favorito">
+                        <button class="material-symbols-outlined" :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : '#0185FA' }"
+                        @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">favorite</button>
+                    </div>
+                </router-link>
+                <router-link v-if="!usuarioLogado" to="/Login">
+                    <div class="favorito">
+                        <button class="material-symbols-outlined">favorite</button>
+                    </div>
+                </router-link>
             </div>
         </div>
         <div class="container2">
@@ -78,8 +98,8 @@
                 <div class="atual">
                     <img :src="Produto.imagem" :alt="Produto.nome" width="600" height="700">
                 </div>
-                <div v-if="Produto.fotos && Produto.fotos.length" class="outrasimg">
-                    <div v-for="(foto, index) in Produto.fotos" :key="index">
+                <div v-if="Produto.imagensSecundarias && Produto.imagensSecundarias.length" class="outrasimg">
+                    <div v-for="(foto, index) in Produto.imagensSecundarias" :key="index">
                         <img :src="foto" :alt="`Foto ${index + 1} de ${Produto.nome}`" width="90" height="110" />
                     </div>
                 </div>
@@ -93,12 +113,11 @@
                         <p class="avaliacao">★★★★★</p>
                         <h6 class="sla2">Seja o primeiro a opinar</h6>
 
-                        <h2 class="price">R$ {{ Produto.preco.toFixed(2) }}</h2>
+                        <h2 class="price">{{ formatarPreco(Produto.preco) }}</h2>
                         <h5 class="juros">ou 2x Sem juros</h5>
-                        <div class="sub-container">
-                            
-                            <input class="quantid" v-model.number="itens" type="number"max="99" maxlength="2" @input="limitarQuantidade"/>
-                            <button class="cart" @click="carrinho.adicionarItem(Produto, itens)"># Adicionar ao carrinho</button>
+                        <div class="sub-container">     
+                        <input class="quantid" v-model.number="itens" type="number"max="99" maxlength="2" @input="limitarQuantidade"/>
+                        <button class="cart" @click="carrinho.adicionarItem(Produto, itens)"># Adicionar ao carrinho</button>
                         </div>
                     </div>
                     <h6 class="aviso">Aqui sua compra é 100% segura, compre com tranquilidade.</h6>
@@ -111,7 +130,7 @@
                 <h2>Descrição geral</h2>
             </div>
             <div class="avaliacoes">
-                <h2>Avaliações</h2>
+                <!--<h2>Avaliações</h2> Para atualizações futuras do site-->
             </div>
         </div>
         <div class="container3">
@@ -246,9 +265,9 @@
         margin-bottom: 1rem;
     }
     .link, .favorito, .whatsapp{
-        padding: 1px 10px;
+        padding: 0px 10px;
         display: flex;
-        align-items: center;  
+        align-items: center;
     }
     .material-symbols-outlined {
         font-variation-settings: 
@@ -271,5 +290,8 @@
     .cart:hover {
         background-color: #007acc;
         transform: scale(1.03);
+    }
+    a {
+        text-decoration: none;
     }
 </style>

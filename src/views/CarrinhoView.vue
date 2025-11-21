@@ -1,5 +1,5 @@
 <script setup>
-    import TopMenu from '@/componentes/TopMenu.vue';
+    import LogoTop from '@/componentes/LogoTop.vue';
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
     import { ref, onMounted } from 'vue'
@@ -60,7 +60,7 @@
 </script>
 
 <template>
-    <TopMenu></TopMenu>
+    <LogoTop></LogoTop>
     <UserAction></UserAction>
     <main>       
         <div class="container1">
@@ -108,12 +108,6 @@
                             <a href="https://buscacepinter.correios.com.br/app/endereco/index.php"><span class="help">? Não sei meu CEP</span></a>
                         </div>
                         <label>Tempo estimado para entrega{{ cidade }}: {{ DiaEntrega }}</label>
-                        <div class="cupom">
-                            <label for="desconto">Cupom de desconto:</label>
-                            <input v-model="cupomatual" class="desconto" type="text" id="desconto" placeholder="Digite o cupom">
-                            <button @click="calcularcupom(cupomatual)">Usar cupom</button>
-                        </div>
-                        <label v-if="descontostring">{{ descontostring }}</label>
                 </div>
             </div>
             <div class="market">
@@ -151,7 +145,7 @@
 
                 <hr>
 
-                <button class="button-comprar">CONTINUAR</button>
+                <router-link to="/Entrega"><button class="button-comprar">CONTINUAR</button></router-link>
                 <router-link to="/"><button class="button-voltar" >VOLTAR</button></router-link>
             </div>
         </div>
@@ -238,7 +232,7 @@
         font-family: inherit;
         text-align: left;
         background-color: rgb(235, 235, 235);
-        padding: 2rem 0rem 5rem 1.5rem;
+        padding: 2rem 0rem 2rem 1.5rem;
     }
     .complements label, .complements span, .complements button {
         font-family: 'Open Sans', sans-serif;
@@ -247,12 +241,6 @@
     }
     .frete{
         margin-bottom: 1rem;
-    }
-    .cupom{
-        margin-bottom: 1rem;
-    }
-    .cupom{
-        margin-top: 1rem;
     }
     .cep, .help{ 
         margin-left: 2rem 

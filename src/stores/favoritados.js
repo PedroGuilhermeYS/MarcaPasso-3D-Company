@@ -1,38 +1,59 @@
 import { defineStore } from 'pinia'
-import { ref, computed} from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useAuthStore } from './useAuthStore'
+import { salvarFavoritos, carregarFavoritos } from '@/firebase/userData'
 
 export const useFavoritadosStore = defineStore('favoritos', () => {
-    const itens = ref([])
+  const itens = ref([])
+  const auth = useAuthStore()
 
+  const total = computed(() =>
+    itens.value.reduce((acc, item) => acc + item.preco, 0)
+  )
 
-    const total = computed(() =>
-        itens.value.reduce((acc, item) => acc + item.preco, 0)
-    )
-
-    function adicionarItem(produto) {
-        const existente = itens.value.find(i => i.id === produto.id)
-
-        if (!existente) {
-            itens.value.push({
-            id: produto.id,
-            imagem: produto.imagem,
-            nome: produto.nome,
-            preco: produto.preco
-            })
-        }
+  // 🔹 Salvar automaticamente no Firebase
+  watch(itens, async (novo) => {
+    if (auth.usuario) {
+      await salvarFavoritos(auth.usuario.uid, novo)
     }
-    
-    function isFavoritado(id) {
-        return itens.value.some(i => i.id === id)
+  }, { deep: true })
+
+  async function carregarDoFirebase() {
+    if (auth.usuario) {
+      itens.value = await carregarFavoritos(auth.usuario.uid)
     }
+  }
 
-    function removerItem(id) {
-        itens.value = itens.value.filter(i => i.id !== id)
-        }
-
-    function limparfavoritos() {
-        itens.value = []
+  function adicionarItem(produto) {
+    const existente = itens.value.find(i => i.id === produto.id)
+    if (!existente) {
+      itens.value.push({
+        id: produto.id,
+        imagem: produto.imagem,
+        nome: produto.nome,
+        preco: produto.preco
+      })
     }
+  }
 
-    return { itens, total, adicionarItem, removerItem, limparfavoritos, isFavoritado }
+  function isFavoritado(id) {
+    return itens.value.some(i => i.id === id)
+  }
+
+  function removerItem(id) {
+    itens.value = itens.value.filter(i => i.id !== id)
+  }
+
+  function limparfavoritos() {
+    itens.value = []
+  }
+
+  // 🔹 Carregar ao logar
+  if (auth.usuario) carregarDoFirebase()
+  auth.$subscribe((_, state) => {
+    if (state.usuario) carregarDoFirebase()
+    else itens.value = []
+  })
+
+  return { itens, total, adicionarItem, removerItem, limparfavoritos, isFavoritado }
 })

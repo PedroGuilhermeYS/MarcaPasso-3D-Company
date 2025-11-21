@@ -42,13 +42,13 @@
     },
     {
       "id": 5,
-      "imagem": "/imagem-produtos/dragaosuporte.jpg",
+      "imagem": "/imagem-produtos/dragão suporte.jpg",
       "nome": "Suporte de Dragão",
       "preco": 119.90,
       "categoria": "Decoração",
       "personalizavel": false,
       "descricao": "Suporte decorativo em formato de dragão, feito em resina detalhada. Ideal para apoiar livros ou controles.",
-      "fotos": ["/imagem-produtos/dragaosuporte.jpg"]
+      "fotos": ["/imagem-produtos/dragão suporte.jpg"]
     },
     {
       "id": 6,
@@ -76,42 +76,48 @@
       "id": 1,
       "cidade": "Joaquim Nabuco",
       "cep_destino": "55535000",
-      "valor_frete": 25,
+      "cep_entrega": "55535-000",
+      "valor_frete": 25.00,
       "prazo_entrega_dias": 5
     },
     {
       "id": 2,
       "cidade": "Recife",
       "cep_destino": "51160220",
-      "valor_frete": 15,
+      "cep_entrega": "51160-220",
+      "valor_frete": 15.00,
       "prazo_entrega_dias": 7
     },
     {
       "id": 3,
       "cidade": "Tamandaré",
       "cep_destino": "55578000",
-      "valor_frete": 30,
+      "cep_entrega": "55578-000",
+      "valor_frete": 30.00,
       "prazo_entrega_dias": 6
     },
     {
       "id": 4,
       "cidade": "Ribeirão",
       "cep_destino": "55520330",
-      "valor_frete": 25,
+      "cep_entrega": "55520-000",
+      "valor_frete": 25.00,
       "prazo_entrega_dias": 5
     },
     {
       "id": 5,
       "cidade": "Palmares",
       "cep_destino": "55540000",
-      "valor_frete": 15,
+      "cep_entrega": "55540-000",
+      "valor_frete": 15.00,
       "prazo_entrega_dias": 7
     },
     {
       "id": 6,
       "cidade": "Água Preta",
       "cep_destino": "55550000",
-      "valor_frete": 30,
+      "cep_entrega": "55550-000",
+      "valor_frete": 30.00,
       "prazo_entrega_dias": 6
     }
   ],
@@ -145,6 +151,73 @@
       "id": 6,
       "cupom_nome": "BATTLEFIELD6",
       "desconto": 100
+    }
+  ],
+  "enderecos": [
+    {
+      "id": 1,
+      "titulo": "Pedro Guilherme",
+      "rua": "Rua São José",
+      "numero": 214,
+      "complemento": "",
+      "bairro": "Centro",
+      "cidade": "Joaquim Nabuco",
+      "estado": "PE",
+      "cep": "55535-000"
+    },
+    {
+      "id": 2,
+      "titulo": "Casa",
+      "rua": "Rua Presidente Nilo Peçanha",
+      "numero": "531",
+      "complemento": "BL B APT 1403",
+      "bairro": "Imbiribeira",
+      "cidade": "Recife",
+      "estado": "PE",
+      "cep": "51160-220"
+    }
+  ],
+  "pagamentos": [
+    {
+      "id": 1,
+      "foto": "/imagem-produtos/logo-pix-icone-1024.png",
+      "frase": "PAGUE COM PIX",
+      "subfrase": "com desconto à vista no pix"
+    },
+    {
+      "id": 2,
+      "foto": "/imagem-produtos/8983163.png",
+      "frase": "PAGUE COM CARTÃO DE CRÉDITO",
+      "subfrase": ""
+    }
+  ],
+  "encomendas": [
+    {
+      "id": 1,
+      "pedidoNumero": "A1001",
+      "data": "20/11/2025",
+      "hora": "09:15",
+      "formaDePagamento": "pix",
+      "status": "pendente",
+      "valor": 120.00
+    },
+    {
+      "id": 2,
+      "pedidoNumero": "A1002",
+      "data": "20/11/2025",
+      "hora": "10:40",
+      "formaDePagamento": "cartao",
+      "status": "pago",
+      "valor": 89.90
+    },
+    {
+      "id": 3,
+      "pedidoNumero": "A1003",
+      "data": "21/11/2025",
+      "hora": "14:22",
+      "formaDePagamento": "pix",
+      "status": "enviado",
+      "valor": 199.50
     }
   ]
 }

@@ -7,6 +7,12 @@ export const useCarrinhoStore = defineStore('carrinho', () => {
   const itens = ref([])
   const auth = useAuthStore()
 
+  const FreteSelecionado = ref(null)
+
+  function definirFrete(frete) {
+    FreteSelecionado.value = frete
+  }
+
   const total = computed(() =>
     itens.value.reduce((acc, item) => acc + item.preco * item.quantidade, 0)
   )
@@ -63,5 +69,5 @@ export const useCarrinhoStore = defineStore('carrinho', () => {
     else itens.value = [] // deslogou → limpa
   })
 
-  return { itens, total, adicionarItem, removerItem, alterarQuantidade, limparCarrinho }
+  return { itens, total, adicionarItem, removerItem, alterarQuantidade, limparCarrinho, FreteSelecionado, definirFrete }
 })

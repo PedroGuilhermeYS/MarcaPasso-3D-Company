@@ -33,10 +33,12 @@ const usuarioLogado = computed(() => auth.usuario)
           </router-link>
         </div>
 
-        <div class="pedidos">
-          <span class="material-symbols-outlined">local_shipping</span>
-          <h4>""Em criação""</h4>
-        </div>
+        <router-link :to="usuarioLogado ? '/Encomendas' : '/Login'">
+          <div class="pedidos">
+            <span class="material-symbols-outlined">local_shipping</span>
+            <h4>Encomendas</h4>
+          </div>
+        </router-link>
 
         <router-link :to="usuarioLogado ? '/Favoritos' : '/Login'">
           <div class="favorito">
@@ -45,7 +47,7 @@ const usuarioLogado = computed(() => auth.usuario)
           </div>
         </router-link>
 
-        <router-link to="/Carrinho">
+        <router-link :to="usuarioLogado ? '/Carrinho' : '/Login'">
           <div class="carrinho">
           <span class="material-symbols-outlined">shopping_cart</span>
           <h4>{{ formatarPreco(carrinho.total) }}</h4>

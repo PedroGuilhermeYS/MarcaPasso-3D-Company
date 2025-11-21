@@ -40,7 +40,7 @@ const irParaLoja = () => {
       </div>
 
       <div class="painel-compra">
-        <img src="@/img/reshot-icon-shopping-cart-WFDT3CVZMJ.svg" alt="Carrinho" class="cart-icon"/>
+        <img src="@\img\reshot-icon-shopping-cart-WFDT3CVZMJ.svg" alt="Carrinho" class="cart-icon"/>
         <p>Realize sua primeira compra!</p>
         <button class="btn-loja" @click="irParaLoja">Ir para a loja</button>
       </div>
@@ -120,8 +120,7 @@ main {
 }
 
 .cart-icon {
-  width: 40px;
-  height: 40px;
+  width: 5rem;
   margin-bottom: 1rem;
 }
 

@@ -20,9 +20,6 @@
     const valordesconto = ref(0)
     const descontostring = ref("")
 
-    //const enderecoSelecionado = ref()
-    //const DestinoEscolhido = ref()
-
     function selecionarPagamento(pag) {
         pagamentoSelecionado.value = pag.id
     }   

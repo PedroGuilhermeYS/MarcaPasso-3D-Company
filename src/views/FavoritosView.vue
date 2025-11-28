@@ -1,5 +1,5 @@
 <script setup>
-    import TopMenu from '@/componentes/TopMenu.vue';
+    import LogoTop from '@/componentes/LogoTop.vue';
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
 
@@ -11,23 +11,13 @@
 
 <template>
 
-    <TopMenu></TopMenu>
+    <LogoTop></LogoTop>
     <UserAction></UserAction>
 
     <main>
         <div class="container">
             <div class="all-products">
-                <h2 class="MS-Reference">Todos os produtos</h2>
-                <label for="categorias">
-                    <h3 class="MS-Reference">Ordenar por:
-                        <select v-model="relevancia" id="relevancia" class="relevance-filter">
-                            <option value="">Relevância</option>
-                            <option value="1">Nome (A-Z)</option>
-                            <option value="2">Maior Preço</option>
-                            <option value="3">Menor Preço</option>
-                        </select>
-                    </h3>
-                </label>
+                <h2 class="MS-Reference">Todos os Favoritados</h2>
                 <div class="lista-produtos">
                     <div v-for="item in favoritados.itens" :key="item.id" class="produto">
                         <img :src="item.imagem" :alt="item.nome">
@@ -77,14 +67,6 @@
         margin-top: 10px;
         margin-left: 50px;
         margin-bottom: 0px;
-    }
-    .relevance-filter{
-        padding: 5px;
-        border-radius: 20px;
-        width: 140px;
-        font-size: .8rem;
-        background-color: #D2D2D2;
-        border: none;
     }
     .produto {
         width: 220px;

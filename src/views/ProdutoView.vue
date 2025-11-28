@@ -1,5 +1,5 @@
 <script setup>
-    import TopMenu from '@/componentes/TopMenu.vue';
+    import LogoTop from '@/componentes/LogoTop.vue';
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
 
@@ -36,10 +36,11 @@
         }
     })
 
-    function limitarQuantidade() {
-        const str = quantidade.value.toString()
-        if (str.length > 2)
-            quantidade.value = parseInt(str.slice(0, 2))
+    function validarQuantidade() {
+        itens.value = Math.floor(itens.value);
+
+        if (isNaN(itens.value) || itens.value < 1) itens.value = 1;
+        if (itens.value > 100) itens.value = 100;
     }
 
     async function compartilharProduto() {
@@ -60,7 +61,7 @@
 </script>
 
 <template>
-    <TopMenu></TopMenu>
+    <LogoTop></LogoTop>
     <UserAction></UserAction>
     <main v-if="Produto">
         <div class="container1">
@@ -116,7 +117,7 @@
                         <h2 class="price">{{ formatarPreco(Produto.preco) }}</h2>
                         <h5 class="juros">ou 2x Sem juros</h5>
                         <div class="sub-container">     
-                        <input class="quantid" v-model.number="itens" type="number"max="99" maxlength="2" @input="limitarQuantidade"/>
+                        <input class="quantid" v-model.number="itens" type="number" min="1" max="100" @input="validarQuantidade"/>
                         <button class="cart" @click="carrinho.adicionarItem(Produto, itens)"># Adicionar ao carrinho</button>
                         </div>
                     </div>

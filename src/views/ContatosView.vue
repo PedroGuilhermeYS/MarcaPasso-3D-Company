@@ -1,11 +1,11 @@
 <script setup>
-import TopMenu from '@/componentes/TopMenu.vue';
+import LogoTop from '@/componentes/LogoTop.vue';
 import UserAction from '@/componentes/UserAction.vue';
 import Footer from '@/componentes/Footer.vue';
 </script>
 
 <template>
-    <TopMenu></TopMenu>
+    <LogoTop></LogoTop>
     <UserAction></UserAction>
     <main>
         <div class="container">

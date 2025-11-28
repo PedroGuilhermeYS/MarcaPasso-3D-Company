@@ -4,7 +4,6 @@ import { db } from '@/firebase/firebase.js'
 import { supabase } from '@/supabase/supabase.js'
 import { collection, doc, setDoc } from 'firebase/firestore'
 
-// Campos do produto
 const nome = ref('')
 const preco = ref('')
 const categoria = ref('')
@@ -16,26 +15,21 @@ const imagensSecundarias = ref([])
 const mensagem = ref('')
 const loading = ref(false)
 
-// Upload da imagem principal
 const onFilePrincipalChange = (e) => {
   imagemPrincipal.value = e.target.files[0]
 }
 
-// Upload das imagens secundárias (até 5)
 const onFilesSecundariasChange = (e) => {
   imagensSecundarias.value = Array.from(e.target.files).slice(0, 5)
 }
 
-// Função principal
 async function cadastrarProduto() {
   mensagem.value = ''
   loading.value = true
 
   try {
-    // Cria o ID manualmente para usar no Firebase e Supabase
     const idProduto = Date.now().toString()
 
-    // === 1️⃣ Upload da imagem principal ===
     let imagemPrincipalUrl = ''
     if (imagemPrincipal.value) {
       const { data, error } = await supabase.storage
@@ -49,10 +43,8 @@ async function cadastrarProduto() {
         .getPublicUrl(data.path)
 
       imagemPrincipalUrl = publicUrl.publicUrl
-      console.log(imagemPrincipalUrl)
     }
 
-    // === 2️⃣ Upload das imagens secundárias ===
     const urlsSecundarias = []
 
     for (const arquivo of imagensSecundarias.value) {
@@ -69,7 +61,6 @@ async function cadastrarProduto() {
       urlsSecundarias.push(publicUrl.publicUrl)
     }
 
-    // === 3️⃣ Salva o produto no Firestore ===
     await setDoc(doc(collection(db, 'produtos'), idProduto), {
       id: idProduto,
       nome: nome.value,
@@ -84,7 +75,6 @@ async function cadastrarProduto() {
 
     mensagem.value = '✅ Produto cadastrado com sucesso!'
 
-    // Limpa o formulário
     nome.value = ''
     preco.value = ''
     categoria.value = ''

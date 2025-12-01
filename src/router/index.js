@@ -1,6 +1,7 @@
 import CarrinhoView from '@/views/CarrinhoView.vue'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
+import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { createRouter, createWebHistory } from 'vue-router'
 import ProdutoView from '@/views/ProdutoView.vue'
 import ContatosView from '@/views/ContatosView.vue'
@@ -42,12 +43,14 @@ const router = createRouter({
     {
       path: "/Favoritos",
       name: "/Favoritos",
-      component: FavoritosView
+      component: FavoritosView,
+      meta: { requiresAuth: true }
     },
     {
       path: "/admin",
       name: "AdminProdutos",
-      component: AdminProdutosView
+      component: AdminProdutosView,
+      meta: { requiresAuth: true }
     },
     {
       path: "/Painel",
@@ -57,19 +60,40 @@ const router = createRouter({
     {
       path: "/Entrega",
       name: "Entrega",
-      component: EntregaView
+      component: EntregaView,
+      meta: { requiresAuth: true }
     },
     {
       path: "/FormaPagamento", 
       name: "FormadePagamento",
-      component: FormaPagamentoView
+      component: FormaPagamentoView,
+      meta: { requiresAuth: true }
     },
     {
       path: "/Encomendas", 
       name: "Encomendas",
-      component: EncomendasView
+      component: EncomendasView,
+      meta: { requiresAuth: true }
     }
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  if (!requiresAuth) {
+    return next()
+  }
+
+  const auth = getAuth()
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      next()
+    } else {
+      next("/Login")
+    }
+  })
 })
 
 export default router

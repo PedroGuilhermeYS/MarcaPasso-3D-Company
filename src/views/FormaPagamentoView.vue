@@ -22,7 +22,7 @@
 
     function selecionarPagamento(pag) {
         pagamentoSelecionado.value = pag.id
-    }   
+    }  
 
     onMounted(async () => {
         const resposta = await fetch('http://localhost:3000/pagamentos')

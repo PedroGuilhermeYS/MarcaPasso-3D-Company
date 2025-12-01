@@ -118,7 +118,17 @@
                         <h5 class="juros">ou 2x Sem juros</h5>
                         <div class="sub-container">     
                         <input class="quantid" v-model.number="itens" type="number" min="1" max="100" @input="validarQuantidade"/>
-                        <button class="cart" @click="carrinho.adicionarItem(Produto, itens)"># Adicionar ao carrinho</button>
+                        <router-link v-if="usuarioLogado" to="/Carrinho">
+                            <button class="cart" @click="carrinho.adicionarItem(Produto, itens)">
+                                # Adicionar ao carrinho
+                            </button>
+                        </router-link>
+
+                        <router-link v-else to="/Login">
+                            <button class="cart">
+                                # Adicionar ao carrinho
+                            </button>
+                        </router-link>
                         </div>
                     </div>
                     <h6 class="aviso">Aqui sua compra é 100% segura, compre com tranquilidade.</h6>

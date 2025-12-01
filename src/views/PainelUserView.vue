@@ -28,7 +28,7 @@ const irParaLoja = () => {
     <div class="container">
       <div class="dados-pessoais">
         <h1>Minha conta</h1>
-        <h3>Dados pessoais <span @click="editarDados" class="editar">Editar</span></h3>
+        <!-- <h3>Dados pessoais <span @click="editarDados" class="editar">Editar</span></h3> -->
 
         <div class="info">
           <p><strong>Nome:</strong> Pedro Guilherme</p>

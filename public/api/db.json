@@ -156,9 +156,9 @@
   "enderecos": [
     {
       "id": 1,
-      "titulo": "Pedro Guilherme",
+      "titulo": "Posto de Entrega Principal",
       "rua": "Rua São José",
-      "numero": 214,
+      "numero": 204,
       "complemento": "",
       "bairro": "Centro",
       "cidade": "Joaquim Nabuco",
@@ -167,10 +167,10 @@
     },
     {
       "id": 2,
-      "titulo": "Casa",
+      "titulo": "Posto de Entrega Secundario",
       "rua": "Rua Presidente Nilo Peçanha",
-      "numero": "531",
-      "complemento": "BL B APT 1403",
+      "numero": "501",
+      "complemento": "BL A APT 1413",
       "bairro": "Imbiribeira",
       "cidade": "Recife",
       "estado": "PE",

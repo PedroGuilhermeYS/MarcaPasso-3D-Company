@@ -13,7 +13,6 @@
 
 <style scoped>
     main {
-        background-color: rgb(255, 255, 255);
         font-family: "Open Sans";
     }
     .container {

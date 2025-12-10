@@ -15,14 +15,14 @@ export const useProdutosStore = defineStore('produtos', () => {
     erro.value = null
 
     try {
-      // 🔥 Buscar produtos no Firebase
+      // Buscar produtos no Firebase
       const snap = await getDocs(collection(db, 'produtos'))
       const listaFirebase = snap.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
 
-      // 🖼️ Buscar imagem principal de cada produto no Supabase
+      // Buscar imagem principal de cada produto no Supabase
       const listaFinal = await Promise.all(
         listaFirebase.map(async (p) => {
 
@@ -36,7 +36,7 @@ export const useProdutosStore = defineStore('produtos', () => {
             console.warn(`Erro ao buscar imagens do produto ${p.id}:`, error)
             p.imagem = null
           } else {
-            // Procurar arquivo principal
+            // Procurar foto principal
             const principal = arquivos.find(arq => arq.name.startsWith('principal_'))
             if (principal) {
               const { data: urlData } = supabase

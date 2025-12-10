@@ -11,7 +11,6 @@ export const useFavoritadosStore = defineStore('favoritos', () => {
     itens.value.reduce((acc, item) => acc + item.preco, 0)
   )
 
-  // 🔹 Salvar automaticamente no Firebase
   watch(itens, async (novo) => {
     if (auth.usuario) {
       await salvarFavoritos(auth.usuario.uid, novo)
@@ -48,7 +47,6 @@ export const useFavoritadosStore = defineStore('favoritos', () => {
     itens.value = []
   }
 
-  // 🔹 Carregar ao logar
   if (auth.usuario) carregarDoFirebase()
   auth.$subscribe((_, state) => {
     if (state.usuario) carregarDoFirebase()

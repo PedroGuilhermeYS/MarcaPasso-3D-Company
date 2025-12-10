@@ -17,7 +17,6 @@ export const useCarrinhoStore = defineStore('carrinho', () => {
     itens.value.reduce((acc, item) => acc + item.preco * item.quantidade, 0)
   )
 
-  // 🔹 Salva automaticamente no Firebase quando itens mudarem
   watch(itens, async (novo) => {
     if (auth.usuario) {
       await salvarCarrinho(auth.usuario.uid, novo)
@@ -62,11 +61,10 @@ export const useCarrinhoStore = defineStore('carrinho', () => {
     itens.value = []
   }
 
-  // 🔹 Carregar automaticamente quando logar
   if (auth.usuario) carregarDoFirebase()
   auth.$subscribe((_, state) => {
     if (state.usuario) carregarDoFirebase()
-    else itens.value = [] // deslogou → limpa
+    else itens.value = []
   })
 
   return { itens, total, adicionarItem, removerItem, alterarQuantidade, limparCarrinho, FreteSelecionado, definirFrete }

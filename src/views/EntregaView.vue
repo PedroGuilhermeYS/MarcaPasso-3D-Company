@@ -60,7 +60,7 @@
             <div class="products">
                 <div class="topo">
                     <h2># Endereço de Entrega</h2>
-                    <h4>criar botão para adicionar+</h4>
+                <!--<h4>criar botão para adicionar+</h4>-->
                 </div>
 
                 <hr>
@@ -79,8 +79,8 @@
                     </div>
 
                     <div class="endereco-botoes">
-                        <button class="editar">Editar</button>
-                        <button class="excluir" @click="excluirEndereco(endereco)">Excluir</button>
+                        <!--<button class="editar">Editar</button>-->
+                        <!--<button class="excluir" @click="excluirEndereco(endereco)">Excluir</button>-->
                     </div>
                 </div>
 
@@ -120,8 +120,8 @@
 
                 <hr>
 
-                <button class="button-comprar" @click="salvarFreteNoCarrinho">CONTINUAR</button>
-                <router-link to="/Carrinho"><button class="button-voltar" >VOLTAR</button></router-link>
+                <button class="button-comprar" @click="salvarFreteNoCarrinho">CONTINUAR PARA PAGAMENTO</button>
+                <router-link to="/Carrinho"><button class="button-voltar" >VOLTAR PARA CARRINHO</button></router-link>
             </div>
         </div>
     </main>

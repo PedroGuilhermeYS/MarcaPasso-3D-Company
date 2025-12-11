@@ -19,8 +19,7 @@
     const carrinho = useCarrinhoStore()
     const favoritados = useFavoritadosStore()
     const currentUrl = window.location.href
-
-    console.log('Favoritos store:', favoritados)
+    const imagemAtual = ref(null)
 
     onMounted(async () => {
         const produtosStore = useProdutosStore()
@@ -33,6 +32,8 @@
 
         if (!Produto.value) {
             console.warn('Produto não encontrado para o ID:', route.params.id)
+        } else {
+            imagemAtual.value = Produto.value.imagem
         }
     })
 
@@ -49,9 +50,9 @@
 
         if (navigator.share) {
             await navigator.share({
-            title: titulo,
-            text: `Confira este produto: ${titulo}`,
-            url: link,
+                title: titulo,
+                text: `Confira este produto: ${titulo}`,
+                url: link,
             })
         } else {
             await navigator.clipboard.writeText(link)
@@ -70,20 +71,24 @@
             </div>
 
             <div class="right">
-
                 <div class="link">
                     <button class="material-symbols-outlined" @click="compartilharProduto">link</button>
                 </div>
 
                 <div class="whatsapp">
                     <a :href="`https://api.whatsapp.com/send?text=${encodeURIComponent('Confira este produto: ' + Produto.nome + ' - ' + currentUrl)}`"
-                    target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
+                        target="_blank" rel="noopener noreferrer">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
                 </div>
 
                 <router-link v-if="usuarioLogado">
                     <div class="favorito">
-                        <button class="material-symbols-outlined" :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : '#0185FA' }"
-                        @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">favorite</button>
+                        <button class="material-symbols-outlined"
+                            :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : '#0185FA' }"
+                            @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">
+                            favorite
+                        </button>
                     </div>
                 </router-link>
                 <router-link v-if="!usuarioLogado" to="/Login">
@@ -94,14 +99,17 @@
             </div>
         </div>
         <div class="container2">
-
             <div class="photos">
                 <div class="atual">
-                    <img :src="Produto.imagem" :alt="Produto.nome" width="600" height="700">
+                    <img :src="imagemAtual" :alt="Produto.nome" width="600" height="700">
                 </div>
+
                 <div v-if="Produto.imagensSecundarias && Produto.imagensSecundarias.length" class="outrasimg">
+
+                    <img :src="Produto.imagem" width="90" height="110" style="cursor:pointer" @click="imagemAtual = Produto.imagem" />
+
                     <div v-for="(foto, index) in Produto.imagensSecundarias" :key="index">
-                        <img :src="foto" :alt="`Foto ${index + 1} de ${Produto.nome}`" width="90" height="110" />
+                        <img :src="foto" :alt="`Foto ${index + 1} de ${Produto.nome}`" width="90" height="110" style="cursor:pointer" @click="imagemAtual = foto" />
                     </div>
                 </div>
             </div>
@@ -116,21 +124,24 @@
 
                         <h2 class="price">{{ formatarPreco(Produto.preco) }}</h2>
                         <h5 class="juros">ou 2x Sem juros</h5>
-                        <div class="sub-container">     
-                        <input class="quantid" v-model.number="itens" type="number" min="1" max="100" @input="validarQuantidade"/>
-                        <router-link v-if="usuarioLogado" to="/Carrinho">
-                            <button class="cart" @click="carrinho.adicionarItem(Produto, itens)">
-                                # Adicionar ao carrinho
-                            </button>
-                        </router-link>
 
-                        <router-link v-else to="/Login">
-                            <button class="cart">
-                                # Adicionar ao carrinho
-                            </button>
-                        </router-link>
+                        <div class="sub-container">
+                            <input class="quantid" v-model.number="itens" type="number" min="1" max="100" @input="validarQuantidade" />
+
+                            <router-link v-if="usuarioLogado">
+                                <button class="cart" @click="carrinho.adicionarItem(Produto, itens)">
+                                    # Adicionar ao carrinho
+                                </button>
+                            </router-link>
+
+                            <router-link v-else to="/Login">
+                                <button class="cart">
+                                    # Adicionar ao carrinho
+                                </button>
+                            </router-link>
                         </div>
                     </div>
+
                     <h6 class="aviso">Aqui sua compra é 100% segura, compre com tranquilidade.</h6>
                 </div>
             </div>
@@ -140,20 +151,19 @@
             <div class="descricao">
                 <h2>Descrição geral</h2>
             </div>
-            <div class="avaliacoes">
-                <!--<h2>Avaliações</h2> Para atualizações futuras do site-->
-            </div>
         </div>
+
         <div class="container3">
             <div class="describe">
                 <h2>{{ Produto.descricao }}</h2>
             </div>
-
         </div>
     </main>
+
     <Footer></Footer>
     <router-link to="/Carrinho"><button>ir pra Carrinho</button></router-link>
 </template>
+
 
 <style scoped>
     main{

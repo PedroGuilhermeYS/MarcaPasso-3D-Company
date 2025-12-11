@@ -7,17 +7,19 @@
 
     const favoritados = useFavoritadosStore()
 
+    function limpartudo() {
+        favoritados.limparfavoritos()
+    }
 </script>
 
 <template>
-
     <LogoTop></LogoTop>
     <UserAction></UserAction>
-
     <main>
         <div class="container">
             <div class="all-products">
                 <h2 class="MS-Reference">Todos os Favoritados</h2>
+                <button class="apagar" @click="limpartudo">LIMPAR TUDO</button>
                 <div class="lista-produtos">
                     <div v-for="item in favoritados.itens" :key="item.id" class="produto">
                         <img :src="item.imagem" :alt="item.nome">
@@ -63,7 +65,7 @@
         margin-left: 40px;
         font-size: .8rem;
     }
-    .all-products h2{
+    .all-products h2, .apagar{
         margin-top: 10px;
         margin-left: 50px;
         margin-bottom: 0px;

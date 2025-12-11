@@ -6,9 +6,9 @@ import { useAuthStore } from '@/stores/useAuthStore';
 
 const authStore = useAuthStore();
 
-const editarDados = () => {
-  alert('Função de edição ainda será implementada.');
-};
+// const editarDados = () => {
+  // alert('Função de edição ainda será implementada.');
+// };
 
 const sair = async () => {
   await authStore.logout();

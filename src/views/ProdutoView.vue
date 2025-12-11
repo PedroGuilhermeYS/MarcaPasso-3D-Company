@@ -161,7 +161,6 @@
     </main>
 
     <Footer></Footer>
-    <router-link to="/Carrinho"><button>ir pra Carrinho</button></router-link>
 </template>
 
 

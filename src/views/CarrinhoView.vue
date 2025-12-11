@@ -120,8 +120,13 @@
                 </div>
 
                 <hr>
+                
+                <button v-if="carrinho.itens.length === 0" class="button-comprar">CARRINHO VAZIO!</button>
 
-                <router-link to="/Entrega"><button class="button-comprar">CONTINUAR PARA ENTREGA</button></router-link>
+                <router-link v-else to="/Entrega">
+                    <button class="button-comprar">CONTINUAR PARA ENTREGA</button>
+                </router-link>
+
                 <router-link to="/"><button class="button-voltar" >VOLTAR</button></router-link>
             </div>
         </div>

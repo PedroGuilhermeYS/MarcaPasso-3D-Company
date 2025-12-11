@@ -6,10 +6,10 @@ import { ref, onMounted } from 'vue'
 import { useCarrinhoStore } from '@/stores/carrinho';
 import { formatarPreco } from '@/utils/functionsFull.js'
 import { useRouter } from 'vue-router'
+
 const mostrarModalPix = ref(false)
 const mostrarModalCartao = ref(false)
 
-// Dados do cartão
 const cartao = ref({
     nome: "",
     numero: "",
@@ -35,11 +35,12 @@ function fecharModais() {
 }
 
 function confirmarCartao() {
-    // Aqui poderia validar, mas vamos só redirecionar
+    carrinho.limparCarrinho()
     router.push("/")
 }
 
 function confirmarPix() {
+    carrinho.limparCarrinho()
     router.push("/")
 }
 
@@ -143,7 +144,7 @@ onMounted(() => {
 
                 <hr>
 
-                <router-link><button class="button-comprar">PAGAMENTO</button></router-link>
+                <button class="button-comprar">PAGAMENTO</button>
                 <router-link to="/Entrega"><button class="button-voltar">VOLTAR PARA ENTREGA</button></router-link>
             </div>
         </div>
@@ -153,8 +154,9 @@ onMounted(() => {
                 <h2>PAGAMENTO VIA PIX</h2>
                 <p>Escaneie o QR Code abaixo:</p>
 
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PagamentoMock" alt="QR Code"
-                    class="qrcode">
+                <img src="@\img\meupix.png" alt="QR Code"class="qrcode">
+
+                <p>Pedro Guilherme - PicPay</p>
 
                 <div class="modal-botoes">
                     <button class="btn-fechar" @click="fecharModais">Fechar</button>
@@ -167,33 +169,26 @@ onMounted(() => {
             <div class="modal">
                 <h2>PAGAMENTO COM CARTÃO</h2>
 
-                <!-- FORM para validar antes de confirmar -->
                 <form @submit.prevent="confirmarCartao">
                 <div class="input-modal">
                     <label>Nome impresso no cartão</label>
-                    <input v-model="cartao.nome" type="text" required>
+                    <input v-model="cartao.nome" type="text" maxlength="25" required>
                 </div>
 
                 <div class="input-modal">
                     <label>Número do cartão</label>
-                    <input
-                    v-model="cartao.numero"
-                    type="text"
-                    maxlength="19"
-                    placeholder="0000 0000 0000 0000"
-                    required
-                    >
+                    <input v-model="cartao.numero" type="text" maxlength="16" placeholder="0000 0000 0000 0000" required>
                 </div>
 
                 <div class="linha-dupla">
                     <div class="input-modal">
                         <label>Validade</label>
-                        <input v-model="cartao.validade" type="text" placeholder="MM/AA" maxlength="5" required>
+                        <input v-model="cartao.validade" type="text" placeholder="MM/AA" maxlength="4" required>
                     </div>
 
                     <div class="input-modal">
                         <label>CVV</label>
-                        <input v-model="cartao.cvv" type="password" maxlength="4" required>
+                        <input v-model="cartao.cvv" type="password" maxlength="3" required>
                     </div>
                 </div>
 

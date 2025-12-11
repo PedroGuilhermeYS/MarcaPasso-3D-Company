@@ -5,7 +5,6 @@ import LogoTop from '@/componentes/LogoTop.vue'
 import { supabase } from '@/supabase/supabase.js'
 import { collection, doc, setDoc } from 'firebase/firestore'
 
-// Campos do formulário
 const nome = ref('')
 const preco = ref('')
 const categoria = ref('')
@@ -103,7 +102,7 @@ async function cadastrarProduto() {
       <div class="row">
         <div class="input-group">
           <label>Preço</label>
-          <input v-model="preco" type="number" step="0.01" placeholder="0,00" required />
+          <input v-model="preco" type="number" step="0.01" min="0" placeholder="0,00" required />
         </div>
 
         <div class="input-group">

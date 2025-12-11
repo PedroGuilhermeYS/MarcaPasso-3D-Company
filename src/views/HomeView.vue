@@ -109,14 +109,20 @@
                     </h3>
                 </label>
                 <div class="lista-produtos">
-                    <div v-for="p in produtosSelecionado" :key="p.id" class="produto">
-                        <img :src="p.imagem" :alt="p.nome">
-                        <h3>{{ p.nome }}</h3>
-                        <p class="preco">{{ formatarPreco(p.preco) }}</p>
-                        <p class="avaliacao">★★★★★</p>                        
-                        
-                        <button @click="$router.push({ name: 'Produto', params: { id: p.id } })">Comprar</button>
+                    <div v-if="produtosSelecionado.length === 0" class="nenhum-produto MS-Reference">
+                        Nenhum produto disponível no momento
+                    </div>
+                    
+                    <div v-else>
+                        <div v-for="p in produtosSelecionado" :key="p.id" class="produto">
+                            <img :src="p.imagem" :alt="p.nome">
+                            <h3>{{ p.nome }}</h3>
+                            <p class="preco">{{ formatarPreco(p.preco) }}</p>
+                            <p class="avaliacao">★★★★★</p>                        
+                            
+                            <button @click="$router.push({ name: 'Produto', params: { id: p.id } })">Comprar</button>
 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,14 +132,13 @@
             <h3>Boletim Informativo</h3>
             <p>Receba notícias, ofertas e comunicações em seu e-mail!!!</p>
             <form action=""> 
-                <input type="text" placeholder="Digite seu nome">
-                <input type="text" placeholder="Digite seu e-mail">
+                <input type="text" placeholder="Digite seu nome" required>
+                <input type="email" placeholder="Digite seu e-mail" required>
                 <button type="submit" class="button-register">CADASTRAR</button>
             </form>
         </div>
     </main>
     <Footer></Footer>
-    <a href="http://localhost:5173/Login"><button>ir pra login</button></a>
 </template>
 
 <style scoped>
@@ -177,6 +182,11 @@
         margin-top: 10px;
         margin-left: 50px;
         margin-bottom: 0px;
+    }
+    .nenhum-produto {
+        grid-column: 1 / -1;
+        padding: 40px 0;
+        color: #000000;
     }
     .relevance-filter{
         padding: 5px;

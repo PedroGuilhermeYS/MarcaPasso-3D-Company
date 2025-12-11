@@ -8,6 +8,12 @@ const carrinho = useCarrinhoStore()
 const auth = useAuthStore()
 
 const usuarioLogado = computed(() => auth.usuario)
+
+  const funcionario = "pedro210905@gmail.com"
+
+  const acessar = computed(() => {
+    return usuarioLogado.value?.email === funcionario
+  })
 </script>
 
 <template>
@@ -21,6 +27,15 @@ const usuarioLogado = computed(() => auth.usuario)
       </div>
 
       <div class="right-buttons">
+
+        <div class="crud" v-if="acessar">
+          <span></span>
+
+          <router-link to="/Crud">
+            <h4>Admin</h4>
+          </router-link>
+        </div>
+
         <div class="login">
           <span class="material-symbols-outlined">person</span>
 
@@ -99,7 +114,7 @@ const usuarioLogado = computed(() => auth.usuario)
     .right-buttons h4{
         margin: 5px;
     }
-    .login, .pedidos, .favorito, .carrinho{
+    .crud, .login, .pedidos, .favorito, .carrinho{
         border: 2px solid #0185FA;
         background-color: white;
         border-radius: 20px;

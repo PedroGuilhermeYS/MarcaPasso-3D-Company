@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { db } from '@/firebase/firebase.js'
-import LogoTop from '@/componentes/LogoTop.vue';
+import LogoTop from '@/componentes/LogoTop.vue'
 import { supabase } from '@/supabase/supabase.js'
 import { collection, doc, setDoc } from 'firebase/firestore'
 
+// Campos do formulário
 const nome = ref('')
 const preco = ref('')
 const categoria = ref('')
@@ -24,42 +25,36 @@ const onFilesSecundariasChange = (e) => {
   imagensSecundarias.value = Array.from(e.target.files).slice(0, 5)
 }
 
+async function uploadArquivo(caminho, arquivo) {
+  const { data, error } = await supabase.storage
+    .from('produtos')
+    .upload(caminho, arquivo)
+
+  if (error) throw error
+
+  const { data: url } = supabase.storage
+    .from('produtos')
+    .getPublicUrl(data.path)
+
+  return url.publicUrl
+}
+
 async function cadastrarProduto() {
   mensagem.value = ''
   loading.value = true
 
   try {
-    const idProduto = Date.now().toString()
+    const idProduto = crypto.randomUUID();
+    const basePath = `${idProduto}/`
 
-    let imagemPrincipalUrl = ''
-    if (imagemPrincipal.value) {
-      const { data, error } = await supabase.storage
-        .from('produtos')
-        .upload(`${idProduto}/principal_${imagemPrincipal.value.name}`, imagemPrincipal.value)
+    const imagemPrincipalUrl = imagemPrincipal.value
+      ? await uploadArquivo(basePath + 'principal_' + imagemPrincipal.value.name, imagemPrincipal.value)
+      : ''
 
-      if (error) throw error
-
-      const { data: publicUrl } = supabase.storage
-        .from('produtos')
-        .getPublicUrl(data.path)
-
-      imagemPrincipalUrl = publicUrl.publicUrl
-    }
-
-    const urlsSecundarias = []
-
-    for (const arquivo of imagensSecundarias.value) {
-      const { data, error } = await supabase.storage
-        .from('produtos')
-        .upload(`${idProduto}/secundaria_${arquivo.name}`, arquivo)
-
-      if (error) throw error
-
-      const { data: publicUrl } = supabase.storage
-        .from('produtos')
-        .getPublicUrl(data.path)
-
-      urlsSecundarias.push(publicUrl.publicUrl)
+    const imagensSec = []
+    for (const img of imagensSecundarias.value) {
+      const url = await uploadArquivo(basePath + 'secundaria_' + img.name, img)
+      imagensSec.push(url)
     }
 
     await setDoc(doc(collection(db, 'produtos'), idProduto), {
@@ -70,7 +65,7 @@ async function cadastrarProduto() {
       personalizavel: personalizavel.value,
       descricao: descricao.value,
       imagemPrincipal: imagemPrincipalUrl,
-      imagensSecundarias: urlsSecundarias,
+      imagensSecundarias: imagensSec,
       criadoEm: new Date()
     })
 
@@ -91,6 +86,7 @@ async function cadastrarProduto() {
   }
 }
 </script>
+
 
 <template>
   <LogoTop></LogoTop>
@@ -144,101 +140,87 @@ async function cadastrarProduto() {
 </template>
 
 <style scoped>
-
-.admin-wrapper {
-  width: 1400px;
-  margin: 0 auto;
-  padding: 0;
-  font-family: 'Open Sans';
-}
-
-.titulo {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.admin-card {
-  background: white;
-  border: 2px solid #0185FA;
-  border-radius: 20px;
-  padding: 2rem 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.3rem;
-  box-shadow: 0 4px 12px #00000015;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.input-group label {
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-input,
-textarea {
-  padding: 12px;
-  border: 1px solid #bbbbbb;
-  border-radius: 10px;
-  font-size: 1rem;
-  outline: none;
-}
-
-input:focus,
-textarea:focus {
-  border-color: #0185FA;
-}
-
-.row {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.checkbox-area {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-}
-
-.upload-box {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.upload-box label {
-  font-weight: 600;
-}
-
-.btn-submit {
-  background: #0185FA;
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.btn-submit:hover {
-  background: #0070d6;
-}
-
-.btn-submit:disabled {
-  background: #8dbcec;
-  cursor: not-allowed;
-}
-.mensagem {
-  text-align: center;
-  font-weight: 600;
-  margin-top: 10px;
-}
+  .admin-wrapper {
+    width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+    font-family: 'Open Sans';
+  }
+  .titulo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .admin-card {
+    background: white;
+    border: 2px solid #0185FA;
+    border-radius: 20px;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    box-shadow: 0 4px 12px #00000015;
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .input-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  input,
+  textarea {
+    padding: 12px;
+    border: 1px solid #bbbbbb;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+  }
+  input:focus,
+  textarea:focus {
+    border-color: #0185FA;
+  }
+  .row {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .checkbox-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+  .upload-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .upload-box label {
+    font-weight: 600;
+  }
+  .btn-submit {
+    background: #0185FA;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: .2s;
+  }
+  .btn-submit:hover {
+    background: #0070d6;
+  }
+  .btn-submit:disabled {
+    background: #8dbcec;
+    cursor: not-allowed;
+  }
+  .mensagem {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 10px;
+  }
 </style>

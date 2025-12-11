@@ -33,30 +33,6 @@
         }
     }
 
-    const cupons = ref([])
-    const cupomatual = ref('')
-    const descontostring = ref('')
-    const valordesconto = ref(0)
-
-    onMounted(async () => {
-        const resposta = await fetch('http://localhost:3000/cupons')
-        const data = await resposta.json()
-        cupons.value = data
-    })
-
-    function calcularcupom(cupomatual) {
-        const cupom = cupons.value.find(c => c.cupom_nome === cupomatual.trim().toUpperCase())
-
-        if (cupom) {
-            valordesconto.value = cupom.desconto / 100
-            descontostring.value = `Desconto de ${cupom.desconto}% aplicado com sucesso!`
-        } else {
-            valordesconto.value = 0
-            descontostring.value = 'Cupom inválido ou não encontrado'
-        }
-    }
-    console.log(ValorFrete)
-
 </script>
 
 <template>
@@ -130,22 +106,22 @@
                 <div class="style-camp destaque-prazo">
                     <span>Total a prazo:</span>
                     <div class="preco">
-                        <span v-if="ValorFrete === null" class="valor">{{ formatarPreco(((carrinho.total * 0.05) + carrinho.total) * (1 - valordesconto)) }}</span>
-                        <span v-if="ValorFrete" class="valor">{{ formatarPreco((((carrinho.total * 0.05) + carrinho.total + ValorFrete)) * (1 - valordesconto)) }}</span>
-                        <small>(Em até 2x de R$ {{ formatarPreco((((carrinho.total * 0.05) + carrinho.total + (ValorFrete || 0)) * (1 - valordesconto)) / 2) }} sem juros)</small>
+                        <span v-if="ValorFrete === null" class="valor">{{ formatarPreco(((carrinho.total * 0.05) + carrinho.total)) }}</span>
+                        <span v-if="ValorFrete" class="valor">{{ formatarPreco((((carrinho.total * 0.05) + carrinho.total + ValorFrete))) }}</span>
+                        <small>(Em até 2x de R$ {{ formatarPreco((((carrinho.total * 0.05) + carrinho.total + (ValorFrete || 0))) / 2) }} sem juros)</small>
                     </div>
                 </div>
                 <div class="style-camp destaque-vista">
                     <span>Valor à vista no <b>Pix:</b></span>
                     <div class="preco">
-                        <span v-if="ValorFrete === null" class="valor">{{ formatarPreco(carrinho.total * (1 - valordesconto)) }}</span>
-                        <span v-if="ValorFrete" class="valor">{{ formatarPreco((carrinho.total + ValorFrete) * (1 - valordesconto)) }}</span>
+                        <span v-if="ValorFrete === null" class="valor">{{ formatarPreco(carrinho.total) }}</span>
+                        <span v-if="ValorFrete" class="valor">{{ formatarPreco((carrinho.total + ValorFrete)) }}</span>
                     </div>
                 </div>
 
                 <hr>
 
-                <router-link to="/Entrega"><button class="button-comprar">CONTINUAR</button></router-link>
+                <router-link to="/Entrega"><button class="button-comprar">CONTINUAR PARA ENTREGA</button></router-link>
                 <router-link to="/"><button class="button-voltar" >VOLTAR</button></router-link>
             </div>
         </div>

@@ -113,7 +113,7 @@
                         Nenhum produto disponível no momento
                     </div>
                     
-                    <div v-else>
+                    <div v-else class="lista-produtos">
                         <div v-for="p in produtosSelecionado" :key="p.id" class="produto">
                             <img :src="p.imagem" :alt="p.nome">
                             <h3>{{ p.nome }}</h3>

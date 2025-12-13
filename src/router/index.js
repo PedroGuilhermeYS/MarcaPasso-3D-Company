@@ -54,31 +54,25 @@ const router = createRouter({
       path: "/Crud",
       name: "/Crud",
       component: CrudView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: "/Produtos",
       name: "/AllProdutos",
       component: AllProdutosView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: "/Atualizar",
       name: "AtualizarProdutos",
       component: AtualizarProdutoView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: "/Remover",
       name: "RemoverProdutos",
       component: RemoverProdutoView,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: "/admin",
-      name: "AdminProdutos",
-      component: AdminProdutosView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: "/Painel",
@@ -107,7 +101,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
+  const requiresAdmin = to.matched.some(r => r.meta.requiresAdmin)
 
   if (!requiresAuth) {
     return next()
@@ -116,11 +111,18 @@ router.beforeEach((to, from, next) => {
   const auth = getAuth()
 
   onAuthStateChanged(auth, user => {
-    if (user && user.email === "pedro210905@gmail.com") {
-      next()
-    } else {
-      next("/Login")
+    if (!user) {
+      return next("/Login")
     }
+
+    if (requiresAdmin) {
+      if (user.email === "pedro210905@gmail.com") {
+        return next()
+      } else {
+        return next("/")
+      }
+    }
+    return next()
   })
 })
 

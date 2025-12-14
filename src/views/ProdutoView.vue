@@ -82,15 +82,13 @@
                     </a>
                 </div>
 
-                <router-link v-if="usuarioLogado">
-                    <div class="favorito">
-                        <button class="material-symbols-outlined"
-                            :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : '#0185FA' }"
-                            @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">
-                            favorite
-                        </button>
-                    </div>
-                </router-link>
+                <div v-if="usuarioLogado" class="favorito">
+                    <button class="material-symbols-outlined"
+                        :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : '#0185FA' }"
+                        @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">
+                        favorite
+                    </button>   
+                </div>
                 <router-link v-if="!usuarioLogado" to="/Login">
                     <div class="favorito">
                         <button class="material-symbols-outlined">favorite</button>
@@ -128,11 +126,11 @@
                         <div class="sub-container">
                             <input class="quantid" v-model.number="itens" type="number" min="1" max="100" @input="validarQuantidade" />
 
-                            <router-link v-if="usuarioLogado">
+                            <div v-if="usuarioLogado" class="compra">
                                 <button class="cart" @click="carrinho.adicionarItem(Produto, itens)">
                                     # Adicionar ao carrinho
                                 </button>
-                            </router-link>
+                            </div>
 
                             <router-link v-else to="/Login">
                                 <button class="cart">
@@ -258,6 +256,13 @@
         border: 2px solid #0185FA;
         padding: 2rem 0rem;
         margin-bottom: 2rem;
+    }
+    .sub-container {
+        display: flex;
+        align-items: center;
+    }
+    .compra {
+        display: flex;
     }
     .modais{
         width: 100%;

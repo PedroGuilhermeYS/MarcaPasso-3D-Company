@@ -36,7 +36,7 @@ const router = createRouter({
     },
     {
       path: "/Contatos",
-      name: "/Contatos",
+      name: "Contatos",
       component: ContatosView
     },
     { path: '/Produto/:id',
@@ -46,19 +46,19 @@ const router = createRouter({
     },
     {
       path: "/Favoritos",
-      name: "/Favoritos",
+      name: "Favoritos",
       component: FavoritosView,
       meta: { requiresAuth: true }
     },
     {
       path: "/Crud",
-      name: "/Crud",
+      name: "Crud",
       component: CrudView,
       meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
       path: "/Produtos",
-      name: "/AllProdutos",
+      name: "AllProdutos",
       component: AllProdutosView,
       meta: { requiresAuth: true, requiresAdmin: true }
     },
@@ -109,21 +109,17 @@ router.beforeEach((to, from, next) => {
   }
 
   const auth = getAuth()
+  const user = auth.currentUser
 
-  onAuthStateChanged(auth, user => {
-    if (!user) {
-      return next("/Login")
-    }
+  if (!user) {
+    return next("/Login")
+  }
 
-    if (requiresAdmin) {
-      if (user.email === "pedro210905@gmail.com") {
-        return next()
-      } else {
-        return next("/")
-      }
-    }
-    return next()
-  })
+  if (requiresAdmin && user.email !== "pedro210905@gmail.com") {
+    return next("/")
+  }
+
+  return next()
 })
 
 export default router

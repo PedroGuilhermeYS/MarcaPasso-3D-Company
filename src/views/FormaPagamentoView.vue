@@ -2,81 +2,31 @@
 import LogoTop from '@/componentes/LogoTop.vue';
 import UserAction from '@/componentes/UserAction.vue';
 import Footer from '@/componentes/Footer.vue';
+import ListaPagamentos from '@/componentes/PagamentoView/ListaPagamentos.vue';
+import MarketResumo from '@/componentes/PagamentoView/MarketResumo.vue';
+import ModaisPagamento from '@/componentes/PagamentoView/ModaisPagamento.vue';
 import { ref, onMounted } from 'vue'
 import { useCarrinhoStore } from '@/stores/carrinho';
-import { formatarPreco } from '@/utils/functionsFull.js'
 import { useRouter } from 'vue-router'
 
-const mostrarModalPix = ref(false)
-const mostrarModalCartao = ref(false)
+const router = useRouter()
+const carrinho = useCarrinhoStore()
 
-const cartao = ref({
-    nome: "",
-    numero: "",
-    validade: "",
-    cvv: ""
-})
+const modaisPagamentoRef = ref(null)
 
 function selecionarPagamento(pag) {
-    pagamentoSelecionado.value = pag.id
-
     if (pag.frase.includes("PIX")) {
-        mostrarModalPix.value = true
+        modaisPagamentoRef.value.abrirModalPix()
     }
 
     if (pag.frase.includes("CARTÃO")) {
-        mostrarModalCartao.value = true
+        modaisPagamentoRef.value.abrirModalCartao()
     }
 }
 
 function fecharModais() {
-    mostrarModalPix.value = false
-    mostrarModalCartao.value = false
-}
-
-function confirmarCartao() {
-    carrinho.limparCarrinho()
-    router.push("/")
-}
-
-function confirmarPix() {
-    carrinho.limparCarrinho()
-    router.push("/")
-}
-
-const router = useRouter()
-
-const carrinho = useCarrinhoStore()
-
-const pagamentos = ref([])
-const pagamentoSelecionado = ref(null)
-
-const cupons = ref([])
-const cupomatual = ref("")
-const valordesconto = ref(0)
-const descontostring = ref("")
-
-onMounted(async () => {
-    const resposta = await fetch('http://localhost:3000/pagamentos')
-    const data = await resposta.json()
-    pagamentos.value = data
-})
-
-onMounted(async () => {
-    const resposta = await fetch('http://localhost:3000/cupons')
-    const data = await resposta.json()
-    cupons.value = data
-})
-
-function calcularcupom(cupomatual) {
-    const cupom = cupons.value.find(c => c.cupom_nome === cupomatual.trim().toUpperCase())
-
-    if (cupom) {
-        valordesconto.value = cupom.desconto / 100
-        descontostring.value = `Desconto de ${cupom.desconto}% aplicado com sucesso!`
-    } else {
-        valordesconto.value = 0
-        descontostring.value = "Cupom inválido ou não encontrado"
+    if (modaisPagamentoRef.value) {
+        modaisPagamentoRef.value.fecharModais()
     }
 }
 
@@ -94,111 +44,14 @@ onMounted(() => {
     <main>
         <div class="container1">
             <div class="products">
-
-                <div class="lista-pagamentos">
-                    <div v-for="pag in pagamentos" :key="pag.id" class="pagamento"
-                        :class="{ selecionado: pagamentoSelecionado === pag.id }" @click="selecionarPagamento(pag)">
-                        <img :src="pag.foto" alt="icone" class="pagamento-foto">
-                        <div class="pagamento-texto">
-                            <div class="pagamento-frase">{{ pag.frase }}</div>
-                            <div class="pagamento-subfrase">{{ pag.subfrase }}</div>
-                        </div>
-                    </div>
-                </div>
-
+                <ListaPagamentos @selecionarPagamento="selecionarPagamento" />
             </div>
             <div class="market">
-                <h2># RESUMO</h2>
-                <div class="style-camp">
-                    <span>Valor dos Produtos:</span>
-                    <span>{{ formatarPreco(carrinho.total) }}</span>
-                </div>
-
-                <hr>
-
-                <div class="style-camp">
-                    <span>Frete:</span>
-                    <span>{{ formatarPreco(carrinho.FreteSelecionado) }}</span>
-                </div>
-
-                <hr>
-
-                <div class="style-camp">
-                    <span>Cupom:</span>
-                    <div class="cupom-box">
-                        <input v-model="cupomatual" type="text" class="input-cupom" placeholder="Digite o cupom">
-                        <button class="btn-cupom" @click="calcularcupom(cupomatual)">Aplicar</button>
-                    </div>
-                </div>
-
-                <label v-if="descontostring" class="mensagem-cupom">{{ descontostring }}</label>
-
-                <hr>
-
-                <div class="style-camp destaque-prazo">
-                    <span>Total:</span>
-                    <div class="preco">
-                        <span class="valor">{{ formatarPreco((carrinho.total + carrinho.FreteSelecionado) * (1 - valordesconto)) }}</span>
-                    </div>
-                </div>
-
-                <hr>
-
-                <button class="button-comprar">PAGAMENTO</button>
-                <router-link to="/Entrega"><button class="button-voltar">VOLTAR PARA ENTREGA</button></router-link>
+                <MarketResumo />
             </div>
         </div>
 
-        <div v-if="mostrarModalPix" class="modal-fundo">
-            <div class="modal">
-                <h2>PAGAMENTO VIA PIX</h2>
-                <p>Escaneie o QR Code abaixo:</p>
-
-                <img src="@\img\meupix.png" alt="QR Code"class="qrcode">
-
-                <p>Pedro Guilherme - PicPay</p>
-
-                <div class="modal-botoes">
-                    <button class="btn-fechar" @click="fecharModais">Fechar</button>
-                    <button class="btn-confirmar" @click="confirmarPix">Confirmar Pagamento</button>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="mostrarModalCartao" class="modal-fundo">
-            <div class="modal">
-                <h2>PAGAMENTO COM CARTÃO</h2>
-
-                <form @submit.prevent="confirmarCartao">
-                <div class="input-modal">
-                    <label>Nome impresso no cartão</label>
-                    <input v-model="cartao.nome" type="text" maxlength="25" required>
-                </div>
-
-                <div class="input-modal">
-                    <label>Número do cartão</label>
-                    <input v-model="cartao.numero" type="text" maxlength="16" placeholder="0000 0000 0000 0000" required>
-                </div>
-
-                <div class="linha-dupla">
-                    <div class="input-modal">
-                        <label>Validade</label>
-                        <input v-model="cartao.validade" type="text" placeholder="MM/AA" maxlength="4" required>
-                    </div>
-
-                    <div class="input-modal">
-                        <label>CVV</label>
-                        <input v-model="cartao.cvv" type="password" maxlength="3" required>
-                    </div>
-                </div>
-
-                <div class="modal-botoes">
-                    <button type="button" class="btn-fechar" @click="fecharModais">Fechar</button>
-                    <button type="submit" class="btn-confirmar">Confirmar</button>
-                </div>
-                </form>
-            </div>
-        </div>
+        <ModaisPagamento ref="modaisPagamentoRef" @fecharModais="fecharModais" />
 
     </main>
     <Footer></Footer>
@@ -227,6 +80,15 @@ main {
     border: 2px solid #0185FA;
     text-align: center;
     padding: 2rem 2rem;
+}
+
+.market {
+    width: 26rem;
+    border-radius: 20px;
+    border: 2px solid #0185FA;
+    padding: 1.5rem;
+    background: #fff;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .lista-pagamentos {
@@ -267,15 +129,6 @@ main {
     text-align: left;
     font-size: 14px;
     color: #555;
-}
-
-.market {
-    width: 26rem;
-    border-radius: 20px;
-    border: 2px solid #0185FA;
-    padding: 1.5rem;
-    background: #fff;
-    font-family: 'Open Sans', sans-serif;
 }
 
 .market h2 {

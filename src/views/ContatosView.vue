@@ -85,12 +85,12 @@ import Footer from '@/componentes/Footer.vue';
     main{
         width: 1400px;
         margin: 0 auto;
-        font-family: 'Open Sans';
+        font-family: var(--font-family-base);
         font-weight: 300;
     }
     .container{
         width: 100%;
-        border: 2px solid #0185FA;
+        border: 2px solid var(--color-primary);
         border-radius: 20px;
         box-sizing: border-box;
         padding: 4rem 4rem;
@@ -149,8 +149,8 @@ import Footer from '@/componentes/Footer.vue';
         padding: 10px;
         border-radius: 6px;
         border-color: transparent;
-        color: white;
-        background-color: #0185FA; 
+        color: var(--color-on-primary);
+        background-color: var(--color-primary); 
         cursor: pointer;
     }
 </style>

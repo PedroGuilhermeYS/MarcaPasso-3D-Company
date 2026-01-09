@@ -54,7 +54,7 @@ const irParaLoja = () => {
 main {
   width: 1400px;
   margin: 0 auto;
-  font-family: 'Open Sans';
+  font-family: var(--font-family-base);
   font-weight: 300;
 }
 
@@ -63,7 +63,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border: 2px solid #0185FA;
+  border: 2px solid var(--color-primary);
   border-radius: 20px;
   padding: 6rem 4rem;
   margin-top: 3rem;
@@ -88,7 +88,7 @@ main {
 }
 
 .editar {
-  color: #0185FA;
+  color: var(--color-primary);
   cursor: pointer;
   font-weight: 600;
   margin-left: 1rem;
@@ -104,7 +104,7 @@ main {
 .sair {
   margin-top: 2rem;
   background-color: transparent;
-  color: #0185FA;
+  color: var(--color-primary);
   border: none;
   font-weight: bold;
   cursor: pointer;
@@ -130,8 +130,8 @@ main {
 }
 
 .btn-loja {
-  background-color: #141313;
-  color: white;
+  background-color: var(--color-ink);
+  color: var(--color-on-primary);
   border: none;
   border-radius: 8px;
   padding: 10px 20px;
@@ -140,7 +140,7 @@ main {
 }
 
 .btn-loja:hover {
-  background-color: #0185FA;
+  background-color: var(--color-primary);
   transition: 0.3s;
 }
 </style>

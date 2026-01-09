@@ -25,8 +25,8 @@ const pesquisa = usePesquisaStore()
 
 <style scoped>
     main {
-        background-color: rgb(255, 255, 255);
-        font-family: "Open Sans";
+        background-color: var(--color-surface);
+        font-family: var(--font-family-base);
     }
     .container {
         display: flex;
@@ -43,11 +43,11 @@ const pesquisa = usePesquisaStore()
         width: 30rem;
         height: 2rem;
         border-radius: 20px;
-        border: 2px solid #D9D9D9;
+        border: 2px solid var(--color-border-light);
         padding-left: 10px;
     }
     .search::placeholder {
-        color: #c0c0c0;
+        color: var(--color-placeholder);
     }
     .icon {
         position: absolute;
@@ -55,10 +55,10 @@ const pesquisa = usePesquisaStore()
         top: 50%;
         transform: translateY(-50%);
         font-size: 14px;
-        border: 1px solid #D9D9D9;
+        border: 1px solid var(--color-border-light);
         border-radius: 50%;
         padding: 5px;
-        background-color: #0185FA;
+        background-color: var(--color-primary);
         cursor: pointer;
     }
 </style>

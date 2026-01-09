@@ -63,10 +63,10 @@
 
 <style scoped>
     .footer {
-        background-color: rgb(255, 255, 255);
-        font-family: "Open Sans", sans-serif;
-        color: #000;
-        border-top: 1px solid #ccc;
+        background-color: var(--color-surface);
+        font-family: var(--font-family-base);
+        color: var(--color-text);
+        border-top: 1px solid var(--color-border-strong);
         font-size: 14px;
         width: 1400px;
         margin: 0 auto;
@@ -108,7 +108,7 @@
         margin-top: 10px;
     }
     .footer-bottom {
-        border-top: 1px solid #999;
+        border-top: 1px solid var(--color-border-strong);
         padding: 1rem;
         text-align: center;
     }

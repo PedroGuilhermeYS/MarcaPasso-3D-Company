@@ -108,7 +108,7 @@ async function cadastrar() {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--color-overlay-modal);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,7 +116,7 @@ async function cadastrar() {
 
 .modal {
   position: relative;
-  background: #fff;
+  background: var(--color-surface);
   padding: 2.5rem;
   border-radius: 8px;
   width: 22%;
@@ -136,7 +136,7 @@ async function cadastrar() {
 
 .tabs button {
   flex: 1;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-input);
   padding: 10px 0;
   cursor: pointer;
   border-radius: 5px;
@@ -145,9 +145,9 @@ async function cadastrar() {
 }
 
 .tabs button.ativo {
-  background: #0185fa;
-  color: white;
-  border-color: #0185fa;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
 }
 
 .subtitulo {
@@ -156,7 +156,6 @@ async function cadastrar() {
 
 .descricao {
   font-size: 0.9rem;
-  color: #444;
   margin-bottom: 1.5rem;
 }
 
@@ -164,7 +163,7 @@ input {
   width: 100%;
   padding: 10px;
   margin-bottom: 0.9rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-input);
   border-radius: 5px;
   font-size: 0.95rem;
   box-sizing: border-box;
@@ -181,17 +180,17 @@ input {
 
 .termos {
   font-size: 0.8rem;
-  color: #555;
+  color: var(--color-muted);
   margin-top: 0.5rem;
 }
 
 .termos .link {
-  color: #0185fa;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
 .erro {
-  color: rgb(255, 0, 0);
+  color: var(--color-error);
   font-size: 0.85rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -200,8 +199,8 @@ input {
 .botao {
   width: 100%;
   padding: 10px;
-  background: #0185fa;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
   border: none;
   border-radius: 6px;
   margin-top: 1rem;
@@ -212,7 +211,7 @@ input {
 }
 
 .botao:hover {
-  background: #0172d1;
+  background-color: var(--color-primary-hover);
 }
 
 .fechar {
@@ -223,12 +222,12 @@ input {
   background: none;
   font-size: 1.6rem;
   cursor: pointer;
-  color: #999;
+  color: var(--color-border-strong);
   transition: 0.2s;
 }
 
 .fechar:hover {
-  color: #555;
+  color: var(--color-muted);
 }
 
 .login-voltar {
@@ -238,7 +237,7 @@ input {
 }
 
 .login-voltar a {
-  color: #0185fa;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 600;
 }

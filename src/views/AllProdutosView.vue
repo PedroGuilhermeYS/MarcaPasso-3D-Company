@@ -22,7 +22,7 @@ onMounted(async () => {
 <template>
     <LogoTop></LogoTop>
     <main>
-        <div class="lista-wrapper">
+        <div class="admin-wrapper">
             <h1 class="titulo">Lista de Produtos</h1>
 
             <div class="grid-produtos">
@@ -40,12 +40,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.lista-wrapper {
-  width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Open Sans';
-}
 
 .titulo {
   text-align: center;
@@ -61,8 +55,8 @@ onMounted(async () => {
 }
 
 .card-produto {
-  background: white;
-  border: 2px solid #0185FA;
+  background: var(--color-surface);
+  border: 2px solid var(--color-primary);
   border-radius: 18px;
   padding: 15px;
   box-shadow: 0 4px 10px #00000015;
@@ -81,12 +75,12 @@ onMounted(async () => {
   font-size: 1rem;  
   font-weight: 700;
   margin: 0;
-  color: #0185FA;
+  color: var(--color-primary);
 }
 .nome {
   font-size: 1rem;  
   font-weight: 700;
   margin: 0;
-  color: #000000;
+  color: var(--color-text);
 }
 </style>

@@ -52,7 +52,7 @@
         <input v-model="senha" type="password" placeholder="Senha" />
       </div>
 
-      <p v-if="erro" style="color: #c00; margin-bottom: 8px;">{{ erro }}</p>
+      <p v-if="erro" style="color: var(--color-error); margin-bottom: 8px;">{{ erro }}</p>
 
       <button class="continuar" :disabled="loading" @click="logar">
         {{ loading ? 'Entrando...' : 'Continuar' }}
@@ -83,7 +83,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--color-overlay-modal);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,7 +92,7 @@
 
 .modal {
     position: relative;
-    background: #fff;
+    background: var(--color-surface);
     padding: 2rem;
     border-radius: 8px;
     width: 380px;
@@ -111,14 +111,14 @@
     justify-content: center;
     width: 90%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-border-input);
     border-radius: 4px;
 }
 
 .link {
     display: block;
     margin-bottom: 1rem;
-    color: #0185fa;
+    color: var(--color-primary);
     text-decoration: none;
     font-size: 0.9rem;
 }
@@ -126,8 +126,8 @@
 .continuar {
     width: 100%;
     padding: 10px;
-    background: #0185fa;
-    color: white;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -135,7 +135,6 @@
 
 .linha-ou {
     margin: 1rem 0;
-    color: #888;
     font-size: 0.9rem;
 }
 
@@ -147,9 +146,9 @@
 .social-login button {
     width: 48%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-border-input);
     border-radius: 4px;
-    background: #fff;
+    background: var(--color-surface);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -159,7 +158,7 @@
 
 .termos {
     font-size: 0.8rem;
-    color: #555;
+    color: var(--color-muted);
     margin-top: 1rem;
 }
 
@@ -171,6 +170,6 @@
     background: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #888;
+    color: var(--color-border-strong);
 }
 </style>

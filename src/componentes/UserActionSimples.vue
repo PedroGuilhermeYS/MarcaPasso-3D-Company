@@ -21,8 +21,8 @@
     main {
         width: 1400px;
         margin: 0 auto;
-        background-color: #0185FA;
-        font-family: "Open Sans";
+        background-color: var(--color-primary);
+        font-family: var(--font-family-base);
     }
     .container{
         align-items: center;
@@ -34,8 +34,8 @@
         justify-content: center;
     }
     p{
-        color: white;
-        font-family: "Open Sans";
+        color: var(--color-on-primary);
+        font-family: var(--font-family-base);
         font-weight: 600;
         cursor: pointer;
     }
@@ -43,7 +43,7 @@
         margin-left: 20px;
     }
     .Essa-barra-que-é-gostar-de-você{
-        border: 1px solid #ffffff;
+        border: 1px solid var(--color-on-primary);
         margin: 10px;
     }  
     a {

@@ -13,7 +13,7 @@
 
 <style scoped>
     main {
-        font-family: "Open Sans";
+        font-family: var(--font-family-base);
     }
     .container {
         display: flex;

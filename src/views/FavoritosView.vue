@@ -41,7 +41,7 @@
     main{
         width: 1400px;
         margin: 0 auto;
-        font-family: 'Open Sans';
+        font-family: var(--font-family-base);
         font-weight: 300;
     }
     .container{
@@ -51,14 +51,14 @@
         
     }
     .MS-Reference{
-       font-family: "MS Reference Sans Serif", sans-serif;
+       font-family: var(--font-family-ms-reference);
        font-weight: 200;
     }
     .all-products{
         width: 90%;
         margin: 0 auto;
         border-radius: 20px;
-        border: 2px solid #0185FA;
+        border: 2px solid var(--color-primary);
     }
     .all-products h3{
         margin-top: 5px;
@@ -86,6 +86,7 @@
     }
     .produto h3 {
         display: -webkit-box;
+        line-clamp: 2;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -110,8 +111,8 @@
         margin: 0px 0;
     }
     button {
-        background-color: #0099ff;
-        color: white;
+        background-color: var(--color-primary);
+        color: var(--color-on-primary);
         border: none;
         padding: 8px 15px;
         border-radius: 8px;

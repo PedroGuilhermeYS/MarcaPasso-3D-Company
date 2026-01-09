@@ -80,8 +80,8 @@ const usuarioLogado = computed(() => auth.usuario)
     main {
         width: 1400px;
         margin: 0 auto;
-        background-color: #0185FA;
-        font-family: "Open Sans";
+        background-color: var(--color-primary);
+        font-family: var(--font-family-base);
     }
     .container{
         align-items: center;
@@ -92,36 +92,39 @@ const usuarioLogado = computed(() => auth.usuario)
         justify-content: space-between;
     }
     p{
-        color: white;
-        font-family: "Open Sans";
+        color: var(--color-on-primary);
+        font-family: var(--font-family-base);
         font-weight: 600;
         cursor: pointer;
     }
     h4{
-        color: black;
-        font-family: "Open Sans";
+        color: var(--color-text);
+        font-family: var(--font-family-base);
         font-weight: 700;
         font-style: italic;
         cursor: pointer;
     }
+
     .space{
         margin-left: 20px;
     }
     .Essa-barra-que-é-gostar-de-você{
-        border: 1px solid #ffffff;
+        border: 1px solid var(--color-on-primary);
         margin: 10px;
     }
+
     .right-buttons h4{
         margin: 5px;
     }
     .crud, .login, .pedidos, .favorito, .carrinho{
-        border: 2px solid #0185FA;
-        background-color: white;
+        border: 2px solid var(--color-primary);
+        background-color: var(--color-surface);
         border-radius: 20px;
         padding: 1px 10px;
         display: flex;
         align-items: center;
     }
+
     .material-symbols-outlined {
         font-variation-settings: 
         'FILL' 0,
@@ -130,8 +133,9 @@ const usuarioLogado = computed(() => auth.usuario)
         'opsz' 24;
         margin-top: 5px;
         font-size: 20px;
-        color: #0185FA;
+        color: var(--color-primary);
     }
+
     a {
         text-decoration: none;
         color: inherit;

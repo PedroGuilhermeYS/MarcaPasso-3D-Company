@@ -69,9 +69,10 @@
     main{
         width: 1400px;
         margin: 0 auto;
-        font-family: 'Open Sans';
+        font-family: var(--font-family-base);
         font-weight: 300;
     }
+
     .container1{
         width: 100%;
         display: flex;
@@ -83,19 +84,21 @@
     .products{
         width: 60rem;
         border-radius: 20px;
-        border: 2px solid #0185FA;
+        border: 2px solid var(--color-primary);
         text-align: center;
         padding: 2rem 2rem;
     }
+
     .pedido-card {
         width: 97%;
-        background: #fff;
+        background: var(--color-surface);
         border-radius: 10px;
         box-shadow: 0 3px 6px #00000015;
         padding: 1.3rem 1rem;
         margin-bottom: 1.3rem;
         cursor: pointer;
     }
+
     .pedido-header {
         display: flex;
         align-items: center;
@@ -109,18 +112,19 @@
     }
     .label {
         font-size: .7rem;
-        color: #7d7d7d;
         font-weight: 600;
         letter-spacing: .5px;
     }
+
     .value {
         font-size: .85rem;
         margin-top: 2px;
     }
     .orange {
-        color: #ff6a00;
+        color: var(--color-warning);
         font-weight: bold;
     }
+
     .bold {
         font-weight: 700;
     }
@@ -129,6 +133,6 @@
         text-align: right;
     }
     .pedido-card:hover {
-        background-color: #ccdce7;
+        background-color: var(--color-bg-hover);
     }
 </style>

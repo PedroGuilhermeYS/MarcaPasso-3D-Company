@@ -30,12 +30,11 @@ const currentTab = ref('adicionar')
 .crud-container {
   display: flex;
   min-height: 100vh;
-  background: #f7f7f7;
 }
 
 .sidebar {
   width: 220px;
-  background: #ffffff;
+  background: var(--color-surface);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -45,8 +44,8 @@ const currentTab = ref('adicionar')
 
 .sidebar button {
   padding: 12px;
-  border: 1px solid #0185fa;
-  background: #ffffff;
+  border: 1px solid var(--color-primary);
+  background: var(--color-surface);
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
@@ -54,12 +53,12 @@ const currentTab = ref('adicionar')
 }
 
 .sidebar button:hover {
-  background: #e9f4ff;
+  background: var(--color-primary-hover);
 }
 
 .sidebar button.active {
-  background: #0185fa;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .content {

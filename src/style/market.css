@@ -1,0 +1,63 @@
+.market {
+    width: 26rem;
+    border-radius: 20px;
+    border: 2px solid var(--color-primary);
+    padding: 1.5rem;
+    background: var(--color-surface);
+    font-family: var(--font-family-base);
+}
+
+.market h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.preco-market {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.valor {
+    font-weight: 500;
+}
+
+small {
+    font-size: 12px;
+}
+
+.style-camp {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0.8rem 0;
+    font-size: 0.95rem;
+}
+
+.style-camp span {
+    font-weight: 500;
+}
+
+.style-camp small {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+.destaque-prazo {
+    background: var(--color-bg-pale);
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.destaque-vista {
+    background: var(--color-success-bg);
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}

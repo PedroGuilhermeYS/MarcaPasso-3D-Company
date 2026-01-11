@@ -1,68 +1,161 @@
 <script setup>
-import { ref } from 'vue'
-import AdicionarProdutosView from './AdicionarProdutosView.vue'
-import AtualizarProdutoView from './AtualizarProdutoView.vue'
-import RemoverProdutoView from './RemoverProdutoView.vue'
-import AllProdutosView from './AllProdutosView.vue'
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
+import LogoTop from "@/componentes/LogoTop.vue";
 
-const currentTab = ref('adicionar')
+// 👉 importa a lógica de exclusão
+import { removerProduto } from "@/stores/RemoverProduto";
+
+const produtos = ref([]);
+const router = useRouter();
+
+onMounted(async () => {
+  const snap = await getDocs(collection(db, "produtos"));
+  produtos.value = snap.docs.map(docSnap => ({
+    id: docSnap.id,
+    ...docSnap.data()
+  }));
+  if (produtos.value.length === 0) {
+    router.push("/Adicionar");
+  }
+});
+
+const adicionarProduto = () => {
+  router.push("/Adicionar");
+};
+
+const atualizarProduto = (id) => {
+  router.push(`/Atualizar/${id}`);
+};
+
+const remover = async (id) => {
+  const confirmar = confirm("Deseja remover este produto?");
+  if (!confirmar) return;
+
+  try {
+    await removerProduto(id);
+    produtos.value = produtos.value.filter(p => p.id !== id);
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao remover produto.");
+  }
+};
 </script>
 
 <template>
-  <div class="crud-container">
-    <aside class="sidebar">
-      <button @click="currentTab = 'adicionar'" :class="{ active: currentTab === 'adicionar' }">Adicionar Produto</button>
-      <button @click="currentTab = 'atualizar'" :class="{ active: currentTab === 'atualizar' }">Atualizar Produto</button>
-      <button @click="currentTab = 'remover'" :class="{ active: currentTab === 'remover' }">Remover Produto</button>
-      <button @click="currentTab = 'todosprodutos'" :class="{ active: currentTab === 'todosprodutos' }">Todos os Produtos</button>
-    </aside>
+  <LogoTop />
 
-    <main class="content">
-      <AdicionarProdutosView v-if="currentTab === 'adicionar'" />
-      <AtualizarProdutoView v-if="currentTab === 'atualizar'" />
-      <RemoverProdutoView v-if="currentTab === 'remover'" />
-      <AllProdutosView v-if="currentTab === 'todosprodutos'" />
-    </main>
+  <div class="container-principal">
+    <h2 class="titulo">Lista de Produtos</h2>
+
+    <div class="barra-superior">
+      <button class="button-comprar" @click="adicionarProduto">
+        + Adicionar Produto
+      </button>
+    </div>
+
+    <div class="grid-produtos">
+      <div class="card-produto" v-for="produto in produtos" :key="produto.id">
+        <img :src="produto.imagemPrincipal" alt="Produto" class="foto"/>
+
+        <p class="nome-produto">
+          {{ produto.nome }}
+        </p>
+
+        <div class="acoes">
+          <button class="btn azul" @click="atualizarProduto(produto.id)">
+            Atualizar
+          </button> 
+
+          <button class="btn vermelho" @click="remover(produto.id)">
+            Remover
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.crud-container {
-  display: flex;
-  min-height: 100vh;
+.container-principal {
+  border: 2px solid #0d6efd;
+  border-radius: 14px;
+  padding: 30px;
+  max-width: 1500px;
+  margin: 0 auto;
 }
 
-.sidebar {
-  width: 220px;
+.titulo {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.barra-superior {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 20px;
+}
+
+.card-produto {
   background: var(--color-surface);
-  padding: 20px;
+  border: 2px solid var(--color-primary);
+  border-radius: 18px;
+  padding: 15px;
+  box-shadow: 0 4px 10px #00000015;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
 }
 
-.sidebar button {
-  padding: 12px;
-  border: 1px solid var(--color-primary);
-  background: var(--color-surface);
-  border-radius: 8px;
-  cursor: pointer;
+.foto {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.nome-produto {
+  margin: 12px 0;
   font-size: 16px;
-  transition: 0.2s;
+  font-weight: 500;
+  text-align: center;
 }
 
-.sidebar button:hover {
-  background: var(--color-primary-hover);
+.acoes {
+  display: flex;
+  gap: 10px;
 }
 
-.sidebar button.active {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+.btn {
+  width: 7rem;
+  padding: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
 }
 
-.content {
-  flex: 1;
-  padding: 30px;
+.btn:hover {
+  transform: scale(1.03);
+}
+
+.azul {
+  background: #0d6efd;
+  color: white;
+}
+
+.vermelho {
+  background: #dc3545;
+  color: white;
 }
 </style>

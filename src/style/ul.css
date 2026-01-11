@@ -1,5 +1,5 @@
 .button-comprar {
-    width: 100%;
+    width: 23.3rem;
     background: var(--color-primary);
     color: var(--color-on-primary);
     border: none;
@@ -17,7 +17,7 @@
 }
 
 .button-voltar {
-    width: 100%;
+    width: 23.3rem;
     background: var(--color-surface);
     color: var(--color-primary);
     border: 2px solid var(--color-primary);

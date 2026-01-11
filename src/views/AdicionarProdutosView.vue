@@ -4,7 +4,9 @@ import { db } from '@/firebase/firebase.js'
 import LogoTop from '@/componentes/LogoTop.vue'
 import { supabase } from '@/supabase/supabase.js'
 import { collection, doc, setDoc } from 'firebase/firestore'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const nome = ref('')
 const preco = ref('')
 const categoria = ref('')
@@ -15,6 +17,10 @@ const imagensSecundarias = ref([])
 
 const mensagem = ref('')
 const loading = ref(false)
+
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 const onFilePrincipalChange = (e) => {
   imagemPrincipal.value = e.target.files[0]
@@ -77,6 +83,10 @@ async function cadastrarProduto() {
     descricao.value = ''
     imagemPrincipal.value = null
     imagensSecundarias.value = []
+    
+    await esperar(2000)
+    router.push("/Crud");
+
   } catch (error) {
     console.error(error)
     mensagem.value = '❌ Erro ao cadastrar o produto.'

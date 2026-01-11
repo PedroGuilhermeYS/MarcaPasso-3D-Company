@@ -1,16 +1,14 @@
 import CarrinhoView from '@/views/CarrinhoView.vue'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
-import { getAuth, onAuthStateChanged } from "firebase/auth"
+import { getAuth } from "firebase/auth"
 import { createRouter, createWebHistory } from 'vue-router'
 import ProdutoView from '@/views/ProdutoView.vue'
 import ContatosView from '@/views/ContatosView.vue'
 import FavoritosView from '@/views/FavoritosView.vue'
 import AdminProdutosView from '@/views/AdicionarProdutosView.vue'
 import AtualizarProdutoView from '@/views/AtualizarProdutoView.vue'
-import RemoverProdutoView from '@/views/RemoverProdutoView.vue'
 import CrudView from '@/views/CrudView.vue'
-import AllProdutosView from '@/views/AllProdutosView.vue'
 import PainelUserView from '@/views/PainelUserView.vue'
 import EntregaView from '@/views/EntregaView.vue'
 import FormaPagamentoView from '@/views/FormaPagamentoView.vue'
@@ -57,21 +55,16 @@ const router = createRouter({
       meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
-      path: "/Produtos",
-      name: "AllProdutos",
-      component: AllProdutosView,
+      path: "/Adicionar",
+      name: "AdicionarProdutos",
+      component: AdminProdutosView,
       meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
-      path: "/Atualizar",
+      path: "/Atualizar/:id",
       name: "AtualizarProdutos",
       component: AtualizarProdutoView,
-      meta: { requiresAuth: true, requiresAdmin: true }
-    },
-    {
-      path: "/Remover",
-      name: "RemoverProdutos",
-      component: RemoverProdutoView,
+      props: true,
       meta: { requiresAuth: true, requiresAdmin: true }
     },
     {
@@ -103,20 +96,29 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresAdmin = to.matched.some(r => r.meta.requiresAdmin)
-
-  if (!requiresAuth) {
-    return next()
-  }
+  const viaCrud = to.matched.some(r => r.meta.viaCrud)
 
   const auth = getAuth()
   const user = auth.currentUser
 
+  // 🔓 Rotas públicas
+  if (!requiresAuth) {
+    return next()
+  }
+
+  // 🔐 Não logado
   if (!user) {
     return next("/Login")
   }
 
+  // 👑 Não é admin
   if (requiresAdmin && user.email !== "pedro210905@gmail.com") {
     return next("/")
+  }
+
+  // 🚫 Bloqueio de acesso direto por URL
+  if (viaCrud && from.name !== "AllProdutos") {
+    return next("/Produtos")
   }
 
   return next()

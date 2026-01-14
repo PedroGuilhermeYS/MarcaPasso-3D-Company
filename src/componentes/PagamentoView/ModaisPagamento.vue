@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCarrinhoStore } from '@/stores/carrinho'
+import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
 
 const emit = defineEmits(['fecharModais'])
 

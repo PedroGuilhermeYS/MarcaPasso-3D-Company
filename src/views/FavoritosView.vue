@@ -3,7 +3,7 @@
     import UserAction from '@/componentes/UserAction.vue';
     import Footer from '@/componentes/Footer.vue';
 
-    import { useFavoritadosStore } from '@/stores/favoritados';
+    import { useFavoritadosStore } from '@/stores/useFavoritosStore';
 
     const favoritados = useFavoritadosStore()
 

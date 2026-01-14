@@ -6,7 +6,7 @@ import ListaPagamentos from '@/componentes/PagamentoView/ListaPagamentos.vue';
 import MarketResumo from '@/componentes/PagamentoView/MarketResumo.vue';
 import ModaisPagamento from '@/componentes/PagamentoView/ModaisPagamento.vue';
 import { ref, onMounted } from 'vue'
-import { useCarrinhoStore } from '@/stores/carrinho';
+import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

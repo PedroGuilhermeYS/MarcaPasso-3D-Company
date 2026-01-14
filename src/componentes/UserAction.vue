@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useCarrinhoStore } from '@/stores/carrinho'
+import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { formatarPreco } from '@/utils/functionsFull.js'
 

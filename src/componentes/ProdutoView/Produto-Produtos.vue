@@ -1,9 +1,9 @@
 <script setup>
     import { ref, onMounted, computed } from 'vue'
     import { useRoute } from 'vue-router'
-    import { useCarrinhoStore } from '@/stores/carrinho'
-    import { useFavoritadosStore } from '@/stores/favoritados';
-    import { useProdutosStore } from '@/stores/Produtos';
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
+    import { useFavoritadosStore } from '@/stores/useFavoritosStore';
+    import { useProdutosStore } from '@/stores/useProdutosStore';
     import { useAuthStore } from '@/stores/useAuthStore'
     import { formatarPreco } from '@/utils/functionsFull.js'
 

@@ -1,6 +1,6 @@
 <script setup>
     import { ref, computed } from 'vue'
-    import { useCarrinhoStore } from '@/stores/carrinho';
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
     import { formatarPreco } from '@/utils/functionsFull.js'
     import { useRouter } from 'vue-router'
     

@@ -6,7 +6,7 @@
     import Footer from '@/componentes/Footer.vue';
     import Endereços from '@/componentes/EntregaView/Endereços.vue'
     import MarketEndereço from '@/componentes/EntregaView/MarketEndereço.vue'
-    import { useCarrinhoStore } from '@/stores/carrinho';
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
     
     const carrinho = useCarrinhoStore()
     const router = useRouter()

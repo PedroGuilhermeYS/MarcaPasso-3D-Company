@@ -1,6 +1,6 @@
 <script setup>
     import { usePesquisaStore } from '@/stores/pesquisa'
-    import { useProdutosStore } from '@/stores/Produtos';
+    import { useProdutosStore } from '@/stores/useProdutosStore';
     import { formatarPreco } from '@/utils/functionsFull.js'
 
     import { ref, onMounted, computed } from 'vue'

@@ -1,5 +1,5 @@
 <script setup>
-    import { useCarrinhoStore } from '@/stores/carrinho';
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
     import { formatarPreco } from '@/utils/functionsFull.js'
 
     const props = defineProps({

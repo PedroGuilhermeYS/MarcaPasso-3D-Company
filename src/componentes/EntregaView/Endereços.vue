@@ -1,6 +1,6 @@
 <script setup>
     import { ref, onMounted } from 'vue'
-    import { useCarrinhoStore } from '@/stores/carrinho';
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
     
     const carrinho = useCarrinhoStore()
     const enderecos = ref([])

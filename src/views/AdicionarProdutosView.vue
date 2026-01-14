@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { db } from '@/firebase/firebase.js'
 import LogoTop from '@/componentes/LogoTop.vue'
-import { supabase } from '@/supabase/supabase.js'
+import { supabase } from '@/lib/supabase.js'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useRouter } from 'vue-router'
 

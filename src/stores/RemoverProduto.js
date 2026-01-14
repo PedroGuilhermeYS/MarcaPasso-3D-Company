@@ -1,5 +1,5 @@
 import { db } from '@/firebase/firebase'
-import { supabase } from '@/supabase/supabase'
+import { supabase } from '@/lib/supabase'
 import { doc, deleteDoc, getDoc } from 'firebase/firestore'
 
 export async function removerProduto(id) {

@@ -41,7 +41,7 @@
     }
 
     async function compartilharProduto() {
-        const link = `http://localhost:5173/produto/${route.params.id}`
+        const link = `${window.location.origin}/produto/${route.params.id}`
         const titulo = Produto.value.nome
 
         if (navigator.share) {
@@ -55,6 +55,7 @@
             alert('Link copiado para a área de transferência!')
         }
     }
+
 </script>
 
 <template>

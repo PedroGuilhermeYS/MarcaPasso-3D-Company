@@ -1,8 +1,5 @@
 <script setup>
     import { ref, onMounted } from 'vue'
-    import LogoTop from '@/componentes/LogoTop.vue';
-    import UserAction from '@/componentes/UserAction.vue';
-    import Footer from '@/componentes/Footer.vue';
     import Carrinho from '@/componentes/CarrinhoView/Carrinho.vue';
     import Market from '@/componentes/CarrinhoView/Market.vue';
 
@@ -33,15 +30,12 @@
 </script>
 
 <template>
-    <LogoTop></LogoTop>
-    <UserAction></UserAction>
     <main>       
         <div class="container1">
             <Carrinho :ValorFrete="ValorFrete" :DiaEntrega="DiaEntrega" :cidade="cidade"@calcular-frete="calculardata"></Carrinho>
             <Market :ValorFrete="ValorFrete"></Market>
         </div>
     </main>
-    <Footer></Footer>
 </template>
 
 <style scoped>

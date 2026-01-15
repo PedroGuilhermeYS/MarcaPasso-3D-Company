@@ -1,7 +1,4 @@
 <script setup>
-import UserActionSimples from '@/componentes/UserActionSimples.vue';
-import Footer from '@/componentes/Footer.vue';
-import LogoTop from '@/componentes/LogoTop.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 const authStore = useAuthStore();
@@ -21,9 +18,6 @@ const irParaLoja = () => {
 </script>
 
 <template>
-  <LogoTop></LogoTop>
-  <UserActionSimples></UserActionSimples>
-
   <main>
     <div class="container">
       <div class="dados-pessoais">
@@ -46,8 +40,6 @@ const irParaLoja = () => {
       </div>
     </div>
   </main>
-
-  <Footer></Footer>
 </template>
 
 <style scoped>

@@ -1,7 +1,4 @@
 <script setup>
-    import LogoTop from '@/componentes/LogoTop.vue';
-    import UserAction from '@/componentes/UserAction.vue';
-    import Footer from '@/componentes/Footer.vue';
     import { ref, onMounted } from 'vue';
     import { formatarPreco } from '@/utils/functionsFull.js'
 
@@ -19,9 +16,6 @@
 </script>
 
 <template>
-    <LogoTop></LogoTop>
-    <UserAction></UserAction>
-
     <main>
         <div class="container1">
             <div class="products">
@@ -61,8 +55,6 @@
             </div>
         </div>
     </main>
-
-    <Footer></Footer>
 </template>
 
 <style scoped>

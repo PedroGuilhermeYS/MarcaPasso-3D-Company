@@ -67,7 +67,7 @@ function calcularcupom(cupomatual) {
     <hr>
 
     <button class="button-comprar">PAGAMENTO</button>
-    <router-link to="/Entrega"><button class="button-voltar">VOLTAR PARA ENTREGA</button></router-link>
+    <router-link :to="{ name: 'Entrega' }"><button class="button-voltar">VOLTAR PARA ENTREGA</button></router-link>
 </template>
 
 <style scoped>

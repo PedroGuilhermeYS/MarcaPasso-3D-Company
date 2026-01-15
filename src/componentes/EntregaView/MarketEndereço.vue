@@ -14,7 +14,7 @@
             alert("Selecione o endreço de entrega")
         }
         else {
-            router.push('/FormaPagamento')
+            router.push({name: 'FormaPagamento'})
         }
     }
 

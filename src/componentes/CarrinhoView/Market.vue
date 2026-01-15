@@ -51,7 +51,7 @@
         
         <button v-if="carrinho.itens.length === 0" class="button-comprar">CARRINHO VAZIO!</button>
 
-        <router-link v-else to="/Entrega">
+        <router-link v-else :to="{ name: 'Entrega' }">
             <button class="button-comprar">CONTINUAR PARA ENTREGA</button>
         </router-link>
 

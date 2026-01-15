@@ -1,7 +1,4 @@
 <script setup>
-import LogoTop from '@/componentes/LogoTop.vue';
-import UserAction from '@/componentes/UserAction.vue';
-import Footer from '@/componentes/Footer.vue';
 import ListaPagamentos from '@/componentes/PagamentoView/ListaPagamentos.vue';
 import MarketResumo from '@/componentes/PagamentoView/MarketResumo.vue';
 import ModaisPagamento from '@/componentes/PagamentoView/ModaisPagamento.vue';
@@ -33,14 +30,12 @@ function fecharModais() {
 onMounted(() => {
     if (carrinho.FreteSelecionado == null) {
         alert("Selecione o endereço de entrega")
-        router.push("/Entrega")
+        router.push({ name: 'Entrega' })
     }
 })
 </script>
 
 <template>
-    <LogoTop></LogoTop>
-    <UserAction></UserAction>
     <main>
         <div class="container1">
             <div class="products">
@@ -54,7 +49,6 @@ onMounted(() => {
         <ModaisPagamento ref="modaisPagamentoRef" @fecharModais="fecharModais" />
 
     </main>
-    <Footer></Footer>
 </template>
 
 <style scoped>

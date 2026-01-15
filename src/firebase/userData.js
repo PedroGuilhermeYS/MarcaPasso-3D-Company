@@ -1,4 +1,4 @@
-import { db } from "@/firebase/firebase";
+import { db } from "@/lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
 export async function salvarCarrinho(uid, itens) {

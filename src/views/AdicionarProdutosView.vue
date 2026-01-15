@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { db } from '@/firebase/firebase.js'
+import { db } from '@/lib/firebase.js'
 import LogoTop from '@/componentes/LogoTop.vue'
 import { supabase } from '@/lib/supabase.js'
 import { collection, doc, setDoc } from 'firebase/firestore'

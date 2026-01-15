@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/firebase/firebase";
+import { db } from "@/lib/firebase";
 import LogoTop from "@/componentes/LogoTop.vue";
 
 // 👉 importa a lógica de exclusão

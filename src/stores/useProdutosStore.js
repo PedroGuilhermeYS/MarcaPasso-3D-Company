@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getFirestore, collection, getDocs } from 'firebase/firestore'
-import { auth } from '@/firebase/firebase.js'
+import { auth } from '@/lib/firebase.js'
 import { supabase } from '@/lib/supabase.js'
 
 export const useProdutosStore = defineStore('produtos', () => {

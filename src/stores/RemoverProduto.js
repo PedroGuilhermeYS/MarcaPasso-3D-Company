@@ -1,4 +1,4 @@
-import { db } from '@/firebase/firebase'
+import { db } from '@/lib/firebase'
 import { supabase } from '@/lib/supabase'
 import { doc, deleteDoc, getDoc } from 'firebase/firestore'
 

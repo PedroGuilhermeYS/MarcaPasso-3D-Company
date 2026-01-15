@@ -32,7 +32,7 @@
 <template>
     <main>       
         <div class="container1">
-            <Carrinho :ValorFrete="ValorFrete" :DiaEntrega="DiaEntrega" :cidade="cidade"@calcular-frete="calculardata"></Carrinho>
+            <Carrinho :ValorFrete="ValorFrete" :DiaEntrega="DiaEntrega" :cidade="cidade" @calcular-frete="calculardata"></Carrinho>
             <Market :ValorFrete="ValorFrete"></Market>
         </div>
     </main>

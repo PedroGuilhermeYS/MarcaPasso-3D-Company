@@ -80,7 +80,7 @@ const remover = async (id) => {
 
 <style scoped>
 .container-principal {
-  border: 2px solid #0d6efd;
+  border: 2px solid var(--color-primary);
   border-radius: 14px;
   padding: 30px;
   max-width: 1500px;
@@ -150,12 +150,12 @@ const remover = async (id) => {
 }
 
 .azul {
-  background: #0d6efd;
+  background: var(--color-primary);
   color: white;
 }
 
 .vermelho {
-  background: #dc3545;
+  background: var(--color-error);
   color: white;
 }
 </style>

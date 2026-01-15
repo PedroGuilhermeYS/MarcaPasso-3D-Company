@@ -121,17 +121,11 @@
                         <div class="sub-container">
                             <input class="quantid" v-model.number="itens" type="number" min="1" max="100" @input="validarQuantidade" />
 
-                            <div v-if="usuarioLogado" class="compra">
+                            <div class="compra">
                                 <button class="cart" @click="carrinho.adicionarItem(Produto, itens)">
                                     # Adicionar ao carrinho
                                 </button>
                             </div>
-
-                            <router-link v-else to="/Login">
-                                <button class="cart">
-                                    # Adicionar ao carrinho
-                                </button>
-                            </router-link>
                         </div>
                     </div>
 

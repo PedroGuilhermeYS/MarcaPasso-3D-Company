@@ -1,6 +1,6 @@
 <script setup>
     import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
-    import { formatarPreco } from '@/utils/functionsFull.js'
+    import { formatarPreco } from '@/composables/useFormatadorPreco.js'
 
     const props = defineProps({
         ValorFrete: {

@@ -1,57 +1,122 @@
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
+import { useFavoritoService } from '@/services/favoritoService'
+import { useAsyncHandler } from '@/composables/useAsyncHandler'
+import { normalizarIdObjeto } from '@/composables/useNormalizadorId'
 import { useAuthStore } from './useAuthStore'
-import { salvarFavoritos, carregarFavoritos } from '@/firebase/userData'
 
-export const useFavoritadosStore = defineStore('favoritos', () => {
-  const itens = ref([])
-  const auth = useAuthStore()
+export const useFavoritosStore = defineStore('favoritos', () => {
+  const favoritos = ref([])
+  const carregando = ref(false)
+  const erro = ref(null)
+
+  const authStore = useAuthStore()
+  const favoritoService = useFavoritoService()
+
+  const { run: withHandling } = useAsyncHandler({ carregando, erro })
 
   const total = computed(() =>
-    itens.value.reduce((acc, item) => acc + item.preco, 0)
+    favoritos.value.reduce((acc, item) => acc + (item.preco || 0), 0)
   )
 
-  watch(itens, async (novo) => {
-    if (auth.usuario) {
-      await salvarFavoritos(auth.usuario.uid, novo)
+  const favoritosIds = computed(() =>
+    new Set(favoritos.value.map(f => f.id))
+  )
+
+  const isFavoritado = (id) =>
+    favoritosIds.value.has(String(id))
+
+  const quantidade = computed(() => favoritos.value.length)
+
+  async function carregarFavoritos() {
+    if (!authStore.usuario) {
+      favoritos.value = []
+      return
     }
-  }, { deep: true })
 
-  async function carregarDoFirebase() {
-    if (auth.usuario) {
-      itens.value = await carregarFavoritos(auth.usuario.uid)
+    const lista = await withHandling(
+      () => favoritoService.buscarTodos(),
+      'Erro ao carregar favoritos'
+    )
+
+    favoritos.value = (lista || []).map(normalizarIdObjeto)
+  }
+
+
+  async function adicionarFavorito(produto) {
+    const novo = await withHandling(
+      () => favoritoService.adicionarFavorito(produto),
+      'Erro ao adicionar favorito'
+    )
+
+    const favoritoNormalizado = normalizarIdObjeto(novo)
+
+    if (!favoritos.value.some(f => f.id === favoritoNormalizado.id)) {
+      favoritos.value.push(favoritoNormalizado)
     }
+
+    return favoritoNormalizado
   }
 
-  function adicionarItem(produto) {
-    const existente = itens.value.find(i => i.id === produto.id)
-    if (!existente) {
-      itens.value.push({
-        id: produto.id,
-        imagem: produto.imagem,
-        nome: produto.nome,
-        preco: produto.preco
-      })
+
+  async function removerFavorito(id) {
+    await withHandling(
+      () => favoritoService.removerFavorito(id),
+      'Erro ao remover favorito'
+    )
+
+    const sid = String(id)
+
+    favoritos.value = favoritos.value.filter(f => String(f.id) !== sid)
+  }
+
+  async function limparFavoritos() {
+    await withHandling(
+      () => favoritoService.removerTodosFavoritos(),
+      'Erro ao limpar favoritos'
+    )
+
+    favoritos.value = []
+  }
+
+  async function atualizarFavorito(id, dados) {
+    const atualizado = await withHandling(
+      () => favoritoService.atualizarFavorito(id, dados),
+      'Erro ao atualizar favorito'
+    )
+
+    const favoritoNormalizado = normalizarIdObjeto(atualizado)
+
+    favoritos.value = favoritos.value.map(f =>
+      f.id === favoritoNormalizado.id
+        ? { ...f, ...favoritoNormalizado }
+        : f
+    )
+
+    return favoritoNormalizado
+  }
+
+  authStore.$subscribe((_, state) => {
+    if (state.usuario) {
+      carregarFavoritos()
+    } else {
+      favoritos.value = []
     }
-  }
-
-  function isFavoritado(id) {
-    return itens.value.some(i => i.id === id)
-  }
-
-  function removerItem(id) {
-    itens.value = itens.value.filter(i => i.id !== id)
-  }
-
-  function limparfavoritos() {
-    itens.value = []
-  }
-
-  if (auth.usuario) carregarDoFirebase()
-  auth.$subscribe((_, state) => {
-    if (state.usuario) carregarDoFirebase()
-    else itens.value = []
   })
 
-  return { itens, total, adicionarItem, removerItem, limparfavoritos, isFavoritado }
+  return {
+    favoritos,
+    carregando,
+    erro,
+
+    total,
+    quantidade,
+    isFavoritado,
+
+    carregarFavoritos,
+    adicionarFavorito,
+    removerFavorito,
+    limparFavoritos,
+    atualizarFavorito,
+  }
 })

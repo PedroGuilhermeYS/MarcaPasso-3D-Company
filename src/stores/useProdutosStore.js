@@ -1,68 +1,96 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getFirestore, collection, getDocs } from 'firebase/firestore'
-import { auth } from '@/lib/firebase.js'
-import { supabase } from '@/lib/supabase.js'
+import { useProdutoService } from '@/services/produtoService'
+import { useAsyncHandler } from '@/composables/useAsyncHandler.js'
+import { normalizarIdObjeto } from '@/composables/useNormalizadorId'
 
 export const useProdutosStore = defineStore('produtos', () => {
   const produtos = ref([])
+  const produtoSelecionado = ref(null)
   const carregando = ref(false)
   const erro = ref(null)
-  const db = getFirestore(auth.app)
+
+  const produtoService = useProdutoService()
+
+  const { run: withHandling } = useAsyncHandler({ carregando, erro })
 
   const carregarProdutos = async () => {
-    carregando.value = true
-    erro.value = null
+    const lista = await withHandling(
+      () => produtoService.buscarTodos(),
+      'Erro ao carregar produtos'
+    )
 
-    try {
-      // Buscar produtos no Firebase
-      const snap = await getDocs(collection(db, 'produtos'))
-      const listaFirebase = snap.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-
-      // Buscar imagem principal de cada produto no Supabase
-      const listaFinal = await Promise.all(
-        listaFirebase.map(async (p) => {
-
-          // Listar arquivos dentro da pasta
-          const { data: arquivos, error } = await supabase
-            .storage
-            .from('produtos')
-            .list(p.id)
-            
-          if (error) {
-            console.warn(`Erro ao buscar imagens do produto ${p.id}:`, error)
-            p.imagem = null
-          } else {
-            // Procurar foto principal
-            const principal = arquivos.find(arq => arq.name.startsWith('principal_'))
-            if (principal) {
-              const { data: urlData } = supabase
-                .storage
-                .from('produtos')
-                .getPublicUrl(`${p.id}/${principal.name}`)
-              p.imagem = urlData.publicUrl
-            } else {
-              p.imagem = null
-            }
-          }
-
-          return p
-        })
-      )
-
-      produtos.value = listaFinal
-      console.log('✅ Produtos carregados:', produtos.value)
-
-    } catch (e) {
-      console.error('Erro ao carregar produtos:', e)
-      erro.value = e.message || 'Erro ao carregar produtos'
-    } finally {
-      carregando.value = false
-    }
+    produtos.value = (lista || []).map(normalizarIdObjeto)
+    return produtos.value
   }
 
-  return { produtos, carregarProdutos, carregando, erro }
+  const buscarProduto = async (id) => {
+    const p = await withHandling(
+      () => produtoService.buscarProduto(id),
+      'Erro ao buscar produto'
+    )
+    produtoSelecionado.value = normalizarIdObjeto(p) || null
+    return produtoSelecionado.value
+  }
+
+  const adicionarProduto = async (produto) => {
+    const novo = await withHandling(
+      () => produtoService.adicionarProduto(produto),
+      'Erro ao adicionar produto'
+    )
+
+    const normalizado = normalizarIdObjeto(novo)
+
+    if (!produtos.value.some(p => String(p.id) === String(normalizado.id))) {
+      produtos.value.push(normalizado)
+    }
+    return normalizado
+  }
+
+  const atualizarProduto = async (id, dados) => {
+    const atualizado = await withHandling(
+      () => produtoService.atualizarProduto(id, dados),
+      'Erro ao atualizar produto'
+    )
+
+    const normalizado = normalizarIdObjeto(atualizado)
+
+    produtos.value = produtos.value.map(p =>
+      String(p.id) === String(normalizado.id) ? normalizado : p
+    )
+
+    if (produtoSelecionado.value && String(produtoSelecionado.value.id) === String(normalizado.id)) {
+      produtoSelecionado.value = normalizado
+    }
+
+    return normalizado
+  }
+
+  const removerProduto = async (id) => {
+    await withHandling(
+      () => produtoService.removerProduto(id),
+      'Erro ao remover produto'
+    )
+
+    const sid = String(id)
+    produtos.value = produtos.value.filter(p => String(p.id) !== sid)
+
+    if (produtoSelecionado.value && String(produtoSelecionado.value.id) === sid) {
+      produtoSelecionado.value = null
+    }
+
+    return id
+  }
+
+  return {
+    produtos,
+    produtoSelecionado,
+    carregando,
+    erro,
+    carregarProdutos,
+    buscarProduto,
+    adicionarProduto,
+    atualizarProduto,
+    removerProduto,
+  }
 })

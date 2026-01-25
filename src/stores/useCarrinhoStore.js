@@ -1,71 +1,144 @@
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useAuthStore } from './useAuthStore'
-import { salvarCarrinho, carregarCarrinho } from '@/firebase/userData'
+import { useCarrinhoService } from '@/services/carrinhoService'
+import { useAsyncHandler } from '@/composables/useAsyncHandler'
+import { normalizarIdObjeto } from '@/composables/useNormalizadorId'
 
 export const useCarrinhoStore = defineStore('carrinho', () => {
   const itens = ref([])
-  const auth = useAuthStore()
+  const freteSelecionado = ref(null)
 
-  const FreteSelecionado = ref(null)
+  const carregando = ref(false)
+  const erro = ref(null)
 
-  function definirFrete(frete) {
-    FreteSelecionado.value = frete
-  }
+  const authStore = useAuthStore()
+  const carrinhoService = useCarrinhoService()
+
+  const { run: withHandling } = useAsyncHandler({ carregando, erro })
 
   const total = computed(() =>
-    itens.value.reduce((acc, item) => acc + item.preco * item.quantidade, 0)
+    itens.value.reduce(
+      (acc, item) => acc + (Number(item.preco || 0) * Number(item.quantidade || 0)),
+      0
+    )
   )
 
-  watch(itens, async (novo) => {
-    if (auth.usuario) {
-      await salvarCarrinho(auth.usuario.uid, novo)
+  async function carregarCarrinho() {
+    if (!authStore.usuario) {
+      itens.value = []
+      return
     }
-  }, { deep: true })
 
-  async function carregarDoFirebase() {
-    if (auth.usuario) {
-      itens.value = await carregarCarrinho(auth.usuario.uid)
-    }
+    const lista = await withHandling(
+      () => carrinhoService.buscarTodos(),
+      'Erro ao carregar carrinho'
+    )
+
+    itens.value = Array.isArray(lista) ? lista.map(normalizarIdObjeto) : []
   }
 
-  const alterarQuantidade = (id, quantidade) => {
-    const item = itens.value.find(p => p.id === id)
-    if (item && quantidade > 0) {
-      item.quantidade = quantidade
-    }
-  }
+  async function adicionarItem(produto, quantidadeInformada = 1) {
+    produto = normalizarIdObjeto(produto)
+    const quantidade = Number(quantidadeInformada) || 1
 
-  function adicionarItem(produto, quantidades) {
-    const quantidade = Number(quantidades) || 1
-    const existente = itens.value.find(i => i.id === produto.id)
+    let existente = await withHandling(
+      () => carrinhoService.buscarItem(produto.id),
+      'Erro ao buscar item no carrinho'
+    )
 
     if (existente) {
-      existente.quantidade += quantidade
-    } else {
-      itens.value.push({
-        id: produto.id,
-        nome: produto.nome,
-        preco: produto.preco,
-        imagem: produto.imagem,
-        quantidade
-      })
+      existente = normalizarIdObjeto(existente)
+      return await alterarQuantidade(existente.id, Number(existente.quantidade || 0) + quantidade)
     }
+
+    const novo = await withHandling(
+      () =>
+        carrinhoService.adicionarItem({
+          id: produto.id,
+          nome: produto.nome,
+          preco: produto.preco,
+          imagem: produto.imagemPrincipal,
+          quantidade,
+        }),
+      'Erro ao adicionar item ao carrinho'
+    )
+
+    if (!novo) return null
+
+    const normalizado = normalizarIdObjeto(novo)
+
+    if (!itens.value.some(p => p.id === normalizado.id)) {
+      itens.value.push(normalizado)
+    } else {
+      const idx = itens.value.findIndex(p => p.id === normalizado.id)
+      if (idx !== -1) itens.value.splice(idx, 1, normalizado)
+    }
+
+    return normalizado
   }
 
-  function removerItem(id) {
-    itens.value = itens.value.filter(i => i.id !== id)
+  async function alterarQuantidade(id, quantidade) {
+    if (quantidade <= 0) return
+
+    const atualizado = await withHandling(
+      () => carrinhoService.alterarQuantidade(id, quantidade),
+      'Erro ao alterar quantidade'
+    )
+
+    // atualiza localmente por comparação de string para garantir consistência de tipos
+    itens.value = itens.value.map(item =>
+      String(item.id) === String(id)
+        ? { ...item, quantidade }
+        : item
+    )
+
+    return atualizado
   }
 
-  function limparCarrinho() {
+  async function removerItem(id) {
+    await withHandling(
+      () => carrinhoService.removerItem(id),
+      'Erro ao remover item do carrinho'
+    )
+
+    itens.value = itens.value.filter(i => String(i.id) !== String(id))
+  }
+
+  async function limparCarrinho() {
+    await withHandling(
+      () => carrinhoService.limparCarrinho(),
+      'Erro ao limpar carrinho'
+    )
+
     itens.value = []
   }
 
-  if (auth.usuario) carregarDoFirebase()
-  auth.$subscribe((_, state) => {
-    if (state.usuario) carregarDoFirebase()
-    else itens.value = []
+  function definirFrete(frete) {
+    freteSelecionado.value = frete
+  }
+
+  authStore.$subscribe((_, state) => {
+    if (state.usuario) {
+      carregarCarrinho()
+    } else {
+      itens.value = []
+    }
   })
 
-  return { itens, total, adicionarItem, removerItem, alterarQuantidade, limparCarrinho, FreteSelecionado, definirFrete }
+  return {
+    itens,
+    freteSelecionado,
+    carregando,
+    erro,
+
+    total,
+
+    carregarCarrinho,
+    adicionarItem,
+    alterarQuantidade,
+    removerItem,
+    limparCarrinho,
+    definirFrete,
+  }
 })

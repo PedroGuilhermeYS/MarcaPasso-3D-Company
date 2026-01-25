@@ -1,7 +1,10 @@
 <script setup>
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
+
+const router = useRouter();
 
 // const editarDados = () => {
   // alert('Função de edição ainda será implementada.');
@@ -9,11 +12,11 @@ const authStore = useAuthStore();
 
 const sair = async () => {
   await authStore.logout();
-  window.location.href = '/';
+  router.push({ name: 'Login' });
 };
 
 const irParaLoja = () => {
-  window.location.href = '/';
+  router.push({ name: 'Home' });
 };
 </script>
 

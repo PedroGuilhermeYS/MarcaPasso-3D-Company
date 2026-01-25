@@ -1,12 +1,9 @@
 <script setup>
     import { onMounted } from 'vue'
     import { useRouter } from 'vue-router'
-    import LogoTop from '@/componentes/LogoTop.vue';
-    import UserAction from '@/componentes/UserAction.vue';
-    import Footer from '@/componentes/Footer.vue';
     import Endereços from '@/componentes/EntregaView/Endereços.vue'
     import MarketEndereço from '@/componentes/EntregaView/MarketEndereço.vue'
-    import { useCarrinhoStore } from '@/stores/carrinho';
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
     
     const carrinho = useCarrinhoStore()
     const router = useRouter()
@@ -20,15 +17,12 @@
 </script>
 
 <template>
-    <LogoTop></LogoTop>
-    <UserAction></UserAction>
     <main>       
         <div class="container1">
             <Endereços></Endereços>
             <MarketEndereço></MarketEndereço>
         </div>
     </main>
-    <Footer></Footer>
 </template>
 
 <style scoped>

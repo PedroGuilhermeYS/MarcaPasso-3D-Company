@@ -1,10 +1,10 @@
 <script setup>
-import UserActionSimples from '@/componentes/UserActionSimples.vue';
-import Footer from '@/componentes/Footer.vue';
-import LogoTop from '@/componentes/LogoTop.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
+
+const router = useRouter();
 
 // const editarDados = () => {
   // alert('Função de edição ainda será implementada.');
@@ -12,18 +12,15 @@ const authStore = useAuthStore();
 
 const sair = async () => {
   await authStore.logout();
-  window.location.href = '/';
+  router.push({ name: 'Login' });
 };
 
 const irParaLoja = () => {
-  window.location.href = '/';
+  router.push({ name: 'Home' });
 };
 </script>
 
 <template>
-  <LogoTop></LogoTop>
-  <UserActionSimples></UserActionSimples>
-
   <main>
     <div class="container">
       <div class="dados-pessoais">
@@ -46,8 +43,6 @@ const irParaLoja = () => {
       </div>
     </div>
   </main>
-
-  <Footer></Footer>
 </template>
 
 <style scoped>

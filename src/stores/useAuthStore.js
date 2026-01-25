@@ -1,34 +1,85 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { auth } from '@/firebase/firebase.js'
-import { 
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from 'firebase/auth'
+import { useAuthService } from '@/services/authService.js'
+import { useAsyncHandler } from '@/composables/useAsyncHandler.js'
 
 export const useAuthStore = defineStore('auth', () => {
-  const usuario = ref(null)
+  const authService = useAuthService()
+
+  const usuario = ref(authService.getCurrentUser())
+  const carregando = ref(false)
+  const erro = ref(null)
+
+  const { run: withHandling } = useAsyncHandler({ carregando, erro })
 
   const cadastrar = async (email, senha) => {
-    const cred = await createUserWithEmailAndPassword(auth, email, senha)
-    usuario.value = cred.user
+    try {
+      const res = await withHandling(
+        () => authService.register(email, senha),
+        'Erro ao cadastrar'
+      )
+      usuario.value = authService.getCurrentUser()
+      return true
+    } catch {
+      return false
+    }
   }
 
   const login = async (email, senha) => {
-    const cred = await signInWithEmailAndPassword(auth, email, senha)
-    usuario.value = cred.user
+    try {
+      const res = await withHandling(
+        () => authService.login(email, senha),
+        'Erro ao realizar login'
+      )
+      usuario.value = authService.getCurrentUser()
+      return true
+    } catch {
+      return false
+    }
   }
 
   const logout = async () => {
-    await signOut(auth)
-    usuario.value = null
+    try {
+      await withHandling(
+        () => authService.logout(),
+        'Erro ao sair'
+      )
+      usuario.value = null
+      return true
+    } catch {
+      return false
+    }
   }
 
-  onAuthStateChanged(auth, (user) => {
-    usuario.value = user
-  })
+  const sincronizarSessao = async () => {
+    try {
+      const res = await withHandling(
+        () =>
+          authService.verificaLogin
+            ? authService.verificaLogin()
+            : Promise.resolve({ ok: false }),
+        'Erro ao sincronizar sessão'
+      )
+      usuario.value = res?.ok ? authService.getCurrentUser() : null
+      return res?.ok === true
+    } catch {
+      usuario.value = null
+      return false
+    }
+  }
 
-  return { usuario, cadastrar, login, logout }
+  const isAdmin = () => usuario.value?.role === 'admin'
+  const isAuthenticated = () => !!usuario.value
+
+  return {
+    usuario,
+    carregando,
+    erro,
+    cadastrar,
+    login,
+    logout,
+    sincronizarSessao,
+    isAdmin,
+    isAuthenticated,
+  }
 })

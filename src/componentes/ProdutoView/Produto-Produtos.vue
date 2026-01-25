@@ -1,35 +1,45 @@
 <script setup>
     import { ref, onMounted, computed } from 'vue'
     import { useRoute } from 'vue-router'
-    import { useCarrinhoStore } from '@/stores/carrinho'
-    import { useFavoritadosStore } from '@/stores/favoritados';
-    import { useProdutosStore } from '@/stores/Produtos';
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
+    import { useFavoritosStore } from '@/stores/useFavoritosStore';
+    import { useProdutosStore } from '@/stores/useProdutosStore';
     import { useAuthStore } from '@/stores/useAuthStore'
-    import { formatarPreco } from '@/utils/functionsFull.js'
+    import { formatarPreco } from '@/composables/useFormatadorPreco.js'
 
     const auth = useAuthStore()
-    const usuarioLogado = computed(() => auth.usuario)
+    const usuarioLogado = computed(() => !!auth.usuario)
     const route = useRoute()
-    const Produto = ref(null)
+    const produto = ref(null)
+    const produtoFavoritavel = computed(() => {
+        if (!produto.value) return null
+        return {
+            id: produto.value.id,
+            nome: produto.value.nome,
+            preco: produto.value.preco,
+            imagem: produto.value.imagemPrincipal
+        }
+    })
     const itens = ref(1)
     const carrinho = useCarrinhoStore()
-    const favoritados = useFavoritadosStore()
+    const favoritos = useFavoritosStore()
     const currentUrl = window.location.href
     const imagemAtual = ref(null)
+    const produtosStore = useProdutosStore()
 
     onMounted(async () => {
-        const produtosStore = useProdutosStore()
 
-        if (!produtosStore.produtos.length) {
-            await produtosStore.carregarProdutos()
-        }
+        await produtosStore.carregarProdutos()
+        await carrinho.carregarCarrinho()
+        await favoritos.carregarFavoritos()
 
-        Produto.value = produtosStore.produtos.find(p => String(p.id) === String(route.params.id))
 
-        if (!Produto.value) {
+        produto.value = produtosStore.produtos.find(p => String(p.id) === String(route.params.id))
+
+        if (!produto.value) {
             console.warn('Produto não encontrado para o ID:', route.params.id)
         } else {
-            imagemAtual.value = Produto.value.imagem
+            imagemAtual.value = produto.value.imagemPrincipal
         }
     })
 
@@ -41,8 +51,8 @@
     }
 
     async function compartilharProduto() {
-        const link = `http://localhost:5173/produto/${route.params.id}`
-        const titulo = Produto.value.nome
+        const link = `${window.location.origin}/produto/${route.params.id}`
+        const titulo = produto.value.nome
 
         if (navigator.share) {
             await navigator.share({
@@ -55,13 +65,23 @@
             alert('Link copiado para a área de transferência!')
         }
     }
+
+    async function onToggleFavorito() {
+        if (!produtoFavoritavel.value) return
+        if (favoritos.isFavoritado(produto.value.id)) {
+            await favoritos.removerFavorito(produto.value.id)
+        } else {
+            await favoritos.adicionarFavorito(produtoFavoritavel.value)
+        }
+    }
+
 </script>
 
 <template>
-    <div v-if="Produto">
+    <div v-if="produto">
         <div class="container1">
             <div class="left">
-                <h3>Home / {{ Produto.categoria }} / {{ Produto.nome }}</h3>
+                <h3>Home / {{ produto.categoria }} / {{ produto.nome }}</h3>
             </div>
 
             <div class="right">
@@ -70,7 +90,7 @@
                 </div>
 
                 <div class="whatsapp">
-                    <a :href="`https://api.whatsapp.com/send?text=${encodeURIComponent('Confira este produto: ' + Produto.nome + ' - ' + currentUrl)}`"
+                    <a :href="`https://api.whatsapp.com/send?text=${encodeURIComponent('Confira este produto: ' + produto.nome + ' - ' + currentUrl)}`"
                         target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-whatsapp"></i>
                     </a>
@@ -78,8 +98,8 @@
 
                 <div v-if="usuarioLogado" class="favorito">
                     <button class="material-symbols-outlined"
-                        :style="{ color: favoritados.isFavoritado(Produto.id) ? 'red' : 'var(--color-primary)' }"
-                        @click="favoritados.isFavoritado(Produto.id) ? favoritados.removerItem(Produto.id) : favoritados.adicionarItem(Produto)">
+                        :style="{ color: favoritos.isFavoritado(produto.id) ? 'red' : 'var(--color-primary)' }"
+                        @click="onToggleFavorito">
                         favorite
                     </button>   
                 </div>
@@ -93,15 +113,15 @@
         <div class="container2">
             <div class="photos">
                 <div class="atual">
-                    <img :src="imagemAtual" :alt="Produto.nome" width="600" height="700">
+                    <img :src="imagemAtual" :alt="produto.nome" width="600" height="700">
                 </div>
 
-                <div v-if="Produto.imagensSecundarias && Produto.imagensSecundarias.length" class="outrasimg">
+                <div v-if="produto.imagensSecundarias && produto.imagensSecundarias.length" class="outrasimg">
 
-                    <img :src="Produto.imagem" width="90" height="110" style="cursor:pointer" @click="imagemAtual = Produto.imagem" />
+                    <img :src="produto.imagemPrincipal" width="90" height="110" style="cursor:pointer" @click="imagemAtual = produto.imagemPrincipal" />
 
-                    <div v-for="(foto, index) in Produto.imagensSecundarias" :key="index">
-                        <img :src="foto" :alt="`Foto ${index + 1} de ${Produto.nome}`" width="90" height="110" style="cursor:pointer" @click="imagemAtual = foto" />
+                    <div v-for="(foto, index) in produto.imagensSecundarias" :key="index">
+                        <img :src="foto" :alt="`Foto ${index + 1} de ${produto.nome}`" width="90" height="110" style="cursor:pointer" @click="imagemAtual = foto" />
                     </div>
                 </div>
             </div>
@@ -109,28 +129,22 @@
             <div class="market">
                 <div class="text">
                     <div class="justify">
-                        <h2 class="name">{{ Produto.nome }}</h2>
+                        <h2 class="name">{{ produto.nome }}</h2>
 
                         <p class="avaliacao">★★★★★</p>
                         <h6 class="sla2">Seja o primeiro a opinar</h6>
 
-                        <h2 class="price">{{ formatarPreco(Produto.preco) }}</h2>
+                        <h2 class="price">{{ formatarPreco(produto.preco) }}</h2>
                         <h5 class="juros">ou 2x Sem juros</h5>
 
                         <div class="sub-container">
                             <input class="quantid" v-model.number="itens" type="number" min="1" max="100" @input="validarQuantidade" />
 
-                            <div v-if="usuarioLogado" class="compra">
-                                <button class="cart" @click="carrinho.adicionarItem(Produto, itens)">
+                            <div class="compra">
+                                <button class="cart" @click="carrinho.adicionarItem(produto, itens)">
                                     # Adicionar ao carrinho
                                 </button>
                             </div>
-
-                            <router-link v-else to="/Login">
-                                <button class="cart">
-                                    # Adicionar ao carrinho
-                                </button>
-                            </router-link>
                         </div>
                     </div>
 

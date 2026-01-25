@@ -55,7 +55,7 @@
     <div class="footer-bottom">
       <p>
         MarcaPasso 3D Company CNPJ 33.210.687/0009-89 - Visite nosso Instagram
-        <strong>@MarcaPasso3DCompany</strong>
+        <a href="https://www.instagram.com/marcapasso3d/"><strong>@MarcaPasso3D</strong></a>
       </p>
     </div>
   </footer>

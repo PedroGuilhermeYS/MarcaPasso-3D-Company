@@ -1,15 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { usePagamentoStore } from '@/stores/usePagamentosStore'
 
 const emit = defineEmits(['selecionarPagamento'])
 
-const pagamentos = ref([])
+const pagamentos = usePagamentoStore()
 const pagamentoSelecionado = ref(null)
 
 onMounted(async () => {
-    const resposta = await fetch('http://localhost:3000/pagamentos')
-    const data = await resposta.json()
-    pagamentos.value = data
+    await pagamentos.buscarPagamentos()
 })
 
 function selecionarPagamento(pag) {
@@ -20,7 +19,7 @@ function selecionarPagamento(pag) {
 
 <template>
     <div class="lista-pagamentos">
-        <div v-for="pag in pagamentos" :key="pag.id" class="pagamento"
+        <div v-for="pag in pagamentos.pagamentos" :key="pag.id" class="pagamento"
             :class="{ selecionado: pagamentoSelecionado === pag.id }" @click="selecionarPagamento(pag)">
             <img :src="pag.foto" alt="icone" class="pagamento-foto">
             <div class="pagamento-texto">

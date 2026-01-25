@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from 'vue'
-import { db } from '@/firebase/firebase.js'
+import { onMounted, ref } from 'vue'
 import LogoTop from '@/componentes/LogoTop.vue'
-import { supabase } from '@/supabase/supabase.js'
-import { collection, doc, setDoc } from 'firebase/firestore'
+import { useProdutosStore } from '@/stores/useProdutosStore'
 import { useRouter } from 'vue-router'
+
+const produtosStore = useProdutosStore()
 
 const router = useRouter()
 const nome = ref('')
@@ -18,6 +18,10 @@ const imagensSecundarias = ref([])
 const mensagem = ref('')
 const loading = ref(false)
 
+onMounted(async () => {
+  await produtosStore.carregarProdutos()
+})
+
 function esperar(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
@@ -30,47 +34,19 @@ const onFilesSecundariasChange = (e) => {
   imagensSecundarias.value = Array.from(e.target.files).slice(0, 5)
 }
 
-async function uploadArquivo(caminho, arquivo) {
-  const { data, error } = await supabase.storage
-    .from('produtos')
-    .upload(caminho, arquivo)
-
-  if (error) throw error
-
-  const { data: url } = supabase.storage
-    .from('produtos')
-    .getPublicUrl(data.path)
-
-  return url.publicUrl
-}
-
 async function cadastrarProduto() {
   mensagem.value = ''
   loading.value = true
 
   try {
-    const idProduto = crypto.randomUUID();
-    const basePath = `${idProduto}/`
-
-    const imagemPrincipalUrl = imagemPrincipal.value
-      ? await uploadArquivo(basePath + 'principal_' + imagemPrincipal.value.name, imagemPrincipal.value)
-      : ''
-
-    const imagensSec = []
-    for (const img of imagensSecundarias.value) {
-      const url = await uploadArquivo(basePath + 'secundaria_' + img.name, img)
-      imagensSec.push(url)
-    }
-
-    await setDoc(doc(collection(db, 'produtos'), idProduto), {
-      id: idProduto,
+    await produtosStore.adicionarProduto({
       nome: nome.value,
       preco: parseFloat(preco.value),
       categoria: categoria.value,
       personalizavel: personalizavel.value,
       descricao: descricao.value,
-      imagemPrincipal: imagemPrincipalUrl,
-      imagensSecundarias: imagensSec,
+      imagemPrincipal: imagemPrincipal.value,
+      imagensSecundarias: imagensSecundarias.value,
       criadoEm: new Date()
     })
 
@@ -85,7 +61,7 @@ async function cadastrarProduto() {
     imagensSecundarias.value = []
     
     await esperar(2000)
-    router.push("/Crud");
+    router.push({name: 'Crud'});
 
   } catch (error) {
     console.error(error)

@@ -1,33 +1,26 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/firebase/firebase";
 import LogoTop from "@/componentes/LogoTop.vue";
+import { useProdutosStore } from "@/stores/useProdutosStore";
 
-// 👉 importa a lógica de exclusão
-import { removerProduto } from "@/stores/RemoverProduto";
+const produtosStore = useProdutosStore();
 
-const produtos = ref([]);
 const router = useRouter();
 
 onMounted(async () => {
-  const snap = await getDocs(collection(db, "produtos"));
-  produtos.value = snap.docs.map(docSnap => ({
-    id: docSnap.id,
-    ...docSnap.data()
-  }));
-  if (produtos.value.length === 0) {
-    router.push("/Adicionar");
+  await produtosStore.carregarProdutos();
+  if (produtosStore.produtos.length === 0) {
+    router.push({name: 'AdicionarProdutos'});
   }
 });
 
 const adicionarProduto = () => {
-  router.push("/Adicionar");
+  router.push({name: 'AdicionarProdutos'});
 };
 
 const atualizarProduto = (id) => {
-  router.push(`/Atualizar/${id}`);
+  router.push({ name: "AtualizarProduto", params: { id } });
 };
 
 const remover = async (id) => {
@@ -35,8 +28,7 @@ const remover = async (id) => {
   if (!confirmar) return;
 
   try {
-    await removerProduto(id);
-    produtos.value = produtos.value.filter(p => p.id !== id);
+    await produtosStore.removerProduto(id);
   } catch (e) {
     console.error(e);
     alert("Erro ao remover produto.");
@@ -57,7 +49,7 @@ const remover = async (id) => {
     </div>
 
     <div class="grid-produtos">
-      <div class="card-produto" v-for="produto in produtos" :key="produto.id">
+      <div class="card-produto" v-for="produto in produtosStore.produtos" :key="produto.id">
         <img :src="produto.imagemPrincipal" alt="Produto" class="foto"/>
 
         <p class="nome-produto">
@@ -80,7 +72,7 @@ const remover = async (id) => {
 
 <style scoped>
 .container-principal {
-  border: 2px solid #0d6efd;
+  border: 2px solid var(--color-primary);
   border-radius: 14px;
   padding: 30px;
   max-width: 1500px;
@@ -150,12 +142,12 @@ const remover = async (id) => {
 }
 
 .azul {
-  background: #0d6efd;
+  background: var(--color-primary);
   color: white;
 }
 
 .vermelho {
-  background: #dc3545;
+  background: var(--color-error);
   color: white;
 }
 </style>

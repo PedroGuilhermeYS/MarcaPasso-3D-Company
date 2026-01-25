@@ -1,19 +1,16 @@
 <script setup>
 import { computed } from 'vue'
-import { useCarrinhoStore } from '@/stores/carrinho'
+import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { formatarPreco } from '@/utils/functionsFull.js'
+import { formatarPreco } from '@/composables/useFormatadorPreco.js'
 
 const carrinho = useCarrinhoStore()
 const auth = useAuthStore()
 
 const usuarioLogado = computed(() => auth.usuario)
-
-  const funcionario = "pedro210905@gmail.com"
-
-  const acessar = computed(() => {
-    return usuarioLogado.value?.email === funcionario
-  })
+const acessar = computed(() => {
+  return auth.isAdmin()
+})
 </script>
 
 <template>
@@ -31,7 +28,7 @@ const usuarioLogado = computed(() => auth.usuario)
         <div class="crud" v-if="acessar">
           <span></span>
 
-          <router-link to="/Crud">
+          <router-link :to="{ name: 'Crud' }">
             <h4>Admin</h4>
           </router-link>
         </div>
@@ -39,30 +36,30 @@ const usuarioLogado = computed(() => auth.usuario)
         <div class="login">
           <span class="material-symbols-outlined">person</span>
 
-          <router-link to="/Login">
+          <router-link :to="{ name: 'Login' }">
           <h4 v-if="!usuarioLogado">Entrar/Cadastrar</h4>
           </router-link>
 
-          <router-link to="/Painel">
+          <router-link :to="{ name: 'PainelUsuario' }">
             <h4 v-if="usuarioLogado">Olá, {{ usuarioLogado.displayName || usuarioLogado.email }}</h4>
           </router-link>
         </div>
 
-        <router-link :to="usuarioLogado ? '/Encomendas' : '/Login'">
+        <router-link :to="{ name: 'Encomendas' }">
           <div class="pedidos">
             <span class="material-symbols-outlined">local_shipping</span>
             <h4>Encomendas</h4>
           </div>
         </router-link>
 
-        <router-link :to="usuarioLogado ? '/Favoritos' : '/Login'">
+        <router-link :to="{ name: 'Favoritos' }">
           <div class="favorito">
           <span class="material-symbols-outlined">favorite</span>
           <h4>Favoritos</h4>
           </div>
         </router-link>
 
-        <router-link :to="usuarioLogado ? '/Carrinho' : '/Login'">
+        <router-link :to="{ name: 'Carrinho' }">
           <div class="carrinho">
           <span class="material-symbols-outlined">shopping_cart</span>
           <h4>{{ formatarPreco(carrinho.total) }}</h4>

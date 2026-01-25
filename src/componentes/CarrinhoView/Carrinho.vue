@@ -1,7 +1,7 @@
 <script setup>
     import { ref, onMounted } from 'vue'
-    import { useCarrinhoStore } from '@/stores/carrinho';
-    import { formatarPreco } from '@/utils/functionsFull.js'
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
+    import { formatarPreco } from '@/composables/useFormatadorPreco.js'
 
     const props = defineProps({
         ValorFrete: {
@@ -18,17 +18,14 @@
         }
     })
 
+    onMounted(async () => {
+        await carrinho.carregarCarrinho()
+    })
+
     const emit = defineEmits(['calcular-frete'])
 
     const carrinho = useCarrinhoStore()
-    const fretes = ref([])
     const cepatual = ref('')
-
-    onMounted(async () => {
-        const resposta = await fetch('http://localhost:3000/fretes')
-        const data = await resposta.json()
-        fretes.value = data
-    })
 
     function calculardata(cepatual) {
         emit('calcular-frete', cepatual)
@@ -66,7 +63,7 @@
                                 <button @click="carrinho.alterarQuantidade(item.id, item.quantidade + 1)">+</button>
                             </div>
                         </td>
-                        <td class="valor">R$ {{ formatarPreco(item.preco * item.quantidade) }}</td>
+                        <td class="valor">{{ formatarPreco(item.preco * item.quantidade) }}</td>
                         <td><button @click="carrinho.removerItem(item.id)" class="remove">Excluir</button></td>
                     </tr>
                 </tbody>

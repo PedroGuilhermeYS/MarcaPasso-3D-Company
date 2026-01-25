@@ -1,10 +1,15 @@
 <script setup>
-    import { useFavoritadosStore } from '@/stores/useFavoritosStore';
+    import { useFavoritosStore } from '@/stores/useFavoritosStore';
+    import { onMounted } from 'vue';
 
-    const favoritados = useFavoritadosStore()
+    const favoritosStore = useFavoritosStore()
 
-    function limpartudo() {
-        favoritados.limparfavoritos()
+    onMounted(async () => {
+        await favoritosStore.carregarFavoritos()
+    })
+
+    function limparTudo() {
+        favoritosStore.limparFavoritos()
     }
 </script>
 
@@ -12,16 +17,20 @@
     <main>
         <div class="container">
             <div class="all-products">
-                <h2 class="MS-Reference">Todos os Favoritados</h2>
-                <button class="apagar" @click="limpartudo">LIMPAR TUDO</button>
+                <h2 class="MS-Reference">Todos os favoritos</h2>
+                <button class="apagar" @click="limparTudo" v-if="favoritosStore.quantidade > 0">LIMPAR TUDO</button>
                 <div class="lista-produtos">
-                    <div v-for="item in favoritados.itens" :key="item.id" class="produto">
+                    <div v-for="item in favoritosStore.favoritos" :key="item.id" class="produto">
                         <img :src="item.imagem" :alt="item.nome">
                         <h3>{{ item.nome }}</h3>
                         <p class="preco">R$ {{ item.preco.toFixed(2) }}</p>
                         <p class="avaliacao">★★★★★</p>
                         <button @click="$router.push({ name: 'Produto', params: { id: item.id } })">Comprar</button>
                     </div>
+                </div>
+
+                <div v-if="favoritosStore.quantidade === 0" class="nenhum-produto" >
+                    Você ainda não adicionou nenhum favorito.
                 </div>
             </div>
         </div>
@@ -93,6 +102,9 @@
         gap: 20px;
         padding: 20px;
         justify-items: center;
+    }
+    .nenhum-produto {
+        padding: 0px 80px 50px;
     }
     .preco {
         margin: 0;

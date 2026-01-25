@@ -1,21 +1,20 @@
 <script setup>
     import { ref, onMounted } from 'vue'
+    import { useFretesStore } from '@/stores/useFretesStore'
     import Carrinho from '@/componentes/CarrinhoView/Carrinho.vue';
     import Market from '@/componentes/CarrinhoView/Market.vue';
 
-    const fretes = ref([])
+    const fretes = useFretesStore()
     const ValorFrete = ref(null)
     const DiaEntrega = ref('')
     const cidade = ref('')
 
     onMounted(async () => {
-        const resposta = await fetch('http://localhost:3000/fretes')
-        const data = await resposta.json()
-        fretes.value = data
+        await fretes.carregarFretes()
     })
 
     function calculardata(cepatual) {
-        const frete = fretes.value.find(f => f.cep_destino === cepatual)
+        const frete = fretes.fretes.find(f => f.cep_destino === cepatual)
 
         if (frete){
             DiaEntrega.value = `${frete.prazo_entrega_dias} dias`

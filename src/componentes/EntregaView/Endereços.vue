@@ -1,27 +1,24 @@
 <script setup>
     import { ref, onMounted } from 'vue'
     import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
+    import { useFretesStore } from '@/stores/useFretesStore';
     
     const carrinho = useCarrinhoStore()
+    const fretes = useFretesStore()
     const enderecos = ref([])
-    const fretes = ref([])
     const ValorFrete = ref(null)
     const enderecoSelecionado = ref(null);
 
     onMounted(async () => {
-        const resposta = await fetch('http://localhost:3000/fretes')
-        const data = await resposta.json()
-        fretes.value = data
-    })
+        await fretes.carregarFretes()
 
-    onMounted(async () => {
         const resposta = await fetch('http://localhost:3000/enderecos')
         const data = await resposta.json()
         enderecos.value = data
         
         // Sincronizar com frete já selecionado na store
-        if (carrinho.FreteSelecionado) {
-            ValorFrete.value = carrinho.FreteSelecionado
+        if (carrinho.freteSelecionado) {
+            ValorFrete.value = carrinho.freteSelecionado
         }
     })
 
@@ -29,7 +26,7 @@
         
         enderecoSelecionado.value = endereco.cep;
         
-        const freteEncontrado = fretes.value.find(f => f.cep_entrega === enderecoSelecionado.value);
+        const freteEncontrado = fretes.fretes.find(f => f.cep_entrega === enderecoSelecionado.value);
         
         if (freteEncontrado) {
             ValorFrete.value = freteEncontrado.valor_frete;

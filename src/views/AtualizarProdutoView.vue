@@ -1,14 +1,13 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { db } from '@/lib/firebase'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
-import LogoTop from '@/componentes/LogoTop.vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useProdutosStore } from '@/stores/useProdutosStore'
 
 const route = useRoute()
-const router = useRouter()
 
-const id = route.params.id
+const produtosStore = useProdutosStore()
+
+const id = computed(() => route.params.id)
 
 const nome = ref('')
 const preco = ref('')
@@ -21,15 +20,8 @@ const loading = ref(false)
 
 onMounted(async () => {
   try {
-    const refDoc = doc(db, 'produtos', id)
-    const snap = await getDoc(refDoc)
+    const p = await produtosStore.buscarProduto(id.value)
 
-    if (!snap.exists()) {
-      mensagem.value = '❌ Produto não encontrado.'
-      return
-    }
-
-    const p = snap.data()
     nome.value = p.nome
     preco.value = p.preco
     categoria.value = p.categoria
@@ -46,9 +38,7 @@ async function atualizarProduto() {
   mensagem.value = ''
 
   try {
-    const refDoc = doc(db, 'produtos', id)
-
-    await updateDoc(refDoc, {
+    await produtosStore.atualizarProduto(id.value, {
       nome: nome.value,
       preco: parseFloat(preco.value),
       categoria: categoria.value,
@@ -67,7 +57,6 @@ async function atualizarProduto() {
 </script>
 
 <template>
-  <LogoTop />
 
   <main class="admin-wrapper">
     <h1 class="titulo">Atualizar Produto</h1>

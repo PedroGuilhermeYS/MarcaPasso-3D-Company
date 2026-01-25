@@ -28,7 +28,7 @@ function fecharModais() {
 }
 
 onMounted(() => {
-    if (carrinho.FreteSelecionado == null) {
+    if (carrinho.freteSelecionado == null) {
         alert("Selecione o endereço de entrega")
         router.push({ name: 'Entrega' })
     }
@@ -46,7 +46,7 @@ onMounted(() => {
             </div>
         </div>
 
-        <ModaisPagamento ref="modaisPagamentoRef" @fecharModais="fecharModais" />
+        <ModaisPagamento ref="modaisPagamentoRef" />
 
     </main>
 </template>

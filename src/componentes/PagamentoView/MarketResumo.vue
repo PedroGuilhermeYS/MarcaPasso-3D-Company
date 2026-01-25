@@ -1,23 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
-import { formatarPreco } from '@/utils/functionsFull.js'
+import { useCupomStore } from '@/stores/useCupomStore'
+import { formatarPreco } from '@/composables/useFormatadorPreco.js'
 
 const carrinho = useCarrinhoStore()
+const cupons = useCupomStore()
 
-const cupons = ref([])
 const cupomatual = ref("")
 const valordesconto = ref(0)
 const descontostring = ref("")
 
 onMounted(async () => {
-    const resposta = await fetch('http://localhost:3000/cupons')
-    const data = await resposta.json()
-    cupons.value = data
+    await cupons.carregarCupons()
 })
 
 function calcularcupom(cupomatual) {
-    const cupom = cupons.value.find(c => c.cupom_nome === cupomatual.trim().toUpperCase())
+    const cupom = cupons.cupons.find(c => c.cupom_nome === cupomatual.trim().toUpperCase())
 
     if (cupom) {
         valordesconto.value = cupom.desconto / 100
@@ -40,7 +39,7 @@ function calcularcupom(cupomatual) {
 
     <div class="style-camp">
         <span>Frete:</span>
-        <span>{{ formatarPreco(carrinho.FreteSelecionado) }}</span>
+        <span>{{ formatarPreco(carrinho.freteSelecionado) }}</span>
     </div>
 
     <hr>
@@ -60,7 +59,7 @@ function calcularcupom(cupomatual) {
     <div class="style-camp destaque-prazo">
         <span>Total:</span>
         <div class="preco">
-            <span class="valor">{{ formatarPreco((carrinho.total + carrinho.FreteSelecionado) * (1 - valordesconto)) }}</span>
+            <span class="valor">{{ formatarPreco((carrinho.total + carrinho.freteSelecionado) * (1 - valordesconto)) }}</span>
         </div>
     </div>
 

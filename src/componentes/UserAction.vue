@@ -2,18 +2,15 @@
 import { computed } from 'vue'
 import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { formatarPreco } from '@/utils/functionsFull.js'
+import { formatarPreco } from '@/composables/useFormatadorPreco.js'
 
 const carrinho = useCarrinhoStore()
 const auth = useAuthStore()
 
 const usuarioLogado = computed(() => auth.usuario)
-
-  const funcionario = "pedro210905@gmail.com"
-
-  const acessar = computed(() => {
-    return usuarioLogado.value?.email === funcionario
-  })
+const acessar = computed(() => {
+  return auth.isAdmin()
+})
 </script>
 
 <template>

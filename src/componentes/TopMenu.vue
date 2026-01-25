@@ -1,12 +1,22 @@
 <script setup>
-import { usePesquisaStore } from '@/stores/pesquisa'
+import { useRouter } from 'vue-router';
+import { usePesquisaStore } from '@/stores/usePesquisaStore'
 const pesquisa = usePesquisaStore()
+
+const router = useRouter()
+
+function buscar () {
+  if (router.currentRoute.value.name !== 'Home') {
+    router.push({ name: 'Home', state: { veioPesquisar: true } });
+  }
+}
+
 </script>
 
 <template>
   <main>
     <div class="container">
-      <router-link to="/">
+      <router-link :to="{ name: 'Home' }">
         <img src="@/img/marcapasso-logo.svg" alt="logo">
       </router-link>
 
@@ -16,8 +26,9 @@ const pesquisa = usePesquisaStore()
           class="search" 
           placeholder="Compre na MarcaPasso 3D"
           v-model="pesquisa.termo"
+          @keyup.enter="buscar"
         >
-        <span class="icon">🔍</span>
+        <span class="icon" @click="buscar">🔍</span>
       </div>
     </div>
   </main>

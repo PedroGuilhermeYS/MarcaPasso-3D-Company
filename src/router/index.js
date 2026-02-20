@@ -1,127 +1,117 @@
-import CarrinhoView from '@/views/CarrinhoView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/useAuthStore'
+
+import PadraoLayout from '@/layouts/PadraoLayout.vue'
+import LoginLayout from '@/layouts/LoginLayout.vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue'
+
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
-import { getAuth } from "firebase/auth"
-import { createRouter, createWebHistory } from 'vue-router'
-import ProdutoView from '@/views/ProdutoView.vue'
+import CarrinhoView from '@/views/CarrinhoView.vue'
 import ContatosView from '@/views/ContatosView.vue'
-import FavoritosView from '@/views/FavoritosView.vue'
-import AdminProdutosView from '@/views/AdicionarProdutosView.vue'
-import AtualizarProdutoView from '@/views/AtualizarProdutoView.vue'
-import CrudView from '@/views/CrudView.vue'
 import PainelUserView from '@/views/PainelUserView.vue'
 import EntregaView from '@/views/EntregaView.vue'
 import FormaPagamentoView from '@/views/FormaPagamentoView.vue'
 import EncomendasView from '@/views/EncomendasView.vue'
+import SomenteLogoLayout from '@/layouts/SomenteLogoLayout.vue'
+
+// Lazy-loaded / heavier views
+const ProdutoView = () => import('@/views/ProdutoView.vue')
+const FavoritosView = () => import('@/views/FavoritosView.vue')
+const CrudView = () => import('@/views/CrudView.vue')
+const AdminProdutosView = () => import('@/views/AdicionarProdutosView.vue')
+const AtualizarProdutoView = () => import('@/views/AtualizarProdutoView.vue')
+
+const routes = [
+  {
+    path: '/',
+    component: PadraoLayout,
+    children: [
+      { path: '', name: 'Home', component: HomeView },
+      { path: 'produto/:id', name: 'Produto', component: ProdutoView, props: true },
+      { path: 'carrinho', name: 'Carrinho', component: CarrinhoView },
+      { path: 'contatos', name: 'Contatos', component: ContatosView },
+    ]
+  },
+
+  {
+    path: '/',
+    component: LoginLayout,
+    children: [
+      { path: 'login', name: 'Login', component: LoginView },
+      { path: 'formapagamento', name: 'FormaPagamento', component: FormaPagamentoView, meta: { requiresAuth: true } },
+      { path: 'conta/painel', name: 'PainelUsuario', component: PainelUserView, meta: { requiresAuth: true } }
+    ]
+  },
+
+
+  {
+    path: '/conta',
+    component: PadraoLayout,
+    meta: { requiresAuth: true },
+    children: [
+      { path: 'entrega', name: 'Entrega', component: EntregaView },
+      { path: 'encomendas', name: 'Encomendas', component: EncomendasView },
+      { path: 'favoritos', name: 'Favoritos', component: FavoritosView }
+    ]
+  },
+
+  {
+    path: '/admin',
+    component: DashboardLayout,
+    meta: { requiresAuth: true, requiresAdmin: true },
+    children: [
+      { path: 'crud', name: 'Crud', component: CrudView },
+      { path: 'adicionar', name: 'AdicionarProdutos', component: AdminProdutosView },
+    ]
+  },
+
+  {
+    path: '/admin',
+    component: SomenteLogoLayout,
+    meta: { requiresAuth: true, requiresAdmin: true },
+    children: [
+      { path: 'atualizar/:id', name: 'AtualizarProduto', component: AtualizarProdutoView, props: true }
+    ]
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      name: "Home",
-      component: HomeView
-    },
-    {
-      path: "/Login",
-      name: "Login",
-      component: LoginView
-    },
-    {
-      path: "/Carrinho",
-      name: "Carrinho",
-      component: CarrinhoView
-    },
-    {
-      path: "/Contatos",
-      name: "Contatos",
-      component: ContatosView
-    },
-    { path: '/Produto/:id',
-      name: 'Produto', 
-      component: ProdutoView, 
-      props: true 
-    },
-    {
-      path: "/Favoritos",
-      name: "Favoritos",
-      component: FavoritosView,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: "/Crud",
-      name: "Crud",
-      component: CrudView,
-      meta: { requiresAuth: true, requiresAdmin: true }
-    },
-    {
-      path: "/Adicionar",
-      name: "AdicionarProdutos",
-      component: AdminProdutosView,
-      meta: { requiresAuth: true, requiresAdmin: true }
-    },
-    {
-      path: "/Atualizar/:id",
-      name: "AtualizarProdutos",
-      component: AtualizarProdutoView,
-      props: true,
-      meta: { requiresAuth: true, requiresAdmin: true }
-    },
-    {
-      path: "/Painel",
-      name: "PainelUser",
-      component: PainelUserView
-    },
-    {
-      path: "/Entrega",
-      name: "Entrega",
-      component: EntregaView,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: "/FormaPagamento", 
-      name: "FormadePagamento",
-      component: FormaPagamentoView,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: "/Encomendas", 
-      name: "Encomendas",
-      component: EncomendasView,
-      meta: { requiresAuth: true }
-    }
-  ],
+  routes
 })
 
-router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
-  const requiresAdmin = to.matched.some(r => r.meta.requiresAdmin)
-  const viaCrud = to.matched.some(r => r.meta.viaCrud)
 
-  const auth = getAuth()
-  const user = auth.currentUser
+let authInitPromise = null
 
-  // 🔓 Rotas públicas
-  if (!requiresAuth) {
-    return next()
+function waitForAuthInit() {
+  if (!authInitPromise) {
+    const auth = useAuthStore()
+    authInitPromise = auth.sincronizarSessao().finally(() => {})
   }
+  return authInitPromise
+}
 
-  // 🔐 Não logado
+router.beforeEach(async (to) => {
+  await waitForAuthInit()
+
+  const requiresAuth = to.matched.some(r => r.meta?.requiresAuth)
+  const requiresAdmin = to.matched.some(r => r.meta?.requiresAdmin)
+
+  const auth = useAuthStore()
+  const user = auth.usuario
+
+  if (!requiresAuth) return true
+
   if (!user) {
-    return next("/Login")
+    return { name: 'Login' }
   }
 
-  // 👑 Não é admin
-  if (requiresAdmin && user.email !== "pedro210905@gmail.com") {
-    return next("/")
+  if (requiresAdmin && !auth.isAdmin()) {
+    return { name: 'Home' }
   }
 
-  // 🚫 Bloqueio de acesso direto por URL
-  if (viaCrud && from.name !== "AllProdutos") {
-    return next("/Produtos")
-  }
-
-  return next()
+  return true
 })
 
 export default router

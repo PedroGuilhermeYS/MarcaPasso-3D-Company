@@ -39,3 +39,10 @@
    color: var(--color-text);
    background: var(--color-surface);
  }
+
+main{
+    width: 1400px;
+    margin: 0 auto;
+    font-family: var(--font-family-base);
+    font-weight: 300;
+}

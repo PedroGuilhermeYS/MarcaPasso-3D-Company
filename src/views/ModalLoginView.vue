@@ -27,10 +27,11 @@
     async function logar() {
         erro.value = ''
         loading.value = true
+        const res = await auth.login(email.value, senha.value)
         try {
             await auth.login(email.value, senha.value)
             fecharModalLogin()
-            router.push('/')
+            router.push({ name: 'Home'})
         } catch (e) {
             erro.value = e?.message ?? 'Erro ao efetuar login.'
         } finally {

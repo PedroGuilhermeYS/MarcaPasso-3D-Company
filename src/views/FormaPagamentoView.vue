@@ -1,12 +1,9 @@
 <script setup>
-import LogoTop from '@/componentes/LogoTop.vue';
-import UserAction from '@/componentes/UserAction.vue';
-import Footer from '@/componentes/Footer.vue';
 import ListaPagamentos from '@/componentes/PagamentoView/ListaPagamentos.vue';
 import MarketResumo from '@/componentes/PagamentoView/MarketResumo.vue';
 import ModaisPagamento from '@/componentes/PagamentoView/ModaisPagamento.vue';
 import { ref, onMounted } from 'vue'
-import { useCarrinhoStore } from '@/stores/carrinho';
+import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -31,16 +28,14 @@ function fecharModais() {
 }
 
 onMounted(() => {
-    if (carrinho.FreteSelecionado == null) {
+    if (carrinho.freteSelecionado == null) {
         alert("Selecione o endereço de entrega")
-        router.push("/Entrega")
+        router.push({ name: 'Entrega' })
     }
 })
 </script>
 
 <template>
-    <LogoTop></LogoTop>
-    <UserAction></UserAction>
     <main>
         <div class="container1">
             <div class="products">
@@ -51,10 +46,9 @@ onMounted(() => {
             </div>
         </div>
 
-        <ModaisPagamento ref="modaisPagamentoRef" @fecharModais="fecharModais" />
+        <ModaisPagamento ref="modaisPagamentoRef" />
 
     </main>
-    <Footer></Footer>
 </template>
 
 <style scoped>

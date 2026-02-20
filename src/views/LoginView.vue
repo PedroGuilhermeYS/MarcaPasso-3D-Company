@@ -1,7 +1,4 @@
 <script setup>
-import UserActionSimples from '@/componentes/UserActionSimples.vue';
-import Footer from '@/componentes/Footer.vue';
-import LogoTop from '@/componentes/LogoTop.vue';
 import { ref } from 'vue'
 import ModalLoginView from '@/views/ModalLoginView.vue'
 import ModalCadastroView from '@/views/ModalCadastroView.vue'
@@ -28,8 +25,6 @@ const fecharCadastro = () => {
 </script>
 
 <template>
-    <LogoTop></LogoTop>
-    <UserActionSimples></UserActionSimples>
     <main>
         <div class="container">
             <div class="yes-registered">
@@ -51,8 +46,6 @@ const fecharCadastro = () => {
             </div>
         </div>
     </main>
-    <Footer></Footer>
-    <a href="http://localhost:5173/Produto"><button>ir pra Produto</button></a>
 </template>
 
 <style scoped>

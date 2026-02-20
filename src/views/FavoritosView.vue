@@ -1,27 +1,26 @@
 <script setup>
-    import LogoTop from '@/componentes/LogoTop.vue';
-    import UserAction from '@/componentes/UserAction.vue';
-    import Footer from '@/componentes/Footer.vue';
+    import { useFavoritosStore } from '@/stores/useFavoritosStore';
+    import { onMounted } from 'vue';
 
-    import { useFavoritadosStore } from '@/stores/favoritados';
+    const favoritosStore = useFavoritosStore()
 
-    const favoritados = useFavoritadosStore()
+    onMounted(async () => {
+        await favoritosStore.carregarFavoritos()
+    })
 
-    function limpartudo() {
-        favoritados.limparfavoritos()
+    function limparTudo() {
+        favoritosStore.limparFavoritos()
     }
 </script>
 
 <template>
-    <LogoTop></LogoTop>
-    <UserAction></UserAction>
     <main>
         <div class="container">
             <div class="all-products">
-                <h2 class="MS-Reference">Todos os Favoritados</h2>
-                <button class="apagar" @click="limpartudo">LIMPAR TUDO</button>
+                <h2 class="MS-Reference">Todos os favoritos</h2>
+                <button class="apagar" @click="limparTudo" v-if="favoritosStore.quantidade > 0">LIMPAR TUDO</button>
                 <div class="lista-produtos">
-                    <div v-for="item in favoritados.itens" :key="item.id" class="produto">
+                    <div v-for="item in favoritosStore.favoritos" :key="item.id" class="produto">
                         <img :src="item.imagem" :alt="item.nome">
                         <h3>{{ item.nome }}</h3>
                         <p class="preco">R$ {{ item.preco.toFixed(2) }}</p>
@@ -29,11 +28,13 @@
                         <button @click="$router.push({ name: 'Produto', params: { id: item.id } })">Comprar</button>
                     </div>
                 </div>
+
+                <div v-if="favoritosStore.quantidade === 0" class="nenhum-produto" >
+                    Você ainda não adicionou nenhum favorito.
+                </div>
             </div>
         </div>
     </main>
-
-    <Footer></Footer>
 </template>
 
 <style scoped>
@@ -101,6 +102,9 @@
         gap: 20px;
         padding: 20px;
         justify-items: center;
+    }
+    .nenhum-produto {
+        padding: 0px 80px 50px;
     }
     .preco {
         margin: 0;

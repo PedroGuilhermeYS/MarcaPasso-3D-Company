@@ -1,20 +1,20 @@
 <script setup>
     import { ref, computed } from 'vue'
-    import { useCarrinhoStore } from '@/stores/carrinho';
-    import { formatarPreco } from '@/utils/functionsFull.js'
+    import { useCarrinhoStore } from '@/stores/useCarrinhoStore';
+    import { formatarPreco } from '@/composables/useFormatadorPreco.js'
     import { useRouter } from 'vue-router'
     
     const router = useRouter()  
 
     const carrinho = useCarrinhoStore()
-    const ValorFrete = computed(() => carrinho.FreteSelecionado)
+    const ValorFrete = computed(() => carrinho.freteSelecionado)
 
     function salvarFreteNoCarrinho() {
-        if (carrinho.FreteSelecionado == null) {
-            alert("Selecione o endreço de entrega")
+        if (carrinho.freteSelecionado == null) {
+            alert("Selecione o endereço de entrega")
         }
         else {
-            router.push('/FormaPagamento')
+            router.push({name: 'FormaPagamento'})
         }
     }
 

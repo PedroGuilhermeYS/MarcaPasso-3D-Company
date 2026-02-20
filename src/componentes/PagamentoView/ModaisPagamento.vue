@@ -1,9 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCarrinhoStore } from '@/stores/carrinho'
-
-const emit = defineEmits(['fecharModais'])
+import { useCarrinhoStore } from '@/stores/useCarrinhoStore'
 
 const mostrarModalPix = ref(false)
 const mostrarModalCartao = ref(false)
@@ -29,7 +27,6 @@ function abrirModalCartao() {
 function fecharModais() {
     mostrarModalPix.value = false
     mostrarModalCartao.value = false
-    emit('fecharModais')
 }
 
 function confirmarCartao() {

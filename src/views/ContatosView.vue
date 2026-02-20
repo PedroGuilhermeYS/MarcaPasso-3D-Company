@@ -1,12 +1,4 @@
-<script setup>
-import LogoTop from '@/componentes/LogoTop.vue';
-import UserAction from '@/componentes/UserAction.vue';
-import Footer from '@/componentes/Footer.vue';
-</script>
-
 <template>
-    <LogoTop></LogoTop>
-    <UserAction></UserAction>
     <main>
         <div class="container">
             <div class="mini-msg">
@@ -78,7 +70,6 @@ import Footer from '@/componentes/Footer.vue';
             </div>
         </div>
     </main>
-    <Footer></Footer>
 </template>
 
 <style scoped>
